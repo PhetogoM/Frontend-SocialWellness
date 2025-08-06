@@ -1,0 +1,3 @@
+This folder is where you will make all of your api request components.
+These components will then be imported into the page components where you need them.
+This is to ensure modular code, we do not want to repeat code or have one big mess.

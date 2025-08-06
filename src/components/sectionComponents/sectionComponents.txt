@@ -1,0 +1,4 @@
+This is where the footer and header components are made.
+These components get imported into the App.js file so that all pages has the header and footer.
+We do not want messy code or to repeat ourselves.
+Make a component once, reuse it where it has to be used again.

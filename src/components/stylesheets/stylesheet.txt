@@ -1,0 +1,2 @@
+This is where all the css stylesheets for styling goes.
+The stylesheets gets created here and imported to each file that needs its stylesheet.

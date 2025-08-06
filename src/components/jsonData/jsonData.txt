@@ -1,0 +1,6 @@
+This folder is where you will make all json files that will hold the data in lists of objects.
+These json files with its json objects are then imported where that static json data is needed.
+Example, you store the about section text in a json file inside an object and you import that json file
+into your about page and use the content from the json file,
+YOU DO NOT HARDCODE BIG CHUNKS OF CONTENT(WORDS) INTO WEB PAGES!
+This ensure that webpages mostly hold only the structure of pages not lost of content.

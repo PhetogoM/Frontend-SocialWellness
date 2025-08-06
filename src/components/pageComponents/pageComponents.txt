@@ -1,0 +1,3 @@
+This is the folder where all the page components will be stored.
+This pages is all the pages that a user will be able to see on the frontend.
+EXTRA COMPONENTS THAT ARE NOT WEG PAGES THAT ARE VISIBLE DO NOT GET STORED IN THIS FOLDER!
