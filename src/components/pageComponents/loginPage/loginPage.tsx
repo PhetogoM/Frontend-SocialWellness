@@ -1,6 +1,6 @@
 import React, { FC } from 'react';
 import { Link } from 'react-router-dom';
-import { LoginPageWrapper } from './loginPage.styled';
+import { LoginPageWrapper } from './loginPage.styled.ts';
 
 interface LoginPageProps {}
 

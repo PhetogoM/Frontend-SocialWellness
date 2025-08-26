@@ -1,10 +1,10 @@
 import React, { lazy, Suspense } from 'react';
 
-const LazyLoginPage = lazy(() => import('./loginPage'));
+const LoginPage = lazy(() => import('./loginPage.tsx'));
 
-const LoginPageLazy = (props: JSX.IntrinsicAttributes & { children?: React.ReactNode }) => (
+const LoginPageLazy = (props: React.ComponentProps<typeof LoginPage>) => (
   <Suspense fallback={null}>
-    <LazyLoginPage {...props} />
+    <LoginPage {...props} />
   </Suspense>
 );
 
