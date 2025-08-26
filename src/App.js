@@ -6,6 +6,7 @@ import "./App.css";
 import Home from "./components/pageComponents/home-page";
 import Header from './components/sectionComponents/header';
 import Footer from './components/sectionComponents/footer';
+import Login from './components/pageComponents/loginPage/loginPage.lazy';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <div className="body">
               <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
               </Routes>
           </div>
 

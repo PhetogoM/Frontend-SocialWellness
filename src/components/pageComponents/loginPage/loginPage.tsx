@@ -1,11 +1,14 @@
 import React, { FC } from 'react';
+import { Link } from 'react-router-dom';
 import { LoginPageWrapper } from './loginPage.styled';
 
 interface LoginPageProps {}
 
 const LoginPage: FC<LoginPageProps> = () => (
   <LoginPageWrapper data-testid="loginPage">
-    LoginPage Component
+    <h2>Login Page</h2>
+    
+    <Link to="/">Go to Homepage</Link>
   </LoginPageWrapper>
 );
 
