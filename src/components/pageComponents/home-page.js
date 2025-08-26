@@ -1,4 +1,5 @@
 import React from 'react';
+import '../stylesheets/home.css';
 
 const Home = () => {
   return (
@@ -12,7 +13,7 @@ const Home = () => {
       <br />
       <ol style={{ listStyleType: 'upper-roman' }}>
           <li>
-              <h2><u>Academic Support & Resource Sharing</u></h2>
+              <h2 className="Bold"><u>Academic Support & Resource Sharing</u></h2>
               <ul>
                   <li>Access notes, study guides, and practical study tips from your peers</li>
                   <li>Join chatrooms by faculty, course, or specific academic interests</li>
