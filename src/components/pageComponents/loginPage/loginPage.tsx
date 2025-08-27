@@ -1,6 +1,6 @@
 import React, { useState, FC } from "react";
 import { Link } from "react-router-dom";
-import { LoginPageWrapper } from "./loginPage.styled"; // your styled component
+import { LoginPageWrapper } from "./loginPage.styled.tsx"; // your styled component
 
 const LoginPage: FC = () => {
   const [email, setEmail] = useState("");
