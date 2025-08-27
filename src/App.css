@@ -66,7 +66,7 @@ body {
   justify-content: center;
   align-items: center;
   height: 80vh;
-  background: url('../assets/hero.png') center/cover no-repeat;
+  background: url('./assets/hero.png') center/cover no-repeat;
   position: relative;
 }
 
