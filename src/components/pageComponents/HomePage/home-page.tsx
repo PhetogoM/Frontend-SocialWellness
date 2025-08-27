@@ -3,46 +3,32 @@ import { Link } from "react-router-dom";
 
 const HomePage: FC = () => {
   return (
-    <div className="flex flex-col min-h-screen bg-gray-50">
-      {/* Top navigation */}
-      <nav className="bg-indigo-600 text-white px-8 py-4 flex justify-between items-center shadow">
-        <h1 className="text-xl font-bold">Unipath</h1>
-        <div className="flex gap-4">
-          <Link
-            to="/"
-            className="bg-white text-indigo-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100"
-          >
-            Home
-          </Link>
-          <Link
-            to="/login"
-            className="bg-white text-indigo-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100"
-          >
-            Login
-          </Link>
-          <Link
-            to="/register"
-            className="bg-white text-indigo-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100"
-          >
-            Register
-          </Link>
-        </div>
-      </nav>
+    <div className="flex flex-col items-center justify-center flex-1 bg-gray-50 min-h-screen px-4">
+      {/* Welcome Bubble */}
+      <div className="bg-indigo-600 text-white text-5xl font-bold px-12 py-8 rounded-3xl shadow-lg text-center">
+        Welcome to Unipath
+      </div>
 
-      {/* Main content with welcome bubble */}
-      <main className="flex flex-1 items-center justify-center">
-        <div className="bg-indigo-600 text-white px-12 py-8 rounded-full shadow-2xl text-center">
-          <h1 className="text-4xl font-bold">Welcome to Unipath!</h1>
-          <p className="mt-4 text-lg">
-            A social wellness platform to connect, share, and grow together.
-          </p>
-        </div>
-      </main>
+      {/* Optional description */}
+      <p className="text-gray-700 mt-6 text-center max-w-xl">
+        A social wellness platform to connect, share, and grow together.
+      </p>
 
-      {/* Footer */}
-      <footer className="bg-gray-200 text-center py-4 mt-auto">
-        &copy; 2025 Unipath. All rights reserved.
-      </footer>
+      {/* Buttons */}
+      <div className="flex gap-4 mt-8">
+        <Link
+          to="/login"
+          className="bg-indigo-600 text-white px-6 py-3 rounded-lg hover:bg-indigo-700 transition"
+        >
+          Login
+        </Link>
+        <Link
+          to="/register"
+          className="bg-indigo-500 text-white px-6 py-3 rounded-lg hover:bg-indigo-600 transition"
+        >
+          Register
+        </Link>
+      </div>
     </div>
   );
 };
