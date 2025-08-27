@@ -4,11 +4,11 @@ import "./App.css";
 
 
 // Importing your components
-import Home from "./components/pageComponents/HomePage/home-page";
-import Header from './components/sectionComponents/header';
-import Footer from './components/sectionComponents/footer';
-import Login from './components/pageComponents/loginPage/loginPage';
-import Register from './components/pageComponents/RegisterPage/RegisterPage';
+import Home from "./components/pageComponents/HomePage/home-page.tsx";
+import Header from './components/sectionComponents/header.tsx';
+import Footer from './components/sectionComponents/footer.tsx';
+import Login from './components/pageComponents/loginPage/loginPage.tsx';
+import Register from './components/pageComponents/RegisterPage/RegisterPage.tsx';
 
 function App() {
   return (
