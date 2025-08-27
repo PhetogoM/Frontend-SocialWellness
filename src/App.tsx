@@ -3,8 +3,8 @@ import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 
 // Importing components
-import Header from "./components/sectionComponents/Header.tsx";
-import Footer from "./components/sectionComponents/Footer.tsx";
+import Header from "./components/sectionComponents/header.tsx";
+import Footer from "./components/sectionComponents/footer.tsx";
 import HomePage from "./components/pageComponents/HomePage/home-page.tsx";
 import LoginPage from "./components/pageComponents/loginPage/loginPage.tsx";
 import RegisterPage from "./components/pageComponents/RegisterPage/RegisterPage.tsx";

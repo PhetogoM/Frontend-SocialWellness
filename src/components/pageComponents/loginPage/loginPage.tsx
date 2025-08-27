@@ -8,9 +8,9 @@ import {
   Title,
   SocialButton,
   RegisterLink,
-} from "./loginPage.styled";
+} from "./loginPage.styled.tsx";
 
-// Social logos
+// Social logos .if error just load the custom.d.ts file in source remove it
 import GoogleLogo from "../../../assets/google-logo.png";
 import MicrosoftLogo from "../../../assets/microsoft-logo.png";
 import AppleLogo from "../../../assets/apple-logo.png";

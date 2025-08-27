@@ -8,9 +8,9 @@ import {
   Title,
   SocialButton,
   LoginLink,
-} from "./RegisterPage.styled";
+} from "./RegisterPage.styled.tsx";
 
-// Social logos
+// Social logos .if error just load the custom.d.ts file onto vs code in source remove it
 import GoogleLogo from "../../../assets/google-logo.png";
 import MicrosoftLogo from "../../../assets/microsoft-logo.png";
 import AppleLogo from "../../../assets/apple-logo.png";
