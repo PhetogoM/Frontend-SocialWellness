@@ -7,7 +7,8 @@ import "./App.css";
 import Home from "./components/pageComponents/HomePage/home-page";
 import Header from './components/sectionComponents/header';
 import Footer from './components/sectionComponents/footer';
-import Login from './components/pageComponents/loginPage/loginPage.lazy';
+import Login from './components/pageComponents/loginPage/loginPage';
+import Register from './components/pageComponents/RegisterPage/RegisterPage';
 
 function App() {
   return (
@@ -22,6 +23,7 @@ function App() {
               <Routes>
                 <Route path="/" element={<Home />} />
                 <Route path="/login" element={<Login />} />
+                <Route path="/Register" element={<Register />} />
               </Routes>
           </div>
 
