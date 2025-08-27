@@ -2,6 +2,7 @@ import React from "react";
 import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 
+
 // Importing your components
 import Home from "./components/pageComponents/HomePage/home-page.tsx";
 import Header from './components/sectionComponents/header.tsx';
@@ -11,25 +12,28 @@ import Register from './components/pageComponents/RegisterPage/RegisterPage.tsx'
 
 function App() {
   return (
-    <Router>
-      <div className="flex flex-col min-h-screen">
-        {/* Header */}
-        <Header />
+      <Router>
 
-        {/* Main content */}
-        <main className="flex-1">
-          <Routes>
-            <Route path="/" element={<Home />} />
-            <Route path="/login" element={<Login />} />
-            <Route path="/register" element={<Register />} />
-          </Routes>
-        </main>
+        <div className="App">
+          <div className="header">
+            <Header />
+          </div>
 
-        {/* Footer always at bottom */}
-        <Footer />
-      </div>
-    </Router>
+          <div className="body">
+              <Routes>
+                <Route path="/" element={<Home />} />
+                <Route path="/login" element={<Login />} />
+                <Route path="/Register" element={<Register />} />
+              </Routes>
+          </div>
+
+          <div className="footer">
+            <Footer />
+          </div>
+        </div>
+      </Router>
   );
 }
+
 
 export default App;
