@@ -1,35 +1,169 @@
+/* Global reset */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: 'Inter', sans-serif;
+}
+
 body {
-    margin: 0;
-    font-family: 'Inter', sans-serif;
-    background-color: #f9fafb; 
+  background-color: #f0f2f5;
+}
 
-    a {
-    text-decoration: none;
-    color: inherit;
-    }
+/* Header */
+.header {
+  background-color: #2176ff; /* bright blue header */
+  color: white;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1rem 2rem;
+}
 
-    button {
-    cursor: pointer;
-    font-family: inherit;
-    }
+.header h1 {
+  font-size: 1.8rem;
+  font-weight: bold;
+}
 
-    input {
-    font-family: inherit;
-    }
+.header nav a {
+  color: white;
+  margin: 0 0.75rem;
+  text-decoration: underline;
+  font-weight: 500;
+}
 
-    h1, h2, h3, h4, h5, h6 {
-    margin: 0;
-    }
+.header .btns button {
+  margin-left: 0.5rem;
+  padding: 0.5rem 1.2rem;
+  border-radius: 50px;
+  border: none;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
 
-    .flex-center {
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    }
+.header .btns .login {
+  background-color: white;
+  color: #2176ff;
+}
 
-    .container {
-    max-width: 1200px;
-    margin: 0 auto;
-    padding: 0 1rem;
-    }
+.header .btns .login:hover {
+  background-color: #e6e6e6;
+}
+
+.header .btns .register {
+  background-color: #1d63e3;
+  color: white;
+}
+
+.header .btns .register:hover {
+  background-color: #1450b8;
+}
+
+/* Landing / Home hero */
+.hero {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 80vh;
+  background: url('../assets/hero-bg.png') center/cover no-repeat;
+  position: relative;
+}
+
+.hero .hero-content {
+  background: rgba(0, 0, 0, 0.5);
+  padding: 3rem 2rem;
+  border-radius: 15px;
+  text-align: center;
+  color: white;
+}
+
+.hero .hero-content h2 {
+  font-size: 2.5rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+}
+
+.hero .hero-content p {
+  font-size: 1.25rem;
+  margin-bottom: 1.5rem;
+}
+
+/* Login form */
+.login-form-container {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  background-color: rgba(255, 255, 255, 0.95);
+  padding: 2.5rem 2rem;
+  border-radius: 15px;
+  width: 100%;
+  max-width: 400px;
+  box-shadow: 0 10px 25px rgba(0, 0, 0, 0.2);
+}
+
+.login-form-container h2 {
+  text-align: center;
+  color: #2176ff;
+  margin-bottom: 1.5rem;
+  font-weight: 600;
+}
+
+.login-form-container input {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  border: 2px solid #2176ff;
+  border-radius: 8px;
+  outline: none;
+  font-size: 1rem;
+  transition: all 0.2s ease;
+}
+
+.login-form-container input:focus {
+  border-color: #1450b8;
+}
+
+.login-form-container button {
+  width: 100%;
+  padding: 0.75rem 1rem;
+  background-color: #2176ff;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+
+.login-form-container button:hover {
+  background-color: #1450b8;
+}
+
+.login-form-container .social-buttons button {
+  width: 100%;
+  padding: 0.65rem;
+  border: none;
+  border-radius: 8px;
+  margin-bottom: 0.75rem;
+  font-weight: 500;
+  cursor: pointer;
+  color: white;
+  font-size: 0.95rem;
+}
+
+.login-form-container .social-buttons .google { background-color: #de5246; }
+.login-form-container .social-buttons .microsoft { background-color: #2176ff; }
+.login-form-container .social-buttons .apple { background-color: #000; }
+.login-form-container .social-buttons .phone { background-color: #00725c; }
+
+/* Footer */
+.footer {
+  background-color: #2176ff;
+  color: white;
+  padding: 1rem 2rem;
+  text-align: center;
+  font-size: 0.95rem;
 }
