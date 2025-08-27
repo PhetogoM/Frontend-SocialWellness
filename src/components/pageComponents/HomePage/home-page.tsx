@@ -1,6 +1,6 @@
 import React, { FC } from "react";
 import { Link } from "react-router-dom";
-import { HomePageWrapper } from "./loginPage.styled";
+import { HomePageWrapper } from "./HomePage.styled.ts";
 
 const HomePage: FC = () => {
   return (
