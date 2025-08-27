@@ -25,7 +25,7 @@ const RegisterPage: FC = () => {
   return (
     <RegisterPageWrapper>
       <RegisterForm onSubmit={handleSubmit}>
-        <Title>Create an account</Title>
+        <Title>Create a account for Unipath</Title>
 
         <SocialButton bgColor="#4285F4" onClick={() => handleSocialRegister("Google")}>
           <img src={GoogleLogo} alt="Google" /> Sign up with Google

@@ -26,7 +26,7 @@ const LoginPage: FC = () => {
   return (
     <LoginPageWrapper>
       <LoginForm onSubmit={handleSubmit}>
-        <Title>Sign in</Title>
+        <Title>Login in Unipath</Title>
 
         <SocialButton bgColor="#4285F4" onClick={() => handleSocialLogin("Google")}>
           <img src={GoogleLogo} alt="Google" /> Sign in with Google
