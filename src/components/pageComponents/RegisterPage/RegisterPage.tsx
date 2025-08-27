@@ -1,5 +1,12 @@
 import React, { useState, FC } from "react";
 import { Link } from "react-router-dom";
+import { RegisterPageWrapper, RegisterForm, Input, Button, Title, SocialButton, LoginLink } from "./RegisterStyled";
+
+// Social logos (or use SVGs)
+import GoogleLogo from "../../assets/google-logo.png";
+import MicrosoftLogo from "../../assets/microsoft-logo.png";
+import AppleLogo from "../../assets/apple-logo.png";
+
 
 const RegisterPage: FC = () => {
   const [name, setName] = useState("");
@@ -11,47 +18,55 @@ const RegisterPage: FC = () => {
     console.log("Registering:", name, email, password);
   };
 
-  return (
-    <div className="min-h-screen flex flex-col items-center justify-center bg-gray-50">
-      <h2 className="text-2xl font-bold mb-6">Create an account</h2>
+  const handleSocialRegister = (provider: string) => {
+    console.log(`Registering with ${provider}`);
+  };
 
-      <form onSubmit={handleSubmit} className="flex flex-col gap-4 w-full max-w-md bg-white p-8 rounded-2xl shadow-lg">
-        <input
+  return (
+    <RegisterPageWrapper>
+      <RegisterForm onSubmit={handleSubmit}>
+        <Title>Create an account</Title>
+
+        <SocialButton bgColor="#4285F4" onClick={() => handleSocialRegister("Google")}>
+          <img src={GoogleLogo} alt="Google" /> Sign up with Google
+        </SocialButton>
+
+        <SocialButton bgColor="#0078D4" onClick={() => handleSocialRegister("Microsoft")}>
+          <img src={MicrosoftLogo} alt="Microsoft" /> Sign up with Microsoft
+        </SocialButton>
+
+        <SocialButton bgColor="#000000" onClick={() => handleSocialRegister("Apple")}>
+          <img src={AppleLogo} alt="Apple" /> Sign up with Apple
+        </SocialButton>
+
+        <div style={{ margin: "20px 0", textAlign: "center", color: "#6b7280" }}>or</div>
+
+        <Input
           type="text"
           placeholder="Full Name"
           value={name}
           onChange={(e) => setName(e.target.value)}
-          className="border px-3 py-2 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500"
         />
-        <input
+        <Input
           type="email"
           placeholder="Email"
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="border px-3 py-2 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500"
         />
-        <input
+        <Input
           type="password"
           placeholder="Password"
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="border px-3 py-2 rounded-lg outline-none focus:ring-2 focus:ring-indigo-500"
         />
-        <button
-          type="submit"
-          className="bg-indigo-600 text-white py-2 rounded-lg font-semibold hover:bg-indigo-700"
-        >
-          Register
-        </button>
-      </form>
 
-      <p className="mt-6 text-sm text-gray-500">
-        Already have an account?{" "}
-        <Link to="/login" className="text-indigo-600 hover:underline">
-          Login
-        </Link>
-      </p>
-    </div>
+        <Button type="submit">Register</Button>
+
+        <LoginLink>
+          Already have an account? <Link to="/login">Login</Link>
+        </LoginLink>
+      </RegisterForm>
+    </RegisterPageWrapper>
   );
 };
 
