@@ -1,31 +1,48 @@
 import React, { FC } from "react";
 import { Link } from "react-router-dom";
+import styled from "styled-components";
+
+/* Header container */
+const HeaderContainer = styled.header`
+  background-color: #60a5fa; /* light blue */
+  color: white;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+/* Button container */
+const HeaderButtons = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+/* Styled button links */
+const HeaderButton = styled(Link)`
+  background-color: white;
+  color: #3b82f6;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background 0.2s;
+
+  &:hover {
+    background-color: #e0f2fe;
+  }
+`;
 
 const Header: FC = () => {
   return (
-    <nav className="bg-indigo-600 text-white px-8 py-4 flex justify-between items-center shadow">
-      <h1 className="text-xl font-bold">Unipath</h1>
-      <div className="flex gap-4">
-        <Link
-          to="/"
-          className="bg-white text-indigo-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100"
-        >
-          Home
-        </Link>
-        <Link
-          to="/login"
-          className="bg-white text-indigo-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100"
-        >
-          Login
-        </Link>
-        <Link
-          to="/register"
-          className="bg-white text-indigo-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100"
-        >
-          Register
-        </Link>
-      </div>
-    </nav>
+    <HeaderContainer>
+      <h1 style={{ fontSize: "2rem", fontWeight: "bold" }}>Unipath: Social Wellness</h1>
+      <HeaderButtons>
+        <HeaderButton to="/">Home</HeaderButton>
+        <HeaderButton to="/login">Login</HeaderButton>
+        <HeaderButton to="/register">Register</HeaderButton>
+      </HeaderButtons>
+    </HeaderContainer>
   );
 };
 

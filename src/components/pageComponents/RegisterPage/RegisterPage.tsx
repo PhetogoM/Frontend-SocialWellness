@@ -1,12 +1,19 @@
 import React, { useState, FC } from "react";
 import { Link } from "react-router-dom";
-import { RegisterPageWrapper, RegisterForm, Input, Button, Title, SocialButton, LoginLink } from "./RegisterPage.styled.tsx";
+import {
+  RegisterPageWrapper,
+  RegisterForm,
+  Input,
+  Button,
+  Title,
+  SocialButton,
+  LoginLink,
+} from "./RegisterPage.styled";
 
-// Social logos (or use SVGs)
+// Social logos
 import GoogleLogo from "../../../assets/google-logo.png";
 import MicrosoftLogo from "../../../assets/microsoft-logo.png";
 import AppleLogo from "../../../assets/apple-logo.png";
-
 
 const RegisterPage: FC = () => {
   const [name, setName] = useState("");
@@ -25,7 +32,7 @@ const RegisterPage: FC = () => {
   return (
     <RegisterPageWrapper>
       <RegisterForm onSubmit={handleSubmit}>
-        <Title>Create a account for Unipath</Title>
+        <Title>Create an account</Title>
 
         <SocialButton bgColor="#4285F4" onClick={() => handleSocialRegister("Google")}>
           <img src={GoogleLogo} alt="Google" /> Sign up with Google
@@ -39,7 +46,7 @@ const RegisterPage: FC = () => {
           <img src={AppleLogo} alt="Apple" /> Sign up with Apple
         </SocialButton>
 
-        <div style={{ margin: "18px 0", textAlign: "center", color: "#6b7280" }}>or</div>
+        <div style={{ textAlign: "center", color: "#6b7280", margin: "15px 0" }}>or</div>
 
         <Input
           type="text"

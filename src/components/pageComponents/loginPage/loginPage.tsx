@@ -1,8 +1,16 @@
 import React, { useState, FC } from "react";
 import { Link } from "react-router-dom";
-import { LoginPageWrapper, LoginForm, Input, Button, Title, SocialButton, RegisterLink } from "./loginPage.styled.tsx";
+import {
+  LoginPageWrapper,
+  LoginForm,
+  Input,
+  Button,
+  Title,
+  SocialButton,
+  RegisterLink,
+} from "./loginPage.styled";
 
-// Optionally, you can download logos or use svg icons
+// Social logos
 import GoogleLogo from "../../../assets/google-logo.png";
 import MicrosoftLogo from "../../../assets/microsoft-logo.png";
 import AppleLogo from "../../../assets/apple-logo.png";
@@ -23,7 +31,7 @@ const LoginPage: FC = () => {
   return (
     <LoginPageWrapper>
       <LoginForm onSubmit={handleSubmit}>
-        <Title>Login in Unipath</Title>
+        <Title>Login to Unipath</Title>
 
         <SocialButton bgColor="#4285F4" onClick={() => handleSocialLogin("Google")}>
           <img src={GoogleLogo} alt="Google" /> Sign in with Google
@@ -37,7 +45,7 @@ const LoginPage: FC = () => {
           <img src={AppleLogo} alt="Apple" /> Sign in with Apple
         </SocialButton>
 
-        <div style={{ margin: "20px 0", textAlign: "center", color: "#6b7280" }}>or</div>
+        <div style={{ textAlign: "center", color: "#6b7280", margin: "15px 0" }}>or</div>
 
         <Input
           type="email"

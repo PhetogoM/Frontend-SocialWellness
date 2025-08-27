@@ -1,14 +1,24 @@
-body {
+/* Reset margins/paddings and box-sizing */
+* {
   margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', 'Roboto', 'Oxygen',
-    'Ubuntu', 'Cantarell', 'Fira Sans', 'Droid Sans', 'Helvetica Neue',
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
-    monospace;
+/* Full height for body and root */
+html, body, #root {
+  height: 100%;
+  font-family: Arial, sans-serif;
+  background-color: #f3f4f6; /* light gray background */
 }
 
+/* Remove default link styles */
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+/* Smooth hover transitions */
+button, a {
+  transition: all 0.2s ease-in-out;
+}

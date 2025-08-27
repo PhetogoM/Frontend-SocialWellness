@@ -2,38 +2,29 @@ import React from "react";
 import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 
-
-// Importing your components
-import Home from "./components/pageComponents/HomePage/home-page.tsx";
-import Header from './components/sectionComponents/header.tsx';
-import Footer from './components/sectionComponents/footer.tsx';
-import Login from './components/pageComponents/loginPage/loginPage.tsx';
-import Register from './components/pageComponents/RegisterPage/RegisterPage.tsx';
+// Importing components
+import Header from "./components/sectionComponents/Header.tsx";
+import Footer from "./components/sectionComponents/Footer.tsx";
+import HomePage from "./components/pageComponents/HomePage/home-page.tsx";
+import LoginPage from "./components/pageComponents/loginPage/loginPage.tsx";
+import RegisterPage from "./components/pageComponents/RegisterPage/RegisterPage.tsx";
 
 function App() {
   return (
-      <Router>
-
-        <div className="App">
-          <div className="header">
-            <Header />
-          </div>
-
-          <div className="body">
-              <Routes>
-                <Route path="/" element={<Home />} />
-                <Route path="/login" element={<Login />} />
-                <Route path="/Register" element={<Register />} />
-              </Routes>
-          </div>
-
-          <div className="footer">
-            <Footer />
-          </div>
-        </div>
-      </Router>
+    <Router>
+      <div className="App">
+        <Header />
+        <main className="AppBody">
+          <Routes>
+            <Route path="/" element={<HomePage />} />
+            <Route path="/login" element={<LoginPage />} />
+            <Route path="/register" element={<RegisterPage />} />
+          </Routes>
+        </main>
+        <Footer />
+      </div>
+    </Router>
   );
 }
-
 
 export default App;
