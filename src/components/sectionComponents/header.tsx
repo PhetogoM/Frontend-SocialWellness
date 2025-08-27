@@ -5,7 +5,7 @@ const Header: FC = () => {
   return (
     <nav className="bg-indigo-600 text-white px-8 py-4 flex justify-between items-center shadow">
       {/* Logo / Title */}
-      <h1 className="text-xl font-bold">Unipath</h1>
+      <h1 className="text-xl font-bold">Unipath: Social Wellness</h1>
 
       {/* Navigation buttons */}
       <div className="flex gap-4 ml-auto">
