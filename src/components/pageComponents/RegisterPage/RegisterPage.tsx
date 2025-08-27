@@ -1,9 +1,9 @@
 import React, { useState, FC } from "react";
 import { Link } from "react-router-dom";
-import { RegisterPageWrapper, RegisterForm, Input, Button, Title, SocialButton, LoginLink } from "./RegisterStyled";
+import { RegisterPageWrapper, RegisterForm, Input, Button, Title, SocialButton, LoginLink } from "./RegisterPage.styled.tsx";
 
 // Social logos (or use SVGs)
-import GoogleLogo from "./assets/google-logo.png";
+import GoogleLogo from "../assets/google-logo.png";
 import MicrosoftLogo from "./assets/microsoft-logo.png";
 import AppleLogo from "/src/assets/apple-logo.png";
 
