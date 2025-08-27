@@ -11,3 +11,14 @@ code {
   font-family: source-code-pro, Menlo, Monaco, Consolas, 'Courier New',
     monospace;
 }
+
+.hero-background {
+  min-height: 100vh; /* full viewport height */
+  background-image: url('./assets/hero.png'); /* relative path from App.css */
+  background-size: cover; /* cover the entire div */
+  background-position: center; /* center the image */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
