@@ -7,9 +7,6 @@ import GoogleLogo from "../../../assets/google-logo.png";
 import MicrosoftLogo from "../../../assets/microsoft-logo.png";
 import AppleLogo from "../../../assets/apple-logo.png";
 
-
-
-
 const LoginPage: FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");

@@ -39,7 +39,7 @@ const RegisterPage: FC = () => {
           <img src={AppleLogo} alt="Apple" /> Sign up with Apple
         </SocialButton>
 
-        <div style={{ margin: "20px 0", textAlign: "center", color: "#6b7280" }}>or</div>
+        <div style={{ margin: "18px 0", textAlign: "center", color: "#6b7280" }}>or</div>
 
         <Input
           type="text"

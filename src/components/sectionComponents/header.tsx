@@ -1,32 +1,34 @@
 import React, { FC } from "react";
-import { Link } from "react-router-dom";
+import { useNavigate } from "react-router-dom";
 
 const Header: FC = () => {
+  const navigate = useNavigate();
+
   return (
-    <nav className="bg-indigo-600 text-white px-8 py-4 flex justify-between items-center shadow">
+    <nav className="bg-indigo-600 text-white px-8 py-4 flex items-center shadow">
       {/* Logo / Title */}
       <h1 className="text-xl font-bold">Unipath: Social Wellness</h1>
 
-      {/* Navigation buttons */}
+      {/* Navigation buttons on the right */}
       <div className="flex gap-4 ml-auto">
-        <Link
-          to="/"
+        <button
+          onClick={() => navigate("/")}
           className="bg-white text-indigo-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition"
         >
           Home
-        </Link>
-        <Link
-          to="/login"
+        </button>
+        <button
+          onClick={() => navigate("/login")}
           className="bg-white text-indigo-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition"
         >
           Login
-        </Link>
-        <Link
-          to="/register"
+        </button>
+        <button
+          onClick={() => navigate("/register")}
           className="bg-white text-indigo-600 px-4 py-2 rounded-lg font-semibold hover:bg-gray-100 transition"
         >
           Register
-        </Link>
+        </button>
       </div>
     </nav>
   );
