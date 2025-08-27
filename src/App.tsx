@@ -8,7 +8,6 @@ import Home from "./components/pageComponents/HomePage/home-page";
 import Header from './components/sectionComponents/header';
 import Footer from './components/sectionComponents/footer';
 import Login from './components/pageComponents/loginPage/loginPage.lazy';
-import RegisterPage from './components/pageComponents/Re';
 
 function App() {
   return (
