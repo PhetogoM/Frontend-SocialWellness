@@ -3,7 +3,7 @@ import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
 
 // Importing your components
-import Home from "./components/pageComponents/home-page";
+import Home from "./components/pageComponents/HomePage/home-page";
 import Header from './components/sectionComponents/header';
 import Footer from './components/sectionComponents/footer';
 import Login from './components/pageComponents/loginPage/loginPage.lazy';
