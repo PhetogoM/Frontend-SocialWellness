@@ -36,7 +36,6 @@ const Footer: FC = () => {
       <div>
         &copy; {new Date().getFullYear()} Unipath. All Rights Reserved.
       </div>
-      <FooterButton to="/register">Register</FooterButton>
     </FooterContainer>
   );
 };
