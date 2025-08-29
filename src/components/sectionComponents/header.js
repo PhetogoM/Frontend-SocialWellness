@@ -56,7 +56,7 @@ const HeaderButton = styled(Link)`
 const Header = () => {
   return (
     <HeaderContainer>
-      <h1 style={{ fontSize: "1.5rem", fontWeight: "bold" }}>Unipath: Social Wellness</h1>
+      <h1 style={{ fontSize: "1.5rem", fontWeight: "bold" }}>UniPath: Social Wellness</h1>
       <NavLinks>
         <NavLink to="/">Home</NavLink>
         <NavLink to="/about">About</NavLink>
