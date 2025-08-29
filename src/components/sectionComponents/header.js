@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 /* Header container */
 const HeaderContainer = styled.header`
-  background-color: #60a5fa; /* light blue */
+  background-color: #5fae8a; /* light blue */
   color: white;
   padding: 20px 40px;
   display: flex;
@@ -41,7 +41,7 @@ const HeaderButtons = styled.div`
 /* Styled button links */
 const HeaderButton = styled(Link)`
   background-color: white;
-  color: #3b82f6;
+  color: #5fae8a;
   padding: 10px 20px;
   border-radius: 8px;
   font-weight: bold;

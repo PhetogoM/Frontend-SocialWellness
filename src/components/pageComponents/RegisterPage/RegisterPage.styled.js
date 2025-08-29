@@ -32,7 +32,7 @@ export const RegisterForm = styled.form`
 
 export const Title = styled.h2`
   text-align: center;
-  color: #3b82f6;
+  color: #5fae8a;
   margin-bottom: 20px;
 `;
 
@@ -43,14 +43,14 @@ export const Input = styled.input`
   outline: none;
 
   &:focus {
-    border-color: #3b82f6;
+    border-color: #5fae8a;
     box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
   }
 `;
 
 export const Button = styled.button`
   padding: 12px;
-  background-color: #3b82f6;
+  background-color: #5fae8a;
   color: white;
   border-radius: 8px;
   font-weight: bold;
@@ -58,7 +58,7 @@ export const Button = styled.button`
   border: none;
 
   &:hover {
-    background-color: #2563eb;
+    background-color: #5fae8a;
   }
 `;
 
@@ -91,7 +91,7 @@ export const LoginLink = styled.p`
   margin-top: 10px;
 
   a {
-    color: #3b82f6;
+    color: #5fae8a;
     font-weight: bold;
   }
 `;

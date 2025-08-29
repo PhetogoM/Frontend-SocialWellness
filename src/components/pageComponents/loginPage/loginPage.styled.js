@@ -29,7 +29,7 @@ export const LoginForm = styled.form`
 export const Title = styled.h2`
   text-align: center;
   margin-bottom: 1.5rem;
-  color: #3b82f6;
+  color: #5fae8a;
 `;
 
 export const Input = styled.input`
@@ -44,7 +44,7 @@ export const Input = styled.input`
 export const Button = styled.button`
   width: 100%;
   padding: 0.75rem;
-  background-color: #2563eb;
+  background-color: #5fae8a;
   color: white;
   font-weight: bold;
   border: none;
@@ -52,7 +52,7 @@ export const Button = styled.button`
   cursor: pointer;
 
   &:hover {
-    background-color: #1d4ed8;
+    background-color: #5fae8a;
   }
 `;
 
@@ -83,7 +83,7 @@ export const RegisterLink = styled.div`
   color: #6b7280;
 
   a {
-    color: #2563eb;
+    color: #5fae8a;
     font-weight: bold;
     text-decoration: none;
 
