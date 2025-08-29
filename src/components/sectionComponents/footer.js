@@ -1,15 +1,28 @@
-import React from 'react';
+import React from "react";
+import styled from "styled-components";
+
+
+/* Footer container */
+const FooterContainer = styled.footer`
+  background-color: #60a5fa; /* medium blue */
+  color: white;
+  text-align: center;
+  padding: 20px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  gap: 10px;
+`;
+
 
 const Footer = () => {
   return (
-    <div>
-      <div className="copyrights">
-        <p>
-			FRONTEND TEMPLATE FOOTER<br/>
-          &copy; {new Date().getFullYear()} Business-Name. All Rights Reserved. | Developed by Development-Group-Name
-        </p>
+    <FooterContainer>
+      <div>
+        &copy; {new Date().getFullYear()} Unipath. All Rights Reserved.
       </div>
-    </div>
+    </FooterContainer>
   );
 };
 
