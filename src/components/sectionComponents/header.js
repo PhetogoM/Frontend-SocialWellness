@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import React from "react";
 import { Link } from "react-router-dom";
 import styled from "styled-components";
 
@@ -12,7 +12,27 @@ const HeaderContainer = styled.header`
   align-items: center;
 `;
 
-/* Button container */
+/* Center navigation */
+const NavLinks = styled.nav`
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex: 1;
+`;
+
+/* Styled hyperlink links using React Router Link */
+const NavLink = styled(Link)`
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 1rem;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+/* Right buttons */
 const HeaderButtons = styled.div`
   display: flex;
   gap: 10px;
@@ -33,12 +53,16 @@ const HeaderButton = styled(Link)`
   }
 `;
 
-const Header: FC = () => {
+const Header = () => {
   return (
     <HeaderContainer>
-      <h1 style={{ fontSize: "2rem", fontWeight: "bold" }}>Unipath: Social Wellness</h1>
+      <h1 style={{ fontSize: "1.5rem", fontWeight: "bold" }}>Unipath: Social Wellness</h1>
+      <NavLinks>
+        <NavLink to="/">Home</NavLink>
+        <NavLink to="/about">About</NavLink>
+        <NavLink to="/FAQs">FAQs</NavLink>
+      </NavLinks>
       <HeaderButtons>
-        <HeaderButton to="/">Home</HeaderButton>
         <HeaderButton to="/login">Login</HeaderButton>
         <HeaderButton to="/register">Register</HeaderButton>
       </HeaderButtons>

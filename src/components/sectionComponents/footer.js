@@ -1,6 +1,6 @@
-import React, { FC } from "react";
+import React from "react";
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+
 
 /* Footer container */
 const FooterContainer = styled.footer`
@@ -15,22 +15,8 @@ const FooterContainer = styled.footer`
   gap: 10px;
 `;
 
-/* Styled footer buttons (optional links) */
-const FooterButton = styled(Link)`
-  background-color: white;
-  color: #3b82f6;
-  padding: 8px 16px;
-  border-radius: 8px;
-  font-weight: bold;
-  text-decoration: none;
-  transition: background 0.2s;
 
-  &:hover {
-    background-color: #e0f2fe;
-  }
-`;
-
-const Footer: FC = () => {
+const Footer = () => {
   return (
     <FooterContainer>
       <div>

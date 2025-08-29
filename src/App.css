@@ -31,7 +31,7 @@ body, html, #root, .App {
   padding: 0;
   font-family: Arial, sans-serif;
 
-  background-image: url('./assets/hero-bg.png');
+  background-image: url('/public/image/hero-bg.png');
   background-size: cover; /* ensures the image covers the screen */
   background-position: center; /* centers the image */
   background-repeat: no-repeat; /* prevents tiling */

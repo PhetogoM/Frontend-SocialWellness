@@ -1,5 +1,13 @@
 import styled from "styled-components";
-import { Link } from "react-router-dom";
+
+export const PageContainer = styled.div`
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 80vh; /* adjust as needed */
+  background: url('/image/hero-bg.png') no-repeat center center;
+  background-size: cover;
+`;
 
 export const RegisterPageWrapper = styled.div`
   min-height: 100vh;
@@ -24,7 +32,6 @@ export const RegisterForm = styled.form`
 
 export const Title = styled.h2`
   text-align: center;
-  font-size: 2rem;
   color: #3b82f6;
   margin-bottom: 20px;
 `;
@@ -55,7 +62,7 @@ export const Button = styled.button`
   }
 `;
 
-export const SocialButton = styled.button<{ bgColor: string }>`
+export const SocialButton = styled.button`
   display: flex;
   align-items: center;
   gap: 10px;
@@ -65,7 +72,7 @@ export const SocialButton = styled.button<{ bgColor: string }>`
   font-weight: bold;
   cursor: pointer;
   border: none;
-  background-color: ${(props) => props.bgColor};
+  background-color: ${(props) => props.bgColor || "#ccc"};
   color: white;
 
   &:hover {
