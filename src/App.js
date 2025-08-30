@@ -7,8 +7,11 @@ import Footer from "./components/sectionComponents/footer.js";
 import HomePage from "./components/pageComponents/HomePage/home-page.js";
 import LoginPage from "./components/pageComponents/loginPage/loginPage.js";
 import RegisterPage from "./components/pageComponents/RegisterPage/RegisterPage.js";
-import AboutPage from "./components/pageComponents/AboutPage/AboutPage.js"
+import AboutPage from "./components/pageComponents/AboutPage/AboutPage.js";
 import FAQsPage from "./components/pageComponents/FAQsPage/FAQsPage.js";
+
+// Import MyCulturePage
+import MyCulturePage from "./components/pageComponents/MyCulturePage/MyCulturePage.js";
 
 import { AppWrapper } from "./components/pageComponents/AppWrapper.styled.js";
 
@@ -24,12 +27,13 @@ function App() {
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/about" element={<AboutPage />} />
             <Route path="/FAQs" element={<FAQsPage />} />
+            <Route path="/myculture" element={<MyCulturePage />} />
           </Routes>
         </main>
         <Footer />
       </AppWrapper>
     </Router>
   );
- } 
- 
- export default App;
+}
+
+export default App;

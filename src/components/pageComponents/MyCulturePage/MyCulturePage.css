@@ -1,0 +1,123 @@
+/* Page container */
+.myculture-container {
+  max-width: 800px;
+  margin: 0 auto;
+  padding: 20px;
+  font-family: "Segoe UI", sans-serif;
+  background-color: #ffffff;
+}
+
+/* Title */
+.myculture-title {
+  font-size: 2.2rem;
+  text-align: center;
+  color: #2e7d32;
+  margin-bottom: 8px;
+}
+
+/* Subtitle */
+.myculture-subtitle {
+  text-align: center;
+  color: #555;
+  margin-bottom: 20px;
+}
+
+/* Post form box */
+.myculture-form {
+  background: #f0fdf4;
+  border: 1px solid #a5d6a7;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.08);
+  margin-bottom: 20px;
+}
+
+/* Post form textarea */
+.myculture-form textarea {
+  width: 100%;
+  padding: 10px;
+  border: 1px solid #a5d6a7;
+  border-radius: 8px;
+  resize: none;
+  font-size: 1rem;
+  outline: none;
+}
+
+/* Textarea focus */
+.myculture-form textarea:focus {
+  border-color: #2e7d32;
+  box-shadow: 0 0 0 2px #a5d6a7;
+}
+
+/* Post button */
+.myculture-form button {
+  margin-top: 10px;
+  width: 100%;
+  padding: 10px;
+  background-color: #2e7d32;
+  color: white;
+  font-weight: bold;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s ease;
+}
+
+/* Post button hover */
+.myculture-form button:hover {
+  background-color: #1b5e20;
+}
+
+/* Feed container */
+.myculture-feed {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+}
+
+/* Post card */
+.myculture-card {
+  background: #ffffff;
+  border: 1px solid #c8e6c9;
+  border-radius: 12px;
+  padding: 15px;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+/* Post content */
+.myculture-content {
+  font-size: 1.05rem;
+  color: #333;
+  margin-bottom: 6px;
+}
+
+/* Post author */
+.myculture-author {
+  font-size: 0.9rem;
+  color: #666;
+  margin-bottom: 10px;
+}
+
+/* Post actions */
+.myculture-actions {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+/* Relate button */
+.myculture-actions button {
+  padding: 6px 12px;
+  border: 1px solid #2e7d32;
+  background: #ffffff;
+  color: #2e7d32;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: 0.2s;
+}
+
+/* Relate button hover */
+.myculture-actions button:hover {
+  background: #2e7d32;
+  color: white;
+}
