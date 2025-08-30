@@ -24,6 +24,8 @@ export const MainTitle = styled.h1`
   font-size: 3rem;
   font-weight: bold;
   margin: 0 0 15px 0;
+  color: #8FBC8F;
+  font-family: Arial, sans-serif; 
 `;
 
 // Subtitle
@@ -31,4 +33,6 @@ export const SubTitle = styled.h2`
   font-size: 1.5rem;
   font-weight: normal;
   margin: 0;
+  color: #8FBC8F; /* Calm green */
+  font-family: Arial, sans-serif; /* optional */
 `;

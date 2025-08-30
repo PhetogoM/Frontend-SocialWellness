@@ -36,11 +36,11 @@ const RegisterPage = () => {
         <RegisterForm onSubmit={handleSubmit}>
           <Title>Register to Unipath</Title>
 
-          <SocialButton bgColor="#4285F4" onClick={() => handleSocialRegister("Google")}>
+          <SocialButton bgColor="#ff2600ff" onClick={() => handleSocialRegister("Google")}>
             <img src={GoogleLogo} alt="Google" /> Sign up with Google
           </SocialButton>
 
-          <SocialButton bgColor="#0078D4" onClick={() => handleSocialRegister("Microsoft")}>
+          <SocialButton bgColor="#000000ff" onClick={() => handleSocialRegister("Microsoft")}>
             <img src={MicrosoftLogo} alt="Microsoft" /> Sign up with Microsoft
           </SocialButton>
 

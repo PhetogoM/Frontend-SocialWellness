@@ -35,11 +35,11 @@ const LoginPage = () => {
         <LoginForm onSubmit={handleSubmit}>
           <Title>Login to Unipath</Title>
 
-          <SocialButton bgColor="#4285F4" onClick={() => handleSocialLogin("Google")}>
+          <SocialButton bgColor="#ff2600ff" onClick={() => handleSocialLogin("Google")}>
             <img src={GoogleLogo} alt="Google" /> Sign in with Google
           </SocialButton>
 
-          <SocialButton bgColor="#0078D4" onClick={() => handleSocialLogin("Microsoft")}>
+          <SocialButton bgColor="#000000ff" onClick={() => handleSocialLogin("Microsoft")}>
             <img src={MicrosoftLogo} alt="Microsoft" /> Sign in with Microsoft
           </SocialButton>
 
