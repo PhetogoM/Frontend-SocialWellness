@@ -82,7 +82,7 @@ function MyCulturePage() {
 
             {/* Relate button and count */}
             <div className="myculture-actions">
-              <button onClick={() => handleRelate(post.id)}>👍 Relate</button>
+              <button onClick={() => handleRelate(post.id)}>💚❤ Relate</button>
               <span>{post.relates} relate(s)</span>
             </div>
           </div>

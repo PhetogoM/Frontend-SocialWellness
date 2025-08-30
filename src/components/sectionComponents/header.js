@@ -25,7 +25,7 @@ const NavLink = styled(Link)`
   color: white;
   font-weight: bold;
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 1.1rem;
 
   &:hover {
     text-decoration: underline;
