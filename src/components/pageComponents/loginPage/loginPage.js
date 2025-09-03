@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import api from "/CMPG323/Frontend-SocialWellness/src/components/sectionComponents/api.js"; // ✅ import API instance
+import api from "../../apiComponents/api";
 import {
   PageContainer,
   LoginPageWrapper,
@@ -12,6 +12,7 @@ import {
   RegisterLink,
 } from "./loginPage.styled.js";
 
+// Social logos
 const GoogleLogo = "/image/google-logo.png";
 
 const LoginPage = () => {
@@ -21,7 +22,6 @@ const LoginPage = () => {
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
 
-  // 🔹 Email/password login
   const handleSubmit = async (e) => {
     e.preventDefault();
 
@@ -34,47 +34,27 @@ const LoginPage = () => {
       setLoading(true);
       setError("");
 
-      const res = await api.post("/auth/login", { email, password });
+      const res = await api.post("token/", {
+        username: email,
+        password,
+      });
 
-      if (res.data && res.data.token) {
-        // ✅ Save user + token
-        localStorage.setItem("user", JSON.stringify(res.data.user));
-        localStorage.setItem("token", res.data.token);
+      localStorage.setItem("access_token", res.data.access);
+      localStorage.setItem("refresh_token", res.data.refresh);
+      localStorage.setItem("user", JSON.stringify({ email }));
 
-        navigate("/myculture");
-      } else {
-        setError("Invalid credentials.");
-      }
+      navigate("/myculture");
     } catch (err) {
       console.error(err);
-      setError("Login failed. Please try again.");
+      setError("Invalid credentials. Please try again.");
     } finally {
       setLoading(false);
     }
   };
 
-  // 🔹 Google button login
-  const handleSocialLogin = async (provider) => {
-    try {
-      setLoading(true);
-      setError("");
-
-      const res = await api.post(`/auth/${provider.toLowerCase()}`);
-
-      if (res.data && res.data.token) {
-        localStorage.setItem("user", JSON.stringify(res.data.user));
-        localStorage.setItem("token", res.data.token);
-
-        navigate("/myculture");
-      } else {
-        setError("Social login failed.");
-      }
-    } catch (err) {
-      console.error(err);
-      setError("Social login failed.");
-    } finally {
-      setLoading(false);
-    }
+  const handleSocialLogin = (provider) => {
+    console.log(`Logging in with ${provider}`);
+    navigate("/myculture"); // placeholder
   };
 
   return (
