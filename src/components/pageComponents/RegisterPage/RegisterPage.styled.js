@@ -4,13 +4,13 @@ export const PageContainer = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  min-height: 80vh; /* adjust as needed */
+  min-height: 100vh; /* adjust as needed */
   background: url('/image/hero-bg.png') no-repeat center center;
   background-size: cover;
 `;
 
 export const RegisterPageWrapper = styled.div`
-  min-height: 100vh;
+  min-height: 80vh;
   display: flex;
   justify-content: center;
   align-items: center;
