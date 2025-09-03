@@ -13,7 +13,7 @@ export const LoginPageWrapper = styled.div`
   display: flex;
   justify-content: center;
   align-items: center;
-  height: 100vh;
+  height: 60vh;
   background-color: #f9fafb;
 `;
 
