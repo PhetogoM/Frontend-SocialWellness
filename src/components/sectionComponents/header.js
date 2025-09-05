@@ -12,6 +12,19 @@ const HeaderContainer = styled.header`
   align-items: center;
 `;
 
+/* Left side: Logo + title */
+const LogoTitle = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px; /* spacing between logo and title */
+`;
+
+const Logo = styled.img`
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+`;
+
 /* Center navigation */
 const NavLinks = styled.nav`
   display: flex;
@@ -25,7 +38,7 @@ const NavLink = styled(Link)`
   color: white;
   font-weight: bold;
   text-decoration: none;
-  font-size: 1rem;
+  font-size: 1.1rem;
 
   &:hover {
     text-decoration: underline;
@@ -56,12 +69,16 @@ const HeaderButton = styled(Link)`
 const Header = () => {
   return (
     <HeaderContainer>
-      <h1 style={{ fontSize: "1.5rem", fontWeight: "bold" }}>UniPath: Social Wellness</h1>
+      <LogoTitle>
+        <Logo src="image/path-to-logo.png" alt="UniPath Logo" />
+        <h1 style={{ fontSize: "1.5rem", fontWeight: "bold" }}>UniPath: Social Wellness</h1>
+      </LogoTitle>
+
       <NavLinks>
         <NavLink to="/">Home</NavLink>
         <NavLink to="/about">About</NavLink>
-        <NavLink to="/FAQs">FAQs</NavLink>
       </NavLinks>
+
       <HeaderButtons>
         <HeaderButton to="/login">Login</HeaderButton>
         <HeaderButton to="/register">Register</HeaderButton>
