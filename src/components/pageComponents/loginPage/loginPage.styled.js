@@ -9,14 +9,6 @@ export const PageContainer = styled.div`
   background-size: cover;
 `;
 
-export const LoginPageWrapper = styled.div`
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  height: 100vh;
-  background-color: #f9fafb;
-`;
-
 export const LoginForm = styled.form`
   background: white;
   padding: 2rem;
