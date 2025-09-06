@@ -9,25 +9,15 @@ export const PageContainer = styled.div`
   background-size: cover;
 `;
 
-export const RegisterPageWrapper = styled.div`
-  min-height: 80vh;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  background-color: #f3f4f6;
-  font-family: Arial, sans-serif;
-`;
-
 export const RegisterForm = styled.form`
   background-color: white;
-  padding: 40px;
-  border-radius: 16px;
+  padding: 2rem;
+  border-radius: 1rem;
   box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
   width: 100%;
   max-width: 400px;
   display: flex;
   flex-direction: column;
-  gap: 15px;
 `;
 
 export const Title = styled.h2`
@@ -37,10 +27,12 @@ export const Title = styled.h2`
 `;
 
 export const Input = styled.input`
-  padding: 12px;
-  border-radius: 8px;
+  width: 100%;
+  padding: 0.75rem;
+  margin-bottom: 1rem;
   border: 1px solid #d1d5db;
-  outline: none;
+  border-radius: 0.5rem;
+  font-size: 1rem;
 
   &:focus {
     border-color: #5fae8a;

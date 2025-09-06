@@ -61,7 +61,6 @@ const LoginPage = () => {
 
   return (
     <PageContainer>
-      <LoginPageWrapper>
         <LoginForm onSubmit={handleSubmit}>
           <Title>Login to Unipath</Title>
           {error && <p style={{ color: "red" }}>{error}</p>}
@@ -82,7 +81,6 @@ const LoginPage = () => {
             Don't have an account? <Link to="/register">Register</Link>
           </RegisterLink>
         </LoginForm>
-      </LoginPageWrapper>
     </PageContainer>
   );
 };

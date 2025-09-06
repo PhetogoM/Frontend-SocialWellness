@@ -64,7 +64,6 @@ const RegisterPage = () => {
 
   return (
     <PageContainer>
-      <RegisterPageWrapper>
         <RegisterForm onSubmit={handleSubmit}>
           <Title>Register to Unipath</Title>
 
@@ -89,7 +88,6 @@ const RegisterPage = () => {
             Already have an account? <Link to="/login">Login</Link>
           </LoginLink>
         </RegisterForm>
-      </RegisterPageWrapper>
     </PageContainer>
   );
 };
