@@ -3,7 +3,6 @@ import { Link, useNavigate } from "react-router-dom";
 import api from "../../apiComponents/api.js";
 import {
   PageContainer,
-  RegisterPageWrapper,
   RegisterForm,
   Input,
   Button,
