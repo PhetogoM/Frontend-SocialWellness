@@ -3,7 +3,7 @@ import axios from "axios";
 import { API_URL } from "./api-base-url";
 
 const api = axios.create({
-  baseURL: `${API_URL}/user_management/`,
+  baseURL: `${API_URL}/`,
   headers: {
     "Content-Type": "application/json",
   },

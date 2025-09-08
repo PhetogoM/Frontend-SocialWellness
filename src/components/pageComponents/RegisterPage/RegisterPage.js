@@ -33,10 +33,10 @@ const RegisterPage = () => {
       setError("");
 
       // Register user
-      await api.post("register/", { name, email, password });
+      await api.post("api/register/", { name, email, password });
 
       // Auto-login after registration
-      const tokenRes = await api.post("token/", { username: email, password });
+      const tokenRes = await api.post("api/token/", { username: email, password });
 
       const user = tokenRes.data.user || { name, email };
       localStorage.setItem("access_token", tokenRes.data.access);

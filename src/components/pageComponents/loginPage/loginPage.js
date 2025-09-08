@@ -31,7 +31,7 @@ const LoginPage = () => {
       setLoading(true);
       setError("");
 
-      const res = await api.post("token/", { username: email, password });
+      const res = await api.post("api/token/", { username: email, password });
 
       // Save tokens + user info including role
       const user = res.data.user || { email }; // fallback if backend doesn't send user
