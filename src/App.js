@@ -42,6 +42,7 @@ function App() {
             <Route path="/login" element={<LoginPage />} />
             <Route path="/register" element={<RegisterPage />} />
             <Route path="/about" element={<AboutPage />} />
+            <Route path= "myculture" element={<MyCulturePage />} />
 
             {/* Protected route */}
             <Route
