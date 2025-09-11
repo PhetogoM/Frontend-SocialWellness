@@ -15,10 +15,10 @@ const GoogleLogo = "/image/google-logo.png";
 
 const RegisterPage = () => {
   const [firstName, setFirstName] = useState("");
-  const [surname, setSurname] = useState(""); // new field
+  const [surname, setSurname] = useState(""); 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState(""); // new field
+  const [confirmPassword, setConfirmPassword] = useState(""); 
   const [error, setError] = useState("");
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
@@ -41,16 +41,17 @@ const RegisterPage = () => {
       setError("");
 
       await api.post("api/register/", {
-        first_name: firstName,
-        last_name: surname,
-        email,
-        password,
+        name: firstName,
+        surname: surname,
+        email: email,
+        password: password,
+        confirm_password: confirmPassword,
       });
 
       // Auto-login after registration
-      const tokenRes = await api.post("api/token/", { username: email, password });
+      const tokenRes = await api.post("api/token/", { email: email, password });
 
-      const user = tokenRes.data.user || { first_name: firstName, last_name: surname, email };
+      const user = tokenRes.data.user || { name: firstName, surname: surname, email: email  };
       localStorage.setItem("access_token", tokenRes.data.access);
       localStorage.setItem("refresh_token", tokenRes.data.refresh);
       localStorage.setItem("user", JSON.stringify(user));
