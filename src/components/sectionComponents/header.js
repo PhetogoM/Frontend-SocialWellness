@@ -1,14 +1,89 @@
-import React from 'react';
+import React from "react";
+import { Link } from "react-router-dom";
+import styled from "styled-components";
+
+/* Header container */
+const HeaderContainer = styled.header`
+  background-color: #5fae8a; /* light blue */
+  color: white;
+  padding: 20px 40px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+`;
+
+/* Left side: Logo + title */
+const LogoTitle = styled.div`
+  display: flex;
+  align-items: center;
+  gap: 12px; /* spacing between logo and title */
+`;
+
+const Logo = styled.img`
+  width: 40px;
+  height: 40px;
+  object-fit: contain;
+`;
+
+/* Center navigation */
+const NavLinks = styled.nav`
+  display: flex;
+  gap: 20px;
+  justify-content: center;
+  flex: 1;
+`;
+
+/* Styled hyperlink links using React Router Link */
+const NavLink = styled(Link)`
+  color: white;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 1.1rem;
+
+  &:hover {
+    text-decoration: underline;
+  }
+`;
+
+/* Right buttons */
+const HeaderButtons = styled.div`
+  display: flex;
+  gap: 10px;
+`;
+
+/* Styled button links */
+const HeaderButton = styled(Link)`
+  background-color: white;
+  color: #5fae8a;
+  padding: 10px 20px;
+  border-radius: 8px;
+  font-weight: bold;
+  text-decoration: none;
+  transition: background 0.2s;
+
+  &:hover {
+    background-color: #e0f2fe;
+  }
+`;
 
 const Header = () => {
   return (
-    <div>
-      <header>
-		<h1>
-			Frontend Template Header
-		</h1>
-      </header>
-    </div>
+    <HeaderContainer>
+      <LogoTitle>
+        <Logo src="image/path-to-logo.png" alt="UniPath Logo" />
+        <h1 style={{ fontSize: "1.5rem", fontWeight: "bold" }}>UniPath: Social Wellness</h1>
+      </LogoTitle>
+
+      <NavLinks>
+        <NavLink to="/">Home</NavLink>
+        <NavLink to="/about">About</NavLink>
+      </NavLinks>
+
+      <HeaderButtons>
+        <HeaderButton to="/login">Login</HeaderButton>
+        <HeaderButton to="/register">Register</HeaderButton>
+      </HeaderButtons>
+    </HeaderContainer>
   );
 };
 
