@@ -1,49 +1,38 @@
-/* Reset margins/paddings and box-sizing */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* Set default font for the app */
-body, html, #root {
-  font-family: Arial, sans-serif;
-  height: 100%;
-}
-
-/* App container for full height */
-.App {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-/* Main body grows to take space between header and footer */
-.AppBody {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
+/* Remove global background here */
 body, html, #root, .App {
   height: 100%;
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
-
-  background-image: url('/public/image/hero-bg.png');
-  background-size: cover; /* ensures the image covers the screen */
-  background-position: center; /* centers the image */
-  background-repeat: no-repeat; /* prevents tiling */
 }
 
-.App::before {
+/* Background only on Home, Login, Register */
+.with-background {
+  background-image: url('/public/image/hero-bg.png'); /* adjust path */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+.with-background::before {
   content: '';
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background: rgba(255, 255, 255, 0.3); /* light overlay */
-  z-index: -1;
+  background: rgba(255, 255, 255, 0.3); /* overlay */
+  z-index: 0;
+}
+
+/* Other pages: plain background */
+.no-background {
+  background: #fff; /* or any solid color */
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }

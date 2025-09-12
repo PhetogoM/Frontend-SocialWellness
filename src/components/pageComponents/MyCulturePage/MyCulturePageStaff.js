@@ -1,7 +1,7 @@
-// components/pageComponents/MyCulturePage/MyCulturePage.js
+// components/pageComponents/MyCulturePage/MyCulturePageStaff.js
 import React, { useState, useEffect, useCallback } from "react";
 import { cultureAPI } from "../../apiComponents/cultureApi.js"; // Fixed import path
-import "./MyCulturePage.css";
+import "./MyCulturePageStaff.css";
 
 // Culture colors mapping
 const CULTURE_COLORS = {
@@ -17,9 +17,10 @@ const CULTURE_COLORS = {
   default: "#333333"
 };
 
-const MyCulturePage = ({ user }) => {
+const MyCulturePageStaff = ({ user }) => {
   const [selectedFilter, setSelectedFilter] = useState("all");
-  const [sortBy, setSortBy] = useState("newest");
+  const [showModerated, setShowModerated] = useState(false);
+  const [sortBy, setSortBy] = useState("most-liked");
   const [posts, setPosts] = useState([]);
   const [cultures, setCultures] = useState([]);
   const [newPost, setNewPost] = useState("");
@@ -28,7 +29,7 @@ const MyCulturePage = ({ user }) => {
   const [posting, setPosting] = useState(false);
   const [error, setError] = useState("");
 
-  // Get culture color - NOW BEING USED!
+  // Get culture color
   const getCultureColor = (cultureName) => {
     return CULTURE_COLORS[cultureName] || CULTURE_COLORS.default;
   };
@@ -39,8 +40,8 @@ const MyCulturePage = ({ user }) => {
       setLoading(true);
       setError("");
       
-      // For regular users, only fetch approved posts
-      const filters = { status: "approved" };
+      // Staff can see all posts, not just approved ones
+      const filters = showModerated ? {} : { status: "pending" };
       
       const [postsResponse, culturesResponse] = await Promise.all([
         cultureAPI.getPosts(filters),
@@ -56,12 +57,17 @@ const MyCulturePage = ({ user }) => {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [showModerated]); // Add showModerated as dependency
 
   // Load posts and cultures on component mount
   useEffect(() => {
     loadData();
   }, [loadData]);
+
+  // Reload data when filters change
+  useEffect(() => {
+    loadData();
+  }, [showModerated, loadData]);
 
   const handlePostSubmit = async () => {
     if (!newPost || !selectedCulture) {
@@ -121,6 +127,20 @@ const MyCulturePage = ({ user }) => {
     }
   };
 
+  const moderatePost = async (id, action) => {
+    try {
+      const response = action === "approve" 
+        ? await cultureAPI.approvePost(id)
+        : await cultureAPI.rejectPost(id);
+      
+      setPosts(posts.map(post => 
+        post.id === id ? response.data : post
+      ));
+    } catch (err) {
+      console.error("Error moderating post:", err);
+    }
+  };
+
   // Filter and sort posts
   const filteredPosts = posts
     .filter(post => selectedFilter === "all" || post.culture === selectedFilter)
@@ -135,18 +155,35 @@ const MyCulturePage = ({ user }) => {
   if (loading) return <div className="loading">Loading posts...</div>;
   
   return (
-    <div className="my-culture-container">
-      <h1 className="page-title">MyCulture</h1>
-      <p className="page-subtitle">Share and learn about South African cultures</p>
+    <div className="my-culture-container staff-version">
+      <h1 className="page-title">MyCulture - Staff Dashboard</h1>
+      <p className="page-subtitle">Moderate and manage cultural posts</p>
       
       {/* Error message */}
       {error && <div className="error">{error}</div>}
 
       <div className="page-layout">
+        {/* Posts Section */}
         <div className="posts-section">
+          {/* Header with toggleable buttons */}
           <div className="posts-header framed">
             <h2>Cultural Posts</h2>
             <div className="filter-controls">
+              <div className="toggle-group">
+                <button 
+                  className={sortBy === "most-liked" ? "active" : ""}
+                  onClick={() => setSortBy("most-liked")}
+                >
+                  Most liked
+                </button>
+                <button 
+                  className={sortBy === "newest" ? "active" : ""}
+                  onClick={() => setSortBy("newest")}
+                >
+                  Newest
+                </button>
+              </div>
+              
               <select
                 value={selectedFilter}
                 onChange={(e) => setSelectedFilter(e.target.value)}
@@ -154,33 +191,28 @@ const MyCulturePage = ({ user }) => {
               >
                 <option value="all">All cultures</option>
                 {cultures.map((culture) => (
-                  <option 
-                    key={typeof culture === 'object' ? culture.id : culture} 
-                    value={typeof culture === 'object' ? culture.name : culture}
-                  >
+                  <option key={typeof culture === 'object' ? culture.id : culture} value={typeof culture === 'object' ? culture.name : culture}>
                     {typeof culture === 'object' ? culture.name : culture}
                   </option>
                 ))}
               </select>
               
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="sort-filter"
+              <button 
+                onClick={() => setShowModerated(!showModerated)}
+                className={showModerated ? "moderation-toggle active" : "moderation-toggle"}
               >
-                <option value="newest">Newest First</option>
-                <option value="most-liked">Most Liked</option>
-              </select>
+                {showModerated ? "Hide Moderated" : "Show Moderated"}
+              </button>
             </div>
           </div>
 
+          {/* Posts Container */}
           <div className="posts-container framed">
             {filteredPosts.length === 0 ? (
-              <p className="no-posts">No posts yet. Be the first to share!</p>
+              <p className="no-posts">No posts to display</p>
             ) : (
               filteredPosts.map((post) => (
                 <div key={post.id} className="post-card">
-                  {/* FIXED: Now using getCultureColor function instead of post.cultureColor */}
                   <div
                     className="post-header"
                     style={{ color: getCultureColor(post.culture) }}
@@ -191,9 +223,27 @@ const MyCulturePage = ({ user }) => {
                   <div className="post-meta">
                     <span>
                       — <strong style={{ color: "green" }}>{post.author?.username || post.author}</strong> ·{" "}
-                      {new Date(post.createdAt).toLocaleDateString()}
+                      {new Date(post.createdAt).toLocaleDateString()} · <span className={`status-${post.status.toLowerCase()}`}>{post.status}</span>
                     </span>
                   </div>
+
+                  {/* Moderation buttons for staff */}
+                  {post.status === "pending" && (
+                    <div className="moderation-actions">
+                      <button 
+                        className="approve-btn"
+                        onClick={() => moderatePost(post.id, "approve")}
+                      >
+                        Approve
+                      </button>
+                      <button 
+                        className="reject-btn"
+                        onClick={() => moderatePost(post.id, "reject")}
+                      >
+                        Reject
+                      </button>
+                    </div>
+                  )}
 
                   {/* Like + Comment buttons */}
                   <div className="post-actions">
@@ -241,7 +291,7 @@ const MyCulturePage = ({ user }) => {
           </div>
         </div>
 
-        {/* Right side - Create post section */}
+        {/* Create Post Section */}
         <div className="create-post-section">
           <div className="create-post framed">
             <h2>Share Your Culture</h2>
@@ -283,4 +333,4 @@ const MyCulturePage = ({ user }) => {
   );
 };
 
-export default MyCulturePage;
+export default MyCulturePageStaff;

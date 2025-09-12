@@ -1,10 +1,16 @@
 // src/App.js
 import React, { useState, useEffect } from "react";
-import { HashRouter as Router, Routes, Route, useLocation, useNavigate } from "react-router-dom";
+import {
+  HashRouter as Router,
+  Routes,
+  Route,
+  useLocation,
+  useNavigate,
+} from "react-router-dom";
 import "./App.css";
 
-import Header from "./components/sectionComponents/header.js"; // simple header
-import SiteHeader from "./components/sectionComponents/SiteHeader.js"; // full site header
+import Header from "./components/sectionComponents/header.js";
+import SiteHeader from "./components/sectionComponents/SiteHeader.js";
 import Footer from "./components/sectionComponents/footer.js";
 
 import HomePage from "./components/pageComponents/HomePage/home-page.js";
@@ -12,6 +18,7 @@ import LoginPage from "./components/pageComponents/loginPage/loginPage.js";
 import RegisterPage from "./components/pageComponents/RegisterPage/RegisterPage.js";
 import AboutPage from "./components/pageComponents/AboutPage/AboutPage.js";
 import MyCulturePage from "./components/pageComponents/MyCulturePage/MyCulturePage.js";
+import MyCulturePageStaff from "./components/pageComponents/MyCulturePage/MyCulturePageStaff.js";
 
 import ProtectedRoute from "./components/ProtectedRoute.js";
 
@@ -22,14 +29,18 @@ function Layout({ children, user, onLogout }) {
   const simpleHeaderPaths = ["/", "/login", "/register"];
   const useSimpleHeader = simpleHeaderPaths.includes(location.pathname);
 
+  const backgroundClass = simpleHeaderPaths.includes(location.pathname)
+    ? "with-background"
+    : "no-background";
+
   return (
     <>
       {useSimpleHeader ? (
-        <Header />  // show for login/register/home
+        <Header />
       ) : (
-        <SiteHeader user={user} onLogout={onLogout} /> // show for main site pages
+        <SiteHeader user={user} onLogout={onLogout} />
       )}
-      <main className="AppBody">{children}</main>
+      <main className={`AppBody ${backgroundClass}`}>{children}</main>
       <Footer />
     </>
   );
@@ -41,7 +52,13 @@ function App() {
   // Load user on mount
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
-    if (storedUser) setUser(JSON.parse(storedUser));
+    if (storedUser) {
+      const userData = JSON.parse(storedUser);
+      setUser(userData);
+      
+      // For testing staff functionality, you can uncomment the line below
+      // userData.is_staff = true; // Force staff view for testing
+    }
   }, []);
 
   const navigate = useNavigate();
@@ -54,6 +71,9 @@ function App() {
     navigate("/login");
   };
 
+  // Check if user is staff (adjust based on your user object structure)
+  const isStaffUser = user && (user.role === "staff" || user.is_staff || user.isModerator);
+  
   return (
     <AppWrapper>
       <Layout user={user} onLogout={handleLogout}>
@@ -61,16 +81,21 @@ function App() {
           {/* Public routes */}
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage setUser={setUser} />} />
-          <Route path="/register" element={<RegisterPage setUser={setUser} />} />
+          <Route
+            path="/register"
+            element={<RegisterPage setUser={setUser} />}
+          />
           <Route path="/about" element={<AboutPage />} />
 
-          {/* MyCulture accessible only if logged in */}
+          {/* MyCulture - show different version based on user role */}
           <Route
             path="/myculture"
             element={
-              <ProtectedRoute user={user}>
+              isStaffUser ? (
+                <MyCulturePageStaff user={user} />
+              ) : (
                 <MyCulturePage user={user} />
-              </ProtectedRoute>
+              )
             }
           />
         </Routes>
