@@ -31,7 +31,7 @@ const LoginPage = ({ setUser }) => { // <-- pass setUser from App.js
       setLoading(true);
       setError("");
 
-      const res = await api.post("api/token/", { username: email, password });
+      const res = await api.post("api/token/", { email: email, password: password });
 
       // Save tokens + user info including role
       const user = res.data.user || { email, role: "user" }; 
