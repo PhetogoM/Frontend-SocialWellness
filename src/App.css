@@ -1,4 +1,4 @@
-/* Remove global background here */
+/* Reset default styles */
 body, html, #root, .App {
   height: 100%;
   margin: 0;
@@ -6,33 +6,37 @@ body, html, #root, .App {
   font-family: Arial, sans-serif;
 }
 
-/* Background only on Home, Login, Register */
+/* Background only on Home, Login, Register pages */
 .with-background {
-  background-image: url('/public/image/hero-bg.png'); /* adjust path */
+  background-image: url('/public/image/hero-bg.png'); /* adjust path if needed */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   flex: 1;
   display: flex;
   flex-direction: column;
-  position: relative;
+  position: relative; /* container for overlay */
 }
 
+/* Remove the mist/overlay completely */
 .with-background::before {
-  content: '';
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.3); /* overlay */
-  z-index: 0;
+  content: none; /* removes the semi-transparent layer */
 }
 
-/* Other pages: plain background */
+/* Pages without background (plain white) */
 .no-background {
-  background: #fff; /* or any solid color */
+  background: #fff;
   flex: 1;
   display: flex;
   flex-direction: column;
+  position: relative;
+}
+
+/* Optional: AppBody container for page content */
+.AppBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }
