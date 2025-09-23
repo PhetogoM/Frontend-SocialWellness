@@ -9,13 +9,15 @@ import {
 } from "react-router-dom";
 import "./App.css";
 
+// Section components
 import Header from "./components/sectionComponents/header.js";
 import SiteHeader from "./components/sectionComponents/SiteHeader.js";
 import Footer from "./components/sectionComponents/footer.js";
 
+// Page components
 import HomePage from "./components/pageComponents/HomePage/home-page.js";
-import LoginPage from "./components/pageComponents/loginPage/loginPage.js";
-import RegisterPage from "./components/pageComponents/RegisterPage/RegisterPage.js";
+import LoginPage from "./components/pageComponents/AuthPage/LoginPage.js";  
+import RegisterPage from "./components/pageComponents/AuthPage/RegisterPage.js";
 import AboutPage from "./components/pageComponents/AboutPage/AboutPage.js";
 import MyCulturePage from "./components/pageComponents/MyCulturePage/MyCulturePage.js";
 import MyCulturePageStaff from "./components/pageComponents/MyCulturePage/MyCulturePageStaff.js";
@@ -85,7 +87,7 @@ function App() {
             path="/register"
             element={<RegisterPage setUser={setUser} />}
           />
-          <Route path="/about" element={<AboutPage />} />
+          <Route path="/about" element={<AboutPage />} /> {/*for testing purposes to skip login part*/}
 
           {/* MyCulture - show different version based on user role */}
           <Route

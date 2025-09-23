@@ -3,13 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import api from "../../apiComponents/api.js";
 import {
   PageContainer,
-  LoginForm,
+  AuthForm as LoginForm,
   Input,
   Button,
   Title,
   SocialButton,
   RegisterLink,
-} from "./loginPage.styled.js";
+} from "./AuthForm.styled.js";
 
 const GoogleLogo = "/image/google-logo.png";
 
