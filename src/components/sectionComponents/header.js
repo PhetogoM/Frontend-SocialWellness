@@ -6,7 +6,7 @@ import styled from "styled-components";
 const HeaderContainer = styled.header`
   background-color: #5fae8a; /* light blue */
   color: white;
-  padding: 20px 40px;
+  padding: 10px 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -20,8 +20,8 @@ const LogoTitle = styled.div`
 `;
 
 const Logo = styled.img`
-  width: 40px;
-  height: 40px;
+  width: 64px;
+  height: 64px;
   object-fit: contain;
 `;
 
@@ -70,7 +70,9 @@ const Header = () => {
   return (
     <HeaderContainer>
       <LogoTitle>
+        <NavLink to="/">
         <Logo src="image/path-to-logo.png" alt="UniPath Logo" />
+        </NavLink>
         <h1 style={{ fontSize: "1.5rem", fontWeight: "bold" }}>UniPath: Social Wellness</h1>
       </LogoTitle>
 

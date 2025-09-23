@@ -6,7 +6,7 @@ import styled from "styled-components";
 const HeaderContainer = styled.header`
   background-color: #5fae8a; /* calm green */
   color: white;
-  padding: 10px 40px;
+  padding: 0px 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -20,8 +20,8 @@ const LogoTitle = styled.div`
 `;
 
 const Logo = styled.img`
-  width: 36px;
-  height: 36px;
+  width: 64px;
+  height: 64px;
   object-fit: contain;
 `;
 
@@ -86,7 +86,9 @@ const SiteHeader = ({ user, onLogout }) => {
   return (
     <HeaderContainer>
       <LogoTitle>
+        <NavLink to="/">
         <Logo src="image/path-to-logo.png" alt="UniPath Logo" />
+        </NavLink>
         <h1 style={{ fontSize: "1.4rem", fontWeight: "bold" }}>UniPath</h1>
       </LogoTitle>
 
