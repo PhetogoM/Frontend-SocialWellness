@@ -5,6 +5,7 @@ Repository for our IT Developments group projects.
 
 1. Run the server with
 
+Using the CMD, navigate to the Frontend-SocialWellness folder:
 If you have not already installed dependecies, run
 
 ```bash
@@ -26,9 +27,7 @@ npm start
 
 The browser should open automatically at http://localhost:3000
 
-2. Run the backend with
+2. To run the backend follow the link below:
 
-```bash
-python manage.py runserver
-```
+
 
