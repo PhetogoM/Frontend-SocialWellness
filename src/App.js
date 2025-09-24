@@ -19,9 +19,9 @@ import RegisterPage from "./components/pageComponents/RegisterPage/RegisterPage.
 import AboutPage from "./components/pageComponents/AboutPage/AboutPage.js";
 import MyCulturePage from "./components/pageComponents/MyCulturePage/MyCulturePage.js";
 import MyCulturePageStaff from "./components/pageComponents/MyCulturePage/MyCulturePageStaff.js";
+import CampusMapPage from "./components/pageComponents/CampusMapPage/CampusMapPage.js"; 
 
-import ProtectedRoute from "./components/ProtectedRoute.js";
-
+//import ProtectedRoute from "./components/ProtectedRoute.js";
 import { AppWrapper } from "./components/pageComponents/AppWrapper.styled.js";
 
 function Layout({ children, user, onLogout }) {
@@ -49,15 +49,13 @@ function Layout({ children, user, onLogout }) {
 function App() {
   const [user, setUser] = useState(null);
 
-  // Load user on mount
   useEffect(() => {
     const storedUser = localStorage.getItem("user");
     if (storedUser) {
       const userData = JSON.parse(storedUser);
       setUser(userData);
-      
-      // For testing staff functionality, you can uncomment the line below
-      // userData.is_staff = true; // Force staff view for testing
+
+      // userData.is_staff = true; // Uncomment to test staff view
     }
   }, []);
 
@@ -71,9 +69,9 @@ function App() {
     navigate("/login");
   };
 
-  // Check if user is staff (adjust based on your user object structure)
-  const isStaffUser = user && (user.role === "staff" || user.is_staff || user.isModerator);
-  
+  const isStaffUser =
+    user && (user.role === "staff" || user.is_staff || user.isModerator);
+
   return (
     <AppWrapper>
       <Layout user={user} onLogout={handleLogout}>
@@ -87,7 +85,7 @@ function App() {
           />
           <Route path="/about" element={<AboutPage />} />
 
-          {/* MyCulture - show different version based on user role */}
+          {/* MyCulture page (staff vs student) */}
           <Route
             path="/myculture"
             element={
@@ -98,13 +96,15 @@ function App() {
               )
             }
           />
+
+          {/* ✅ New Campus Map page */}
+          <Route path="/campusmap" element={<CampusMapPage />} />
         </Routes>
       </Layout>
     </AppWrapper>
   );
 }
 
-// Wrap App with Router
 export default function AppWithRouter() {
   return (
     <Router>
