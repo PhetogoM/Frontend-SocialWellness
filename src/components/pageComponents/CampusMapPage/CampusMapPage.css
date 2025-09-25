@@ -123,4 +123,36 @@
   box-shadow: 0 4px 12px rgba(0,0,0,0.2);
 }
 
+.campus-map-container {
+  max-width: 1000px;
+  margin: 0 auto;
+  padding: 20px;
+  text-align: center;
+}
+
+.page-title {
+  color: #5fae8a;
+  margin-bottom: 10px;
+}
+
+.page-subtitle {
+  color: #7f8c8d;
+  margin-bottom: 20px;
+}
+
+.find-me-btn {
+  padding: 10px 20px;
+  background-color: #2ecc71;
+  border: none;
+  border-radius: 6px;
+  color: white;
+  font-weight: bold;
+  cursor: pointer;
+  margin-bottom: 20px;
+}
+
+.find-me-btn:hover {
+  background-color: #27ae60;
+}
+
 }
