@@ -3,7 +3,7 @@ import axios from "axios";
 import { API_URL } from "./api-base-url"; // Import from your config file
 
 const api = axios.create({
-  baseURL: `${API_URL}/api/`, // Added /api/ to match typical Django REST framework structure
+  baseURL: `${API_URL}/api/`, // Adjust to match your backend endpoints
   headers: {
     "Content-Type": "application/json",
   },
@@ -32,5 +32,16 @@ api.interceptors.response.use(
     return Promise.reject(error);
   }
 );
+
+// --- Add this function for Campus Map ---
+export const getLocations = async () => {
+  try {
+    const res = await api.get("locations/"); // your endpoint, e.g., /api/locations/
+    return res.data;
+  } catch (err) {
+    console.error("Error fetching locations:", err);
+    return []; // Return empty array if error
+  }
+};
 
 export default api;

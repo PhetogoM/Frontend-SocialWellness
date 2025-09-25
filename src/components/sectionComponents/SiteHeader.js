@@ -79,9 +79,9 @@ const SiteHeader = ({ user, onLogout }) => {
     { path: "/whatsdifference", label: "WhatsTheDifference" },
     { path: "/communicationskills", label: "Communication Skills" },
     { path: "/eisenhower", label: "Two-Week Planner" },
-    { path: "/campusmap", label: "Google Maps" },   // ✅ fixed route
-    { path: "/socialchatbox", label: "Social Chatbox" }, // ✅ matches your functional req
-    { path: "/moderator", label: "Moderator Panel" }, // ✅ moderator page
+    { path: "/campusmap", label: "Google Maps" },   
+    { path: "/socialchatbox", label: "Social Chatbox" }, 
+    { path: "/moderator", label: "Moderator Panel" }, 
     { path: "/weneed", label: "WeNeed" },
   ];
 

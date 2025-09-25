@@ -1,5 +1,12 @@
-import React, { useState } from "react";
-import { GoogleMap, Marker, useJsApiLoader } from "@react-google-maps/api";
+import React, { useState, useEffect } from "react";
+import {
+  GoogleMap,
+  Marker,
+  DirectionsRenderer,
+  InfoWindow,
+  useJsApiLoader,
+} from "@react-google-maps/api";
+import { getLocations } from "../../apiComponents/api.js"; // your api.js function
 import "./CampusMapPage.css";
 
 const containerStyle = {
@@ -8,27 +15,38 @@ const containerStyle = {
   borderRadius: "10px",
 };
 
-const NWU_POTCH = { lat: -26.6906, lng: 27.1000 }; // NWU Potch Campus
+const CAMPUS_CENTER = { lat: -26.6906, lng: 27.1 }; // NWU Potch center
 
 function CampusMapPage() {
+  const [locations, setLocations] = useState([]);
   const [currentPosition, setCurrentPosition] = useState(null);
+  const [start, setStart] = useState("");
+  const [destination, setDestination] = useState("");
+  const [directions, setDirections] = useState(null);
+  const [selectedMarker, setSelectedMarker] = useState(null);
 
-  // Load Maps API
   const { isLoaded } = useJsApiLoader({
     id: "google-map-script",
-    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY, // Store in .env
+    googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
   });
 
-  // Find user location
+  // Fetch locations from API on mount
+  useEffect(() => {
+    const fetchLocations = async () => {
+      try {
+        const data = await getLocations();
+        setLocations(data);
+      } catch (err) {
+        console.error("Failed to fetch locations:", err);
+      }
+    };
+    fetchLocations();
+  }, []);
+
   const handleFindMe = () => {
     if (navigator.geolocation) {
       navigator.geolocation.getCurrentPosition(
-        (pos) => {
-          setCurrentPosition({
-            lat: pos.coords.latitude,
-            lng: pos.coords.longitude,
-          });
-        },
+        (pos) => setCurrentPosition({ lat: pos.coords.latitude, lng: pos.coords.longitude }),
         () => alert("Unable to retrieve your location")
       );
     } else {
@@ -36,40 +54,116 @@ function CampusMapPage() {
     }
   };
 
+  const handleFindRoute = () => {
+    if (!start || !destination) {
+      alert("Please select both starting point and destination.");
+      return;
+    }
+
+    const startLoc = locations.find((loc) => loc.id === start);
+    const destLoc = locations.find((loc) => loc.id === destination);
+
+    if (!startLoc || !destLoc) return;
+
+    const directionsService = new window.google.maps.DirectionsService();
+    directionsService.route(
+      {
+        origin: { lat: startLoc.lat, lng: startLoc.lng },
+        destination: { lat: destLoc.lat, lng: destLoc.lng },
+        travelMode: window.google.maps.TravelMode.WALKING,
+      },
+      (result, status) => {
+        if (status === "OK") setDirections(result);
+        else alert("Could not calculate route. Try again.");
+      }
+    );
+  };
+
   return (
     <div className="campus-map-container">
       <h1 className="page-title">Campus Map</h1>
       <p className="page-subtitle">
-        Explore NWU Potchefstroom Campus and find your current location.
+        Select your starting point and destination, or find your location on the map.
       </p>
 
-      <button onClick={handleFindMe} className="find-me-btn">
-        📍 Find My Location
-      </button>
+      <div className="map-controls">
+        <select value={start} onChange={(e) => setStart(e.target.value)}>
+          <option value="">Select Starting Point</option>
+          {locations.map((loc) => (
+            <option key={loc.id} value={loc.id}>{loc.name}</option>
+          ))}
+        </select>
 
-      {isLoaded ? (
-        <GoogleMap
-          mapContainerStyle={containerStyle}
-          center={NWU_POTCH}
-          zoom={15}
-        >
-          {/* Default marker for campus */}
-          <Marker position={NWU_POTCH} label="NWU Potch Campus" />
+        <select value={destination} onChange={(e) => setDestination(e.target.value)}>
+          <option value="">Select Destination</option>
+          {locations.map((loc) => (
+            <option key={loc.id} value={loc.id}>{loc.name}</option>
+          ))}
+        </select>
 
-          {/* Show user location if found */}
-          {currentPosition && (
-            <Marker
-              position={currentPosition}
-              label="You"
-              icon={{
-                url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png",
-              }}
-            />
-          )}
-        </GoogleMap>
-      ) : (
-        <p>Loading map...</p>
-      )}
+        <button onClick={handleFindRoute}>Find My Destination</button>
+        <button onClick={handleFindMe}>Find My Location</button>
+      </div>
+
+      <div className="map-frame">
+        {isLoaded ? (
+          <GoogleMap
+            mapContainerStyle={containerStyle}
+            center={CAMPUS_CENTER}
+            zoom={16}
+            options={{
+              zoomControl: true,
+              streetViewControl: false,
+              mapTypeControl: false,
+              fullscreenControl: true,
+              scrollwheel: true,
+              gestureHandling: "greedy",
+            }}
+          >
+            {locations.map((loc) => (
+              <Marker
+                key={loc.id}
+                position={{ lat: loc.lat, lng: loc.lng }}
+                label={loc.name}
+                onClick={() => setSelectedMarker(loc)}
+              />
+            ))}
+
+            {currentPosition && (
+              <Marker
+                position={currentPosition}
+                label="You"
+                icon={{ url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png" }}
+              />
+            )}
+
+            {selectedMarker && (
+              <InfoWindow
+                position={{ lat: selectedMarker.lat, lng: selectedMarker.lng }}
+                onCloseClick={() => setSelectedMarker(null)}
+              >
+                <div>
+                  <h3>{selectedMarker.name}</h3>
+                  <p>{selectedMarker.info}</p>
+                </div>
+              </InfoWindow>
+            )}
+
+            {directions && <DirectionsRenderer directions={directions} />}
+          </GoogleMap>
+        ) : (
+          <p>Loading map...</p>
+        )}
+      </div>
+
+      <a
+        href="/files/nwu-campus-map.pdf"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="pdf-link"
+      >
+        Link to download Map.pdf
+      </a>
     </div>
   );
 }
