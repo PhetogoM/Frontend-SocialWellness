@@ -38,7 +38,8 @@ const NavLink = styled(Link)`
   font-weight: bold;
   text-decoration: none;
   padding: 10px 15px;
-  border-bottom: ${(props) => (props.active ? "3px solid white" : "3px solid transparent")};
+  border-bottom: ${(props) =>
+    props.active ? "3px solid white" : "3px solid transparent"};
   transition: border 0.2s;
 
   &:hover {
@@ -77,23 +78,28 @@ const SiteHeader = ({ user, onLogout }) => {
     { path: "/myculture", label: "MyCulture" },
     { path: "/whatsdifference", label: "WhatsTheDifference" },
     { path: "/communicationskills", label: "Communication Skills" },
-    { path: "/maps", label: "Google Maps" },
-    { path: "/socialchat", label: "Social Chatboxes" },
+    { path: "/campusmap", label: "Campus Map" },   
+    { path: "/socialchatbox", label: "Social Chatbox" }, 
+    { path: "/moderator", label: "Moderator Panel" }, 
     { path: "/weneed", label: "WeNeed" },
   ];
 
   return (
     <HeaderContainer>
       <LogoTitle>
-        <NavLink to="/">
-        <Logo src="image/path-to-logo.png" alt="UniPath Logo" />
-        </NavLink>
+        <Link to="/">
+          <Logo src="image/path-to-logo.png" alt="UniPath Logo" />
+        </Link>
         <h1 style={{ fontSize: "1.4rem", fontWeight: "bold" }}>UniPath</h1>
       </LogoTitle>
 
       <NavLinks>
         {PAGES.map((p) => (
-          <NavLink key={p.path} to={p.path} active={location.pathname === p.path ? 1 : 0}>
+          <NavLink
+            key={p.path}
+            to={p.path}
+            active={location.pathname === p.path ? 1 : 0}
+          >
             {p.label}
           </NavLink>
         ))}
