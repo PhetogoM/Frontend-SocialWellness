@@ -6,7 +6,7 @@ import {
   InfoWindow,
   useJsApiLoader,
 } from "@react-google-maps/api";
-import { getLocations } from "../../apiComponents/api.js"; // your api.js function
+import { getLocations } from "../../apiComponents/api.js"; 
 import "./CampusMapPage.css";
 
 const containerStyle = {
@@ -30,7 +30,7 @@ function CampusMapPage() {
     googleMapsApiKey: process.env.REACT_APP_GOOGLE_MAPS_API_KEY,
   });
 
-  // Fetch locations from API on mount
+  // Fetch locations from API on mount. 
   useEffect(() => {
     const fetchLocations = async () => {
       try {
@@ -53,6 +53,26 @@ function CampusMapPage() {
       alert("Geolocation not supported by your browser");
     }
   };
+
+  /*NB!!! THIS IS THE HARD CODE TO TEST THE DESITINATION ROUTE. REMOVE COMENTS AND LOCATE THE
+   useEffect() at the top and comment it out the code*/
+
+  /*useEffect(() => {
+  setLocations([
+    {
+      id: "library",
+      name: "Library",
+      lat: -26.68897566681695,
+      lng: 27.091789954128075,
+    },
+    {
+      id: "admin",
+      name: "Admin Block",
+      lat: -26.688517124237258,
+      lng: 27.09326263617408,
+    },
+  ]);
+}, []);*/
 
   const handleFindRoute = () => {
     if (!start || !destination) {
