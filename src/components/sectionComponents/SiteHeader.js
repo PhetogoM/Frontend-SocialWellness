@@ -77,7 +77,6 @@ const SiteHeader = ({ user, onLogout }) => {
     { path: "/myculture", label: "MyCulture" },
     { path: "/whatsdifference", label: "WhatsTheDifference" },
     { path: "/communicationskills", label: "Communication Skills" },
-    { path: "/eisenhower", label: "Two-Week Planner" },
     { path: "/maps", label: "Google Maps" },
     { path: "/socialchat", label: "Social Chatboxes" },
     { path: "/weneed", label: "WeNeed" },
