@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 
-const MyCulturePage = () => {
+const CommunicationSkillsPage = () => {
   const [expandedCategory, setExpandedCategory] = useState(null);
 
   const cultures = {
@@ -204,4 +204,5 @@ const MyCulturePage = () => {
   );
 };
 
-export default MyCulturePage;
+export default CommunicationSkillsPage;
+
