@@ -83,7 +83,7 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage setUser={setUser} />} />
           <Route path="/register" element={<RegisterPage setUser={setUser} />}/>
-          <Route path="/communicationskills" element={<CommunicationSkillsPage setUser={setUser} />}/>
+          <Route path="/communicationskills" element={<CommunicationSkillsPage  />}/>
           <Route path="/about" element={<AboutPage />} /> {/*for testing purposes to skip login part*/}
 
           {/* MyCulture page (staff vs student) */}

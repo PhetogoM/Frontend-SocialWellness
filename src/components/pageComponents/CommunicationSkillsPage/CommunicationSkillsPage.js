@@ -1,51 +1,49 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
+// 👈 STEP 1: ADD THE HOOK IMPORT BACK
+import { useNavigate } from 'react-router-dom';
 
 const CommunicationSkillsPage = () => {
   const [expandedCategory, setExpandedCategory] = useState(null);
+  // INITIALIZE THE NAVIGATE HOOK
+  const navigate = useNavigate();
+  
+  // REPLACED 'VIDEO_ID_...'PLACEHOLDERS WITH YOUR ACTUAL YOUTUBE CODES
+  const categories = {
 
-  const cultures = {
-    'Zulu': [
-      { id: 1, title: 'Welcome to University - Zulu Perspective', videoId: 'dQw4w9WgXcQ' },
-      { id: 2, title: 'Study Tips from Zulu Students', videoId: 'dQw4w9WgXcQ' },
-      { id: 3, title: 'Campus Life and Zulu Culture', videoId: 'dQw4w9WgXcQ' }
+    'Learning to understand others': [
+
+      { id: 1, title: 'Active Listening Techniques', videoId: 'Yq5pJ0q3xuc' },
+
+      { id: 2, title: 'Reading Body Language', videoId: '4jwUXV4QaTw' },
+
+      { id: 3, title: 'Empathy in Communication', videoId: 'pi86Nr9Mdms&t=470s' },
+
+      { id: 4, title: 'Understanding Different Perspectives', videoId: 'iueVZJVEmEs' }
+
     ],
-    'Sotho': [
-      { id: 4, title: 'Navigating University as a Sotho Student', videoId: 'dQw4w9WgXcQ' },
-      { id: 5, title: 'Balancing Culture and Campus Life', videoId: 'dQw4w9WgXcQ' }
-    ],
-    'Sepedi': [
-      { id: 6, title: 'First Year Tips - Sepedi Edition', videoId: 'dQw4w9WgXcQ' },
-      { id: 7, title: 'Finding Your Community on Campus', videoId: 'dQw4w9WgXcQ' }
-    ],
-    'Setswana': [
-      { id: 8, title: 'University Guide for Setswana Speakers', videoId: 'dQw4w9WgXcQ' },
-      { id: 9, title: 'Academic Success Stories', videoId: 'dQw4w9WgXcQ' }
-    ],
-    'Xhosa': [
-      { id: 10, title: 'Xhosa Students Share Their Journey', videoId: 'dQw4w9WgXcQ' },
-      { id: 11, title: 'Campus Resources and Support', videoId: 'dQw4w9WgXcQ' }
-    ],
-    'Tsonga': [
-      { id: 12, title: 'First Year Essentials - Tsonga Perspective', videoId: 'dQw4w9WgXcQ' },
-      { id: 13, title: 'Making Friends at University', videoId: 'dQw4w9WgXcQ' }
-    ],
-    'Venda': [
-      { id: 14, title: 'Venda Culture on Campus', videoId: 'dQw4w9WgXcQ' },
-      { id: 15, title: 'Study Strategies for Success', videoId: 'dQw4w9WgXcQ' }
-    ],
-    'English': [
-      { id: 16, title: 'Getting Started at University', videoId: 'dQw4w9WgXcQ' },
-      { id: 17, title: 'Campus Life Overview', videoId: 'dQw4w9WgXcQ' }
-    ],
-    'Afrikaans': [
-      { id: 18, title: 'Universiteit vir Eerstejaarstudente', videoId: 'dQw4w9WgXcQ' },
-      { id: 19, title: 'Kampuslewe en Ondersteuning', videoId: 'dQw4w9WgXcQ' }
+
+    'Express yourself with clarity': [
+
+      { id: 5, title: 'Speaking with Confidence', videoId: 'eVFzbxmKNUw' },
+
+      { id: 6, title: 'Structuring Your Thoughts', videoId: 'Z_z-QOagXZU' },
+
+      { id: 7, title: 'Effective Presentation Skills', videoId: 'yoD8RMq2OkU' },
+
+      { id: 8, title: 'Writing Clear Messages', videoId: 'prUqCd2R3Zw&t=20s' }
+
     ]
+
   };
 
   const toggleCategory = (category) => {
     setExpandedCategory(expandedCategory === category ? null : category);
+  };
+  
+  // ADD THE GO-BACK LOGIC
+  const handleBackClick = () => {
+    navigate(-1); // Go back one step in browser history
   };
 
   return (
@@ -59,6 +57,28 @@ const CommunicationSkillsPage = () => {
         maxWidth: '900px',
         margin: '0 auto'
       }}>
+        {/* BACK BUTTON (Now functional) */}
+        <button
+          onClick={handleBackClick}
+          style={{
+            background: 'transparent',
+            border: '2px solid #000000',
+            color: '#000000',
+            padding: '8px 15px',
+            borderRadius: '50px',
+            cursor: 'pointer',
+            fontSize: '1rem',
+            fontWeight: '600',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '5px',
+            marginBottom: '20px',
+            transition: 'background-color 0.3s, color 0.3s'
+          }}
+        >
+          &larr; Back
+        </button>
+        
         <header style={{
           textAlign: 'center',
           marginBottom: '40px'
@@ -68,14 +88,14 @@ const CommunicationSkillsPage = () => {
             fontSize: '2.5rem',
             marginBottom: '10px',
             fontWeight: '700'
-          }}>MyCulture</h1>
+          }}>Communication Skills</h1>
           <p style={{
             color: '#000000',
             fontSize: '1.1rem',
             maxWidth: '600px',
             margin: '0 auto'
           }}>
-            Explore the university environment and its surrounding communities with guidance that illuminates diverse cultural backgrounds you may encounter
+            Develop essential communication skills to connect better with others and express yourself effectively
           </p>
         </header>
 
@@ -93,19 +113,19 @@ const CommunicationSkillsPage = () => {
           }}>
           </div>
 
-          {Object.keys(cultures).sort().map((culture) => (
-            <div key={culture} style={{
+          {Object.keys(categories).map((category) => (
+            <div key={category} style={{
               marginBottom: '15px',
               border: '1px solid #80EF80',
               borderRadius: '8px',
               overflow: 'hidden'
             }}>
               <button
-                onClick={() => toggleCategory(culture)}
+                onClick={() => toggleCategory(category)}
                 style={{
                   width: '100%',
                   padding: '18px 20px',
-                  background: expandedCategory === culture ? '#80EF80' : '#e8f8e8',
+                  background: expandedCategory === category ? '#80EF80' : '#e8f8e8',
                   border: 'none',
                   display: 'flex',
                   justifyContent: 'space-between',
@@ -114,22 +134,22 @@ const CommunicationSkillsPage = () => {
                   transition: 'all 0.3s ease',
                   fontSize: '1.1rem',
                   fontWeight: '600',
-                  color: expandedCategory === culture ? 'white' : '#000000'
+                  color: expandedCategory === category ? 'white' : '#000000'
                 }}
               >
-                <span>Check out my culture - {culture}</span>
-                {expandedCategory === culture ? 
+                <span>{category}</span>
+                {expandedCategory === category ? 
                   <ChevronDown size={24} /> : 
                   <ChevronRight size={24} />
                 }
               </button>
 
-              {expandedCategory === culture && (
+              {expandedCategory === category && (
                 <div style={{
                   padding: '20px',
                   background: '#fafafa'
                 }}>
-                  {cultures[culture].map((video) => (
+                  {categories[category].map((video) => (
                     <div key={video.id} style={{
                       marginBottom: '25px',
                       background: 'white',
@@ -142,47 +162,35 @@ const CommunicationSkillsPage = () => {
                         fontSize: '1rem',
                         marginBottom: '12px',
                         fontWeight: '600'
-                      }}>{video.title}</h3>
+                      }}>
+                        {video.title}
+                      </h3>
+                      {/* NEW YOUTUBE IFRAME CODE (Replaces the old placeholder div) */}
                       <div style={{
                         position: 'relative',
-                        paddingBottom: '56.25%',
+                        paddingBottom: '56.25%', // 16:9 aspect ratio
                         height: 0,
                         overflow: 'hidden',
                         borderRadius: '6px',
-                        background: '#e3f2fd'
+                        background: '#000'
                       }}>
-                        <div style={{
-                          position: 'absolute',
-                          top: '50%',
-                          left: '50%',
-                          transform: 'translate(-50%, -50%)',
-                          textAlign: 'center'
-                        }}>
-                          <div style={{
-                            width: '80px',
-                            height: '80px',
-                            background: '#ff0000',
-                            borderRadius: '50%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            margin: '0 auto 10px'
-                          }}>
-                            <div style={{
-                              width: 0,
-                              height: 0,
-                              borderLeft: '25px solid white',
-                              borderTop: '15px solid transparent',
-                              borderBottom: '15px solid transparent',
-                              marginLeft: '5px'
-                            }}></div>
-                          </div>
-                          <p style={{
-                            color: '#666',
-                            fontSize: '0.9rem'
-                          }}>Video Player Placeholder</p>
-                        </div>
+                        <iframe
+                          // This line uses the videoId from the data structure
+                          src={`https://www.youtube.com/embed/${video.videoId}`}
+                          title={video.title}
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          allowFullScreen
+                          style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%',
+                            border: 'none'
+                          }}
+                        ></iframe>
                       </div>
+                      
                     </div>
                   ))}
                 </div>
@@ -190,19 +198,9 @@ const CommunicationSkillsPage = () => {
             </div>
           ))}
         </div>
-
-        <footer style={{
-          textAlign: 'center',
-          color: '#558b2f',
-          fontSize: '0.9rem',
-          marginTop: '30px'
-        }}>
-          <p>UniPath - Helping you navigate your first year with confidence</p>
-        </footer>
       </div>
     </div>
   );
 };
 
 export default CommunicationSkillsPage;
-
