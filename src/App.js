@@ -6,7 +6,7 @@ import "./App.css";
 import Home from "./components/pageComponents/home-page";
 import Header from './components/sectionComponents/header';
 import Footer from './components/sectionComponents/footer';
-import CommunicationSkillsPage from './pages/CommunicationSkillsPage';
+import CommunicationSkillsPage from './pages/CommunicationSkills-page';
 
 function App() {
   return (

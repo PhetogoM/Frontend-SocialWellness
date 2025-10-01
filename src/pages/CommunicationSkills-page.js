@@ -1,9 +1,16 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
+// REMOVED: import { useNavigate } from 'react-router-dom';
 
 const CommunicationSkillsPage = () => {
   const [expandedCategory, setExpandedCategory] = useState(null);
-
+  
+  // PLACEHOLDER: This function does nothing right now.
+  const handleBackClick = () => {
+    console.log("Back button clicked - Navigation functionality not yet implemented.");
+    // No code added here yet!
+  };
+  
   const categories = {
     'Learning to understand others': [
       { id: 1, title: 'Active Listening Techniques', videoId: 'dQw4w9WgXcQ' },
@@ -22,7 +29,7 @@ const CommunicationSkillsPage = () => {
   const toggleCategory = (category) => {
     setExpandedCategory(expandedCategory === category ? null : category);
   };
-
+  
   return (
     <div style={{
       minHeight: '100vh',
@@ -34,6 +41,29 @@ const CommunicationSkillsPage = () => {
         maxWidth: '900px',
         margin: '0 auto'
       }}>
+        {/* === BACK BUTTON PLACEHOLDER === */}
+        <button
+          onClick={handleBackClick}
+          style={{
+            background: 'transparent',
+            border: '2px solid #000000',
+            color: '#000000',
+            padding: '8px 15px',
+            borderRadius: '50px',
+            cursor: 'pointer',
+            fontSize: '1rem',
+            fontWeight: '600',
+            display: 'flex',
+            alignItems: 'center',
+            gap: '5px',
+            marginBottom: '20px',
+            transition: 'background-color 0.3s, color 0.3s'
+          }}
+        >
+          &larr; Back
+        </button>
+        {/* ============================== */}
+        
         <header style={{
           textAlign: 'center',
           marginBottom: '40px'
@@ -117,7 +147,9 @@ const CommunicationSkillsPage = () => {
                         fontSize: '1rem',
                         marginBottom: '12px',
                         fontWeight: '600'
-                      }}>{video.title}</h3>
+                      }}>
+                        {video.title}
+                      </h3>
                       <div style={{
                         position: 'relative',
                         paddingBottom: '56.25%',
