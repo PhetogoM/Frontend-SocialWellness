@@ -1,10 +1,10 @@
 import React from "react";
 import { HashRouter as Router, Route, Routes } from "react-router-dom";
 import "./App.css";
-import MyCulturePage from './pages/MyCulturePage';
+//import MyCulturePage from './pages/CulturePage';
 
 // Importing your components
-import Home from "./components/pageComponents/home-page";
+//import Home from "./components/pageComponents/home-page";
 import Header from './components/sectionComponents/header';
 import Footer from './components/sectionComponents/footer';
 import CulturePage from './components/sectionComponents/CulturePage';
