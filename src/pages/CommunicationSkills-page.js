@@ -1,35 +1,51 @@
 import React, { useState } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
-// REMOVED: import { useNavigate } from 'react-router-dom';
+// 👈 STEP 1: ADD THE HOOK IMPORT BACK
+import { useNavigate } from 'react-router-dom';
 
 const CommunicationSkillsPage = () => {
   const [expandedCategory, setExpandedCategory] = useState(null);
+  // INITIALIZE THE NAVIGATE HOOK
+  const navigate = useNavigate();
   
-  // PLACEHOLDER: This function does nothing right now.
-  const handleBackClick = () => {
-    console.log("Back button clicked - Navigation functionality not yet implemented.");
-    // No code added here yet!
-  };
-  
+  // REPLACED 'VIDEO_ID_...'PLACEHOLDERS WITH YOUR ACTUAL YOUTUBE CODES
   const categories = {
+
     'Learning to understand others': [
-      { id: 1, title: 'Active Listening Techniques', videoId: 'dQw4w9WgXcQ' },
-      { id: 2, title: 'Reading Body Language', videoId: 'dQw4w9WgXcQ' },
-      { id: 3, title: 'Empathy in Communication', videoId: 'dQw4w9WgXcQ' },
-      { id: 4, title: 'Understanding Different Perspectives', videoId: 'dQw4w9WgXcQ' }
+
+      { id: 1, title: 'Active Listening Techniques', videoId: 'Yq5pJ0q3xuc' },
+
+      { id: 2, title: 'Reading Body Language', videoId: '4jwUXV4QaTw' },
+
+      { id: 3, title: 'Empathy in Communication', videoId: 'pi86Nr9Mdms&t=470s' },
+
+      { id: 4, title: 'Understanding Different Perspectives', videoId: 'iueVZJVEmEs' }
+
     ],
+
     'Express yourself with clarity': [
-      { id: 5, title: 'Speaking with Confidence', videoId: 'dQw4w9WgXcQ' },
-      { id: 6, title: 'Structuring Your Thoughts', videoId: 'dQw4w9WgXcQ' },
-      { id: 7, title: 'Effective Presentation Skills', videoId: 'dQw4w9WgXcQ' },
-      { id: 8, title: 'Writing Clear Messages', videoId: 'dQw4w9WgXcQ' }
+
+      { id: 5, title: 'Speaking with Confidence', videoId: 'eVFzbxmKNUw' },
+
+      { id: 6, title: 'Structuring Your Thoughts', videoId: 'Z_z-QOagXZU' },
+
+      { id: 7, title: 'Effective Presentation Skills', videoId: 'yoD8RMq2OkU' },
+
+      { id: 8, title: 'Writing Clear Messages', videoId: 'prUqCd2R3Zw&t=20s' }
+
     ]
+
   };
 
   const toggleCategory = (category) => {
     setExpandedCategory(expandedCategory === category ? null : category);
   };
   
+  // ADD THE GO-BACK LOGIC
+  const handleBackClick = () => {
+    navigate(-1); // Go back one step in browser history
+  };
+
   return (
     <div style={{
       minHeight: '100vh',
@@ -41,7 +57,7 @@ const CommunicationSkillsPage = () => {
         maxWidth: '900px',
         margin: '0 auto'
       }}>
-        {/* === BACK BUTTON PLACEHOLDER === */}
+        {/* BACK BUTTON (Now functional) */}
         <button
           onClick={handleBackClick}
           style={{
@@ -62,7 +78,6 @@ const CommunicationSkillsPage = () => {
         >
           &larr; Back
         </button>
-        {/* ============================== */}
         
         <header style={{
           textAlign: 'center',
@@ -150,46 +165,32 @@ const CommunicationSkillsPage = () => {
                       }}>
                         {video.title}
                       </h3>
+                      {/* NEW YOUTUBE IFRAME CODE (Replaces the old placeholder div) */}
                       <div style={{
                         position: 'relative',
-                        paddingBottom: '56.25%',
+                        paddingBottom: '56.25%', // 16:9 aspect ratio
                         height: 0,
                         overflow: 'hidden',
                         borderRadius: '6px',
-                        background: '#e3f2fd'
+                        background: '#000'
                       }}>
-                        <div style={{
-                          position: 'absolute',
-                          top: '50%',
-                          left: '50%',
-                          transform: 'translate(-50%, -50%)',
-                          textAlign: 'center'
-                        }}>
-                          <div style={{
-                            width: '80px',
-                            height: '80px',
-                            background: '#ff0000',
-                            borderRadius: '50%',
-                            display: 'flex',
-                            alignItems: 'center',
-                            justifyContent: 'center',
-                            margin: '0 auto 10px'
-                          }}>
-                            <div style={{
-                              width: 0,
-                              height: 0,
-                              borderLeft: '25px solid white',
-                              borderTop: '15px solid transparent',
-                              borderBottom: '15px solid transparent',
-                              marginLeft: '5px'
-                            }}></div>
-                          </div>
-                          <p style={{
-                            color: '#666',
-                            fontSize: '0.9rem'
-                          }}>Video Player Placeholder</p>
-                        </div>
+                        <iframe
+                          // This line uses the videoId from the data structure
+                          src={`https://www.youtube.com/embed/${video.videoId}`}
+                          title={video.title}
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          allowFullScreen
+                          style={{
+                            position: 'absolute',
+                            top: 0,
+                            left: 0,
+                            width: '100%',
+                            height: '100%',
+                            border: 'none'
+                          }}
+                        ></iframe>
                       </div>
+                      
                     </div>
                   ))}
                 </div>
