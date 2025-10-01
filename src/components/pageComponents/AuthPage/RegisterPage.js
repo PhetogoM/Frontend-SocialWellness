@@ -4,13 +4,13 @@ import { Link, useNavigate } from "react-router-dom";
 import api from "../../apiComponents/api.js";
 import {
   PageContainer,
-  RegisterForm,
+  AuthForm as RegisterForm,
   Input,
   Button,
   Title,
   SocialButton,
-  LoginLink,
-} from "./RegisterPage.styled.js";
+  RegisterLink,
+} from "./AuthForm.styled.js";
 
 const GoogleLogo = "/image/google-logo.png";
 
@@ -83,9 +83,9 @@ const RegisterPage = ({ setUser }) => {
           <img src={GoogleLogo} alt="Google" /> Sign up with Google
         </SocialButton>
 
-        <LoginLink>
+        <RegisterLink>
           Already have an account? <Link to="/login">Login</Link>
-        </LoginLink>
+        </RegisterLink>
       </RegisterForm>
     </PageContainer>
   );

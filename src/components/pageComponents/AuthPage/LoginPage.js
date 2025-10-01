@@ -3,13 +3,13 @@ import { Link, useNavigate } from "react-router-dom";
 import api from "../../apiComponents/api.js";
 import {
   PageContainer,
-  LoginForm,
+  AuthForm as LoginForm,
   Input,
   Button,
   Title,
   SocialButton,
   RegisterLink,
-} from "./loginPage.styled.js";
+} from "./AuthForm.styled.js";
 
 const GoogleLogo = "/image/google-logo.png";
 
@@ -31,7 +31,7 @@ const LoginPage = ({ setUser }) => { // <-- pass setUser from App.js
       setLoading(true);
       setError("");
 
-      const res = await api.post("api/token/", { email: email, password: password });
+      const res = await api.post("/token/", { email: email, password: password });
 
       // Save tokens + user info including role
       const user = res.data.user || { email, role: "user" }; 

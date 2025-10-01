@@ -27,10 +27,11 @@ const Logo = styled.img`
 
 /* Center navigation */
 const NavLinks = styled.nav`
-  display: flex;
+  position: absolute;   
+  left: 50%;
   gap: 20px;
-  justify-content: center;
-  flex: 1;
+  transform: translateX(-50%);
+  display: flex;
 `;
 
 /* Styled hyperlink links using React Router Link */

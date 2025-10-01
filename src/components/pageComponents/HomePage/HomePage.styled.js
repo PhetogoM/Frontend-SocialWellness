@@ -6,17 +6,18 @@ export const PageContainer = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 80vh; /* adjust as needed */
-  background: url('/image/hero-bg.png') no-repeat center center;
   background-size: cover;
 `;
 
 // Rounded heading container with overlay
 export const HeadingContainer = styled.div`
-  background-color: rgba(0,0,0,0.5); /* semi-transparent overlay */
+  background-color: rgba(255, 255, 255, 0.8); /* semi-transparent overlay */
   padding: 40px 60px;
   border-radius: 20px;
   text-align: center;
-  color: white;
+  border-color: #5FAE8A;
+  border-width: 2px;
+  border-style: solid;
 `;
 
 // Main heading
@@ -24,8 +25,7 @@ export const MainTitle = styled.h1`
   font-size: 3rem;
   font-weight: bold;
   margin: 0 0 15px 0;
-  color: #8FBC8F;
-  font-family: Arial, sans-serif; 
+  color: #5FAE8A;
 `;
 
 // Subtitle
@@ -33,6 +33,5 @@ export const SubTitle = styled.h2`
   font-size: 1.5rem;
   font-weight: normal;
   margin: 0;
-  color: #8FBC8F; /* Calm green */
-  font-family: Arial, sans-serif; /* optional */
+  color: #5FAE8A;
 `;
