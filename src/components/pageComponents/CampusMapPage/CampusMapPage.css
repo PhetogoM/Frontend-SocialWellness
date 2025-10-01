@@ -1,0 +1,106 @@
+.campus-map-container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 20px;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.page-title {
+  text-align: center;
+  color: #5fae8a;
+  margin-bottom: 5px;
+  font-size: 2rem;
+  border-bottom: 2px solid #e74c3c;
+  padding-bottom: 10px;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.page-subtitle {
+  text-align: center;
+  color: #7f8c8d;
+  margin-bottom: 30px;
+  font-size: 1rem;
+  max-width: 600px;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+/* Controls */
+.map-controls {
+  display: flex;
+  gap: 15px;
+  justify-content: center;
+  align-items: center;
+  margin-bottom: 20px;
+  flex-wrap: wrap;
+}
+
+.map-controls select {
+  padding: 10px;
+  border: 1px solid #ddd;
+  border-radius: 6px;
+  font-size: 0.95rem;
+  min-width: 200px;
+  background-color: #fff;
+  box-shadow: 0 1px 3px rgba(0,0,0,0.1);
+}
+
+.map-controls button {
+  padding: 12px 20px;
+  background-color: #2ecc71;
+  color: white;
+  font-weight: 600;
+  border: none;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.map-controls button:hover {
+  background-color: #2ecc71;
+}
+
+/* Map */
+.map-frame {
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 10px rgba(0,0,0,0.15);
+  margin-top: 20px;
+  background: #f4f6f8;
+}
+
+/* PDF link at bottom */
+.pdf-link {
+  display: block;
+  text-align: center;
+  margin-top: 25px;
+  font-size: 1.1rem;
+  color: #007bff;
+  text-decoration: none;
+  font-weight: 600;
+}
+
+.pdf-link:hover {
+  text-decoration: underline;
+  color: #0056b3;
+}
+
+/* Responsive */
+@media (max-width: 768px) {
+  .map-controls {
+    flex-direction: column;
+    gap: 10px;
+  }
+
+  .map-controls select,
+  .map-controls button {
+    width: 100%;
+  }
+
+  .page-title {
+    font-size: 1.6rem;
+  }
+}
