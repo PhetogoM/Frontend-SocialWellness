@@ -6,6 +6,7 @@ import "./App.css";
 import Home from "./components/pageComponents/home-page";
 import Header from './components/sectionComponents/header';
 import Footer from './components/sectionComponents/footer';
+import CommunicationSkillsPage from './pages/CommunicationSkillsPage';
 
 function App() {
   return (
@@ -19,6 +20,7 @@ function App() {
           <div className="body">
               <Routes>
                 <Route path="/" element={<Home />} />
+                <Route path="/communication-skills" element={<CommunicationSkillsPage />} />
               </Routes>
           </div>
 
