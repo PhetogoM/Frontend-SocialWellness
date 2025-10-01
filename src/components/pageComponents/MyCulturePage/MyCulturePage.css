@@ -347,4 +347,118 @@
   .post-actions button {
     width: 100%;
   }
+
+  /* -------------------
+   Post Actions (Like + Comment) 
+   ------------------- */
+.post-actions {
+  display: flex;
+  gap: 15px;
+  margin-top: 15px;
+  flex-wrap: wrap;
+}
+
+.post-actions button {
+  background: #f1f6f9;
+  border: 1px solid #dcdcdc;
+  border-radius: 25px;
+  padding: 8px 16px;
+  cursor: pointer;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 0.9rem;
+  transition: all 0.2s ease;
+  min-width: 80px;
+  justify-content: center;
+}
+
+.post-actions button:hover {
+  background-color: #e0e7ef;
+  transform: translateY(-2px);
+}
+
+.post-actions button:active {
+  transform: translateY(0);
+}
+
+/* -------------------
+   Comments Section
+   ------------------- */
+.comments {
+  margin-top: 15px;
+  padding-top: 12px;
+  border-top: 1px solid #eee;
+}
+
+.comments input {
+  width: 100%;
+  padding: 10px 15px;
+  border: 1px solid #ddd;
+  border-radius: 25px;
+  margin-top: 10px;
+  font-size: 0.9rem;
+  box-sizing: border-box;
+  transition: border-color 0.2s ease, box-shadow 0.2s ease;
+}
+
+.comments input:focus {
+  border-color: #2ecc71;
+  box-shadow: 0 0 5px rgba(46, 204, 113, 0.4);
+  outline: none;
+}
+
+/* Comment items */
+.comment-item {
+  margin-bottom: 12px;
+  padding: 10px;
+  background-color: #f9fafb;
+  border-radius: 8px;
+  border-left: 4px solid #5fae8a;
+  transition: background-color 0.2s ease;
+}
+
+.comment-item:hover {
+  background-color: #f1f4f8;
+}
+
+.comment-header {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 5px;
+  align-items: center;
+  flex-wrap: wrap;
+}
+
+.comment-header strong {
+  color: #2c3e50;
+}
+
+.comment-time {
+  font-size: 0.8rem;
+  color: #888;
+}
+
+.comment-content {
+  color: #333;
+  line-height: 1.4;
+}
+
+/* -------------------
+   Responsive Adjustments
+   ------------------- */
+@media (max-width: 768px) {
+  .post-actions {
+    flex-direction: column;
+  }
+
+  .post-actions button {
+    width: 100%;
+  }
+
+  .comments input {
+    font-size: 0.85rem;
+  }
+}
+
 }

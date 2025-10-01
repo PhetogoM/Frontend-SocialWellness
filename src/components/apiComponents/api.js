@@ -1,9 +1,8 @@
-// src/api.js
 import axios from "axios";
 import { API_URL } from "./api-base-url"; // Import from your config file
 
 const api = axios.create({
-  baseURL: `${API_URL}/api/`, // Adjust to match your backend endpoints
+  baseURL: `${API_URL}/api/`, // Backend API base
   headers: {
     "Content-Type": "application/json",
   },
@@ -33,14 +32,14 @@ api.interceptors.response.use(
   }
 );
 
-// --- Add this function for Campus Map ---
+// for Campus Map or other endpoints
 export const getLocations = async () => {
   try {
-    const res = await api.get("locations/"); // your endpoint, e.g., /api/locations/
+    const res = await api.get("locations/"); // e.g., /api/locations/
     return res.data;
   } catch (err) {
     console.error("Error fetching locations:", err);
-    return []; // Return empty array if error
+    return [];
   }
 };
 

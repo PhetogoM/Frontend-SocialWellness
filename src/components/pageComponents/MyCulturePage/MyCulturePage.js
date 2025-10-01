@@ -1,9 +1,8 @@
-// components/pageComponents/MyCulturePage/MyCulturePage.js
+// components/pageComponents/MyCulturePage/MyCulturePageUser.js
 import React, { useState, useEffect, useCallback } from "react";
-import { cultureAPI } from "../../apiComponents/cultureApi.js"; // Fixed import path
+import { cultureAPI } from "../../apiComponents/cultureApi.js";
 import "./MyCulturePage.css";
 
-// Culture colors mapping
 const CULTURE_COLORS = {
   Zulu: "#e63946",
   Xhosa: "#1d3557",
@@ -17,9 +16,9 @@ const CULTURE_COLORS = {
   default: "#333333"
 };
 
-const MyCulturePage = ({ user }) => {
+const MyCulturePageUser = ({ user }) => {
   const [selectedFilter, setSelectedFilter] = useState("all");
-  const [sortBy, setSortBy] = useState("newest");
+  const [sortBy, setSortBy] = useState("most-liked");
   const [posts, setPosts] = useState([]);
   const [cultures, setCultures] = useState([]);
   const [newPost, setNewPost] = useState("");
@@ -28,211 +27,127 @@ const MyCulturePage = ({ user }) => {
   const [posting, setPosting] = useState(false);
   const [error, setError] = useState("");
 
-  // Get culture color - NOW BEING USED!
-  const getCultureColor = (cultureName) => {
-    return CULTURE_COLORS[cultureName] || CULTURE_COLORS.default;
-  };
+  const getCultureColor = (cultureName) => CULTURE_COLORS[cultureName] || CULTURE_COLORS.default;
 
-  // Load data with useCallback to fix dependency warning
   const loadData = useCallback(async () => {
     try {
       setLoading(true);
       setError("");
-      
-      // For regular users, only fetch approved posts
-      const filters = { status: "approved" };
-      
       const [postsResponse, culturesResponse] = await Promise.all([
-        cultureAPI.getPosts(filters),
+        cultureAPI.getPosts({ status: "approved" }),
         cultureAPI.getCultures()
       ]);
-      
       setPosts(postsResponse.data);
       setCultures(culturesResponse.data);
     } catch (err) {
-      const errorMessage = err.response?.data?.message || "Failed to load data. Please try again.";
-      setError(errorMessage);
-      console.error("Error loading data:", err);
+      setError(err.response?.data?.message || "Failed to load data.");
+      console.error(err);
     } finally {
       setLoading(false);
     }
   }, []);
 
-  // Load posts and cultures on component mount
-  useEffect(() => {
-    loadData();
-  }, [loadData]);
+  useEffect(() => { loadData(); }, [loadData]);
 
   const handlePostSubmit = async () => {
     if (!newPost || !selectedCulture) {
       setError("Please select a culture and write a message");
       return;
     }
-
     try {
-      setError("");
       setPosting(true);
-      
-      const newPostData = {
+      setError("");
+      const response = await cultureAPI.createPost({
         culture: selectedCulture,
         content: newPost
-      };
-
-      const response = await cultureAPI.createPost(newPostData);
+      });
       setPosts([response.data, ...posts]);
       setNewPost("");
       setSelectedCulture("");
     } catch (err) {
-      const errorMessage = err.response?.data?.message || "Failed to create post. Please try again.";
-      setError(errorMessage);
-      console.error("Error creating post:", err);
+      setError(err.response?.data?.message || "Failed to create post.");
     } finally {
       setPosting(false);
     }
   };
 
-  const toggleLike = async (id) => {
+  const toggleLike = async (postId) => {
     try {
-      const response = await cultureAPI.likePost(id);
-      setPosts(posts.map(post => 
-        post.id === id ? response.data : post
-      ));
-    } catch (err) {
-      console.error("Error liking post:", err);
-    }
+      const response = await cultureAPI.likePost(postId);
+      setPosts(posts.map(post => post.id === postId ? response.data : post));
+    } catch (err) { console.error(err); }
   };
 
-  const toggleComments = (id) => {
-    setPosts(posts.map(post =>
-      post.id === id ? { ...post, showComments: !post.showComments } : post
-    ));
+  const toggleComments = (postId) => {
+    setPosts(posts.map(post => post.id === postId ? { ...post, showComments: !post.showComments } : post));
   };
 
-  const addComment = async (id, comment) => {
+  const addComment = async (postId, comment) => {
     if (!comment) return;
-    
     try {
-      const response = await cultureAPI.addComment(id, comment);
-      setPosts(posts.map(post => 
-        post.id === id ? response.data : post
-      ));
-    } catch (err) {
-      console.error("Error adding comment:", err);
-    }
+      const response = await cultureAPI.addComment(postId, comment);
+      setPosts(posts.map(post => post.id === postId ? response.data : post));
+    } catch (err) { console.error(err); }
   };
 
-  // Filter and sort posts
   const filteredPosts = posts
     .filter(post => selectedFilter === "all" || post.culture === selectedFilter)
-    .sort((a, b) => {
-      if (sortBy === "most-liked") {
-        return b.likes - a.likes;
-      } else {
-        return new Date(b.createdAt) - new Date(a.createdAt);
-      }
-    });
+    .sort((a, b) => sortBy === "most-liked" ? b.likes - a.likes : new Date(b.createdAt) - new Date(a.createdAt));
 
   if (loading) return <div className="loading">Loading posts...</div>;
-  
+
   return (
-    <div className="my-culture-container">
+    <div className="my-culture-container user-version">
       <h1 className="page-title">MyCulture</h1>
-      <p className="page-subtitle">Share and learn about South African cultures</p>
-      
-      {/* Error message */}
+      <p className="page-subtitle">Share and explore cultural posts</p>
       {error && <div className="error">{error}</div>}
 
       <div className="page-layout">
+        {/* Posts Section */}
         <div className="posts-section">
           <div className="posts-header framed">
             <h2>Cultural Posts</h2>
             <div className="filter-controls">
-              <select
-                value={selectedFilter}
-                onChange={(e) => setSelectedFilter(e.target.value)}
-                className="culture-filter"
-              >
+              <div className="toggle-group">
+                <button className={sortBy==="most-liked"?"active":""} onClick={()=>setSortBy("most-liked")}>Most liked</button>
+                <button className={sortBy==="newest"?"active":""} onClick={()=>setSortBy("newest")}>Newest</button>
+              </div>
+              <select value={selectedFilter} onChange={(e)=>setSelectedFilter(e.target.value)} className="culture-filter">
                 <option value="all">All cultures</option>
-                {cultures.map((culture) => (
-                  <option 
-                    key={typeof culture === 'object' ? culture.id : culture} 
-                    value={typeof culture === 'object' ? culture.name : culture}
-                  >
-                    {typeof culture === 'object' ? culture.name : culture}
-                  </option>
-                ))}
-              </select>
-              
-              <select
-                value={sortBy}
-                onChange={(e) => setSortBy(e.target.value)}
-                className="sort-filter"
-              >
-                <option value="newest">Newest First</option>
-                <option value="most-liked">Most Liked</option>
+                {cultures.map(c=> <option key={c.id} value={c.name}>{c.name}</option>)}
               </select>
             </div>
           </div>
 
           <div className="posts-container framed">
-            {filteredPosts.length === 0 ? (
-              <p className="no-posts">No posts yet. Be the first to share!</p>
-            ) : (
-              filteredPosts.map((post) => (
+            {filteredPosts.length === 0 ? <p className="no-posts">No posts to display</p> : (
+              filteredPosts.map(post=>(
                 <div key={post.id} className="post-card">
-                  {/* FIXED: Now using getCultureColor function instead of post.cultureColor */}
-                  <div
-                    className="post-header"
-                    style={{ color: getCultureColor(post.culture) }}
-                  >
-                    {post.culture}
-                  </div>
+                  <div className="post-header" style={{color:getCultureColor(post.culture)}}>{post.culture}</div>
                   <div className="post-content">{post.content}</div>
                   <div className="post-meta">
-                    <span>
-                      — <strong style={{ color: "green" }}>{post.author?.username || post.author}</strong> ·{" "}
-                      {new Date(post.createdAt).toLocaleDateString()}
-                    </span>
+                    — <strong>{post.author?.username || post.author}</strong> · {new Date(post.createdAt).toLocaleDateString()}
                   </div>
 
-                  {/* Like + Comment buttons */}
                   <div className="post-actions">
-                    <button onClick={() => toggleLike(post.id)}>💚 {post.likes}</button>
-                    <button onClick={() => toggleComments(post.id)}>
-                      💬 {post.comments?.length || 0}
-                    </button>
+                    <button onClick={()=>toggleLike(post.id)}>💚 {post.likes}</button>
+                    <button onClick={()=>toggleComments(post.id)}>💬 {post.comments?.length || 0}</button>
                   </div>
 
-                  {/* Comments section */}
                   {post.showComments && (
                     <div className="comments">
-                      {post.comments?.length === 0 ? (
-                        <p>No comments yet</p>
-                      ) : (
-                        <ul>
-                          {post.comments.map((comment, idx) => (
-                            <li key={idx} className="comment-item">
-                              <div className="comment-header">
-                                <strong>{comment.author?.username || comment.author}</strong>
-                                <span className="comment-time">
-                                  {new Date(comment.createdAt).toLocaleDateString()}
-                                </span>
-                              </div>
-                              <div className="comment-content">{comment.content}</div>
-                            </li>
-                          ))}
-                        </ul>
+                      {post.comments?.length===0 ? <p>No comments yet</p> : (
+                        <ul>{post.comments.map((c,i)=>(
+                          <li key={i} className="comment-item">
+                            <div className="comment-header">
+                              <strong>{c.author?.username || c.author}</strong>
+                              <span className="comment-time">{new Date(c.createdAt).toLocaleDateString()}</span>
+                            </div>
+                            <div className="comment-content">{c.content}</div>
+                          </li>
+                        ))}</ul>
                       )}
-                      <input
-                        type="text"
-                        placeholder="Write a comment..."
-                        onKeyDown={(e) => {
-                          if (e.key === "Enter") {
-                            addComment(post.id, e.target.value);
-                            e.target.value = "";
-                          }
-                        }}
-                      />
+                      <input type="text" placeholder="Write a comment..." onKeyDown={e=>{if(e.key==="Enter"){addComment(post.id,e.target.value); e.target.value="";}}} />
                     </div>
                   )}
                 </div>
@@ -241,41 +156,22 @@ const MyCulturePage = ({ user }) => {
           </div>
         </div>
 
-        {/* Right side - Create post section */}
+        {/* Create Post Section */}
         <div className="create-post-section">
           <div className="create-post framed">
             <h2>Share Your Culture</h2>
             <div className="form-group">
               <label>Select Culture</label>
-              <select
-                value={selectedCulture}
-                onChange={(e) => setSelectedCulture(e.target.value)}
-              >
+              <select value={selectedCulture} onChange={(e)=>setSelectedCulture(e.target.value)}>
                 <option value="">Choose a culture...</option>
-                {cultures.map((culture) => (
-                  <option 
-                    key={typeof culture === 'object' ? culture.id : culture} 
-                    value={typeof culture === 'object' ? culture.name : culture}
-                  >
-                    {typeof culture === 'object' ? culture.name : culture}
-                  </option>
-                ))}
+                {cultures.map(c=> <option key={c.id} value={c.name}>{c.name}</option>)}
               </select>
             </div>
-            
             <div className="form-group">
               <label>Your Message</label>
-              <textarea
-                placeholder="Share traditions, lifestyles, or cultural aspects..."
-                rows="5"
-                value={newPost}
-                onChange={(e) => setNewPost(e.target.value)}
-              />
+              <textarea rows="5" value={newPost} onChange={(e)=>setNewPost(e.target.value)} placeholder="Share traditions, lifestyles, or cultural aspects..." />
             </div>
-            
-            <button onClick={handlePostSubmit} className="submit-btn" disabled={posting}>
-              {posting ? "Submitting..." : "Submit for Approval"}
-            </button>
+            <button onClick={handlePostSubmit} className="submit-btn" disabled={posting}>{posting?"Submitting...":"Submit for Approval"}</button>
           </div>
         </div>
       </div>
@@ -283,4 +179,4 @@ const MyCulturePage = ({ user }) => {
   );
 };
 
-export default MyCulturePage;
+export default MyCulturePageUser;
