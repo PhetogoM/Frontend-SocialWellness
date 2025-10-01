@@ -21,7 +21,8 @@ import RegisterPage from "./components/pageComponents/AuthPage/RegisterPage.js";
 import AboutPage from "./components/pageComponents/AboutPage/AboutPage.js";
 import MyCulturePage from "./components/pageComponents/MyCulturePage/MyCulturePage.js";
 import MyCulturePageStaff from "./components/pageComponents/MyCulturePage/MyCulturePageStaff.js";
-import CampusMapPage from "./components/pageComponents/CampusMapPage/CampusMapPage.js"; 
+import CampusMapPage from "./components/pageComponents/CampusMapPage/CampusMapPage.js";
+import CommunicationSkillsPage from "./components/pageComponents/CommunicationSkillsPage/CommunicationSkillsPage.js"; 
 
 //import ProtectedRoute from "./components/ProtectedRoute.js";
 import { AppWrapper } from "./components/pageComponents/AppWrapper.styled.js";
@@ -81,10 +82,8 @@ function App() {
           {/* Public routes */}
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage setUser={setUser} />} />
-          <Route
-            path="/register"
-            element={<RegisterPage setUser={setUser} />}
-          />
+          <Route path="/register" element={<RegisterPage setUser={setUser} />}/>
+          <Route path="/communicationskills" element={<CommunicationSkillsPage setUser={setUser} />}/>
           <Route path="/about" element={<AboutPage />} /> {/*for testing purposes to skip login part*/}
 
           {/* MyCulture page (staff vs student) */}
