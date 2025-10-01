@@ -5,7 +5,6 @@ export const PageContainer = styled.div`
   justify-content: center;
   align-items: center;
   min-height: 80vh; /* adjust as needed */
-  background: url('/image/hero-bg.png') no-repeat center center;
   background-size: cover;
 `;
 
