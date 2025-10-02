@@ -38,9 +38,9 @@ const RegisterPage = ({ setUser }) => {
     try {
       setLoading(true);
       setError("");
-      await api.post("api/register/", { first_name: firstName, last_name: surname, email, password });
+      await api.post("auth/register/", { first_name: firstName, last_name: surname, email, password });
 
-      const tokenRes = await api.post("api/token/", { username: email, password });
+      const tokenRes = await api.post("auth/login/", { username: email, password });
       const user = tokenRes.data.user || { first_name: firstName, last_name: surname, email, role: "user" };
       localStorage.setItem("access_token", tokenRes.data.access);
       localStorage.setItem("refresh_token", tokenRes.data.refresh);
