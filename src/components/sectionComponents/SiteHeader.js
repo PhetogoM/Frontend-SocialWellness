@@ -75,13 +75,13 @@ const SiteHeader = ({ user, onLogout }) => {
   const location = useLocation();
 
   const PAGES = [
-    { path: "/myculture", label: "MyCulture" },
-    { path: "/whatsdifference", label: "WhatsTheDifference" },
+    { path: "/about", label: "About" },
+    { path: "/myculture", label: "My Culture" },
     { path: "/communicationskills", label: "Communication Skills" },
     { path: "/campusmap", label: "Campus Map" },   
     { path: "/socialchatbox", label: "Social Chatbox" }, 
     { path: "/moderator", label: "Moderator Panel" }, 
-    { path: "/weneed", label: "WeNeed" },
+    { path: "/weneed", label: "We Need" },
   ];
 
   return (
