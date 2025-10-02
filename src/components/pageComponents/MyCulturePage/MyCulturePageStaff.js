@@ -1,9 +1,8 @@
 // components/pageComponents/MyCulturePage/MyCulturePageStaff.js
 import React, { useState, useEffect, useCallback } from "react";
-import { cultureAPI } from "../../apiComponents/cultureApi.js"; // Ensure correct path
+import { cultureAPI } from "../../apiComponents/cultureApi.js";
 import "./MyCulturePageStaff.css";
 
-// Culture colors mapping
 const CULTURE_COLORS = {
   Zulu: "#e63946",
   Xhosa: "#1d3557",
@@ -35,13 +34,12 @@ const MyCulturePageStaff = ({ user }) => {
     try {
       setLoading(true);
       setError("");
-      
-      const filters = showModerated ? {} : { status: "pending" };
+      const filters = showModerated ? {} : { approved: false };
       const [postsResponse, culturesResponse] = await Promise.all([
         cultureAPI.getPosts(filters),
         cultureAPI.getCultures()
       ]);
-      setPosts(postsResponse.data);
+      setPosts(postsResponse.data.map(p => ({ ...p, likes: p.num_of_likes })));
       setCultures(culturesResponse.data);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to load data.");
@@ -63,9 +61,9 @@ const MyCulturePageStaff = ({ user }) => {
       setError("");
       const response = await cultureAPI.createPost({
         culture: selectedCulture,
-        content: newPost
+        text_message: newPost
       });
-      setPosts([response.data, ...posts]);
+      setPosts(prev => [{ ...response.data, likes: response.data.num_of_likes }, ...prev]);
       setNewPost("");
       setSelectedCulture("");
     } catch (err) {
@@ -78,19 +76,11 @@ const MyCulturePageStaff = ({ user }) => {
   const toggleLike = async (postId) => {
     try {
       const response = await cultureAPI.likePost(postId);
-      setPosts(posts.map(post => post.id === postId ? response.data : post));
-    } catch (err) { console.error(err); }
-  };
-
-  const toggleComments = (postId) => {
-    setPosts(posts.map(post => post.id === postId ? { ...post, showComments: !post.showComments } : post));
-  };
-
-  const addComment = async (postId, comment) => {
-    if (!comment) return;
-    try {
-      const response = await cultureAPI.addComment(postId, comment);
-      setPosts(posts.map(post => post.id === postId ? response.data : post));
+      setPosts(prevPosts =>
+        prevPosts.map(post =>
+          post.id === postId ? { ...post, likes: response.data.num_of_likes } : post
+        )
+      );
     } catch (err) { console.error(err); }
   };
 
@@ -99,13 +89,15 @@ const MyCulturePageStaff = ({ user }) => {
       const response = action === "approve" 
         ? await cultureAPI.approvePost(postId) 
         : await cultureAPI.rejectPost(postId);
-      setPosts(posts.map(post => post.id === postId ? response.data : post));
+      setPosts(prevPosts => prevPosts.map(post =>
+        post.id === postId ? response.data : post
+      ));
     } catch (err) { console.error(err); }
   };
 
   const filteredPosts = posts
     .filter(post => selectedFilter === "all" || post.culture === selectedFilter)
-    .sort((a, b) => sortBy === "most-liked" ? b.likes - a.likes : new Date(b.createdAt) - new Date(a.createdAt));
+    .sort((a, b) => sortBy === "most-liked" ? b.likes - a.likes : new Date(b.date_created) - new Date(a.date_created));
 
   if (loading) return <div className="loading">Loading posts...</div>;
 
@@ -116,7 +108,6 @@ const MyCulturePageStaff = ({ user }) => {
       {error && <div className="error">{error}</div>}
 
       <div className="page-layout">
-        {/* Posts Section */}
         <div className="posts-section">
           <div className="posts-header framed">
             <h2>Cultural Posts</h2>
@@ -140,9 +131,9 @@ const MyCulturePageStaff = ({ user }) => {
               filteredPosts.map(post=>(
                 <div key={post.id} className="post-card">
                   <div className="post-header" style={{color:getCultureColor(post.culture)}}>{post.culture}</div>
-                  <div className="post-content">{post.content}</div>
+                  <div className="post-content">{post.text_message}</div>
                   <div className="post-meta">
-                    — <strong>{post.author?.username || post.author}</strong> · {new Date(post.createdAt).toLocaleDateString()} · <span className={`status-${post.status.toLowerCase()}`}>{post.status}</span>
+                    — <strong>{post.user?.name || post.user}</strong> · {new Date(post.date_created).toLocaleDateString()} · <span className={`status-${post.status.toLowerCase()}`}>{post.status}</span>
                   </div>
 
                   {post.status==="pending" && (
@@ -154,32 +145,13 @@ const MyCulturePageStaff = ({ user }) => {
 
                   <div className="post-actions">
                     <button onClick={()=>toggleLike(post.id)}>💚 {post.likes}</button>
-                    <button onClick={()=>toggleComments(post.id)}>💬 {post.comments?.length || 0}</button>
                   </div>
-
-                  {post.showComments && (
-                    <div className="comments">
-                      {post.comments?.length===0 ? <p>No comments yet</p> : (
-                        <ul>{post.comments.map((c,i)=>(
-                          <li key={i} className="comment-item">
-                            <div className="comment-header">
-                              <strong>{c.author?.username || c.author}</strong>
-                              <span className="comment-time">{new Date(c.createdAt).toLocaleDateString()}</span>
-                            </div>
-                            <div className="comment-content">{c.content}</div>
-                          </li>
-                        ))}</ul>
-                      )}
-                      <input type="text" placeholder="Write a comment..." onKeyDown={e=>{if(e.key==="Enter"){addComment(post.id,e.target.value); e.target.value="";}}} />
-                    </div>
-                  )}
                 </div>
               ))
             )}
           </div>
         </div>
 
-        {/* Create Post Section */}
         <div className="create-post-section">
           <div className="create-post framed">
             <h2>Share Your Culture</h2>
