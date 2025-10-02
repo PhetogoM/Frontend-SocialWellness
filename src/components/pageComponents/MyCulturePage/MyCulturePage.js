@@ -35,12 +35,14 @@ const MyCulturePageUser = ({ user }) => {
     try {
       setLoading(true);
       setError("");
-      const [postsResponse, culturesResponse] = await Promise.all([
+      const [postsResponse, culturesResponse, usersResponse] = await Promise.all([
         cultureAPI.getPosts({ status: "approved" }),
-        cultureAPI.getCultures()
+        cultureAPI.getCultures(),
+        cultureAPI.getUsers()
       ]);
       setPosts(postsResponse.data);
       setCultures(culturesResponse.data);
+      setUsers(usersResponse.data);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to load data.");
       console.error(err);
