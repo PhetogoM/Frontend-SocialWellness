@@ -326,30 +326,8 @@
   }
 }
 
-@media (max-width: 768px) {
-  .my-culture-container {
-    padding: 15px;
-  }
-  
-  .page-title {
-    font-size: 1.8rem;
-  }
-  
-  .filter-controls {
-    flex-direction: column;
-  }
-  
-  .post-actions {
-    flex-direction: column;
-    gap: 10px;
-  }
-  
-  .post-actions button {
-    width: 100%;
-  }
-
 /* Sort toggle buttons */
-.toggle-group button {
+.sort-btn {
   background: #f8f9fa;
   border: 1px solid #ddd;
   border-radius: 20px;
@@ -371,6 +349,28 @@
   color: white;
   border-color: #27ae60;
 }
+
+@media (max-width: 768px) {
+  .my-culture-container {
+    padding: 15px;
+  }
+  
+  .page-title {
+    font-size: 1.8rem;
+  }
+  
+  .filter-controls {
+    flex-direction: column;
+  }
+  
+  .post-actions {
+    flex-direction: column;
+    gap: 10px;
+  }
+  
+  .post-actions button {
+    width: 100%;
+  }
 
   /* -------------------
    Post Actions (Like + Comment) 

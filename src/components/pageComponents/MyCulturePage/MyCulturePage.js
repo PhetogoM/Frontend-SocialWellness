@@ -115,9 +115,17 @@ const MyCulturePageUser = ({ user }) => {
             <h2>Culture Posts</h2>
             <div className="filter-controls">
               <div className="toggle-group">
-                <button className={sortBy==="most-liked"?"active":""} onClick={()=>setSortBy("most-liked")}>Most liked</button>
-                <button className={sortBy==="newest"?"active":""} onClick={()=>setSortBy("newest")}>Newest</button>
-              </div>
+                <button
+                  className={`sort-btn ${sortBy === "most-liked" ? "active" : ""}`}
+                  onClick={() => setSortBy("most-liked")}>
+                  Most liked
+                </button>
+                <button
+                  className={`sort-btn ${sortBy === "newest" ? "active" : ""}`}
+                  onClick={() => setSortBy("newest")}>
+                  Newest
+                </button>
+                </div>
               <select value={selectedFilter} onChange={(e)=>setSelectedFilter(e.target.value)} className="culture-filter">
                 <option value="all">All cultures</option>
                 {cultures.map(c=> <option key={c.id} value={c.name}>{c.name}</option>)}
