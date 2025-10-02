@@ -20,7 +20,6 @@ import LoginPage from "./components/pageComponents/AuthPage/LoginPage.js";
 import RegisterPage from "./components/pageComponents/AuthPage/RegisterPage.js";
 import AboutPage from "./components/pageComponents/AboutPage/AboutPage.js";
 import MyCulturePage from "./components/pageComponents/MyCulturePage/MyCulturePage.js";
-import MyCulturePageStaff from "./components/pageComponents/MyCulturePage/MyCulturePageStaff.js";
 import CampusMapPage from "./components/pageComponents/CampusMapPage/CampusMapPage.js"; 
 
 //import ProtectedRoute from "./components/ProtectedRoute.js";
@@ -71,8 +70,8 @@ function App() {
     navigate("/login");
   };
 
-  const isStaffUser =
-    user && (user.role === "staff" || user.is_staff || user.isModerator);
+  //const isStaffUser =
+   // user && (user.role === "staff" || user.is_staff || user.isModerator);
 
   return (
     <AppWrapper>
@@ -90,12 +89,7 @@ function App() {
           {/* MyCulture page (staff vs student) */}
           <Route
             path="/myculture"
-            element={
-              isStaffUser ? (
-                <MyCulturePageStaff user={user} />
-              ) : (
-                <MyCulturePage user={user} />
-              )
+            element={<MyCulturePage user={user} />
             }
           />
 
