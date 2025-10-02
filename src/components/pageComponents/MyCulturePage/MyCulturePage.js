@@ -64,7 +64,7 @@ const MyCulturePageUser = ({ user }) => {
       setError("");
       const response = await cultureAPI.createPost({
         culture: selectedCulture,
-        content: newPost
+        text_message: newPost
       });
       setPosts([response.data, ...posts]);
       setNewPost("");
@@ -182,7 +182,9 @@ const MyCulturePageUser = ({ user }) => {
               <label>Select Culture</label>
               <select value={selectedCulture} onChange={(e)=>setSelectedCulture(e.target.value)}>
                 <option value="">Choose a culture...</option>
-                {cultures.map(c=> <option key={c.id} value={c.name}>{c.name}</option>)}
+                {cultures.map(c => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
               </select>
             </div>
             <div className="form-group">
