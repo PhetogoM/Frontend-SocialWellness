@@ -67,7 +67,13 @@ const LoginPage = ({ setUser }) => { // <-- pass setUser from App.js
     <PageContainer>
       <LoginForm onSubmit={handleSubmit}>
         <Title>Login to Unipath</Title>
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && (
+  <div style={{ color: "red", marginBottom: "10px" }}>
+    {error.split('\n').map((line, idx) =>
+      line.trim() ? <div key={idx}>{line}</div> : null
+    )}
+  </div>
+)}
 
         <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
         <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
