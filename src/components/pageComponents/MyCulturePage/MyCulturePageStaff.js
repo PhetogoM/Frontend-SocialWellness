@@ -1,4 +1,3 @@
-// components/pageComponents/MyCulturePage/MyCulturePageStaff.js
 import React, { useState, useEffect, useCallback } from "react";
 import { cultureAPI } from "../../apiComponents/cultureApi.js";
 import "./MyCulturePageStaff.css";
@@ -74,6 +73,12 @@ const MyCulturePageStaff = ({ user }) => {
   };
 
   const toggleLike = async (postId) => {
+    setPosts(prevPosts =>
+      prevPosts.map(post =>
+        post.id === postId ? { ...post, likes: (post.likes || 0) + 1 } : post
+      )
+    );
+
     try {
       const response = await cultureAPI.likePost(postId);
       setPosts(prevPosts =>
@@ -81,17 +86,24 @@ const MyCulturePageStaff = ({ user }) => {
           post.id === postId ? { ...post, likes: response.data.num_of_likes } : post
         )
       );
-    } catch (err) { console.error(err); }
+    } catch (err) {
+      console.error(err);
+      setPosts(prevPosts =>
+        prevPosts.map(post =>
+          post.id === postId ? { ...post, likes: (post.likes || 1) - 1 } : post
+        )
+      );
+    }
   };
 
   const moderatePost = async (postId, action) => {
     try {
-      const response = action === "approve" 
-        ? await cultureAPI.approvePost(postId) 
+      const response = action === "approve"
+        ? await cultureAPI.approvePost(postId)
         : await cultureAPI.rejectPost(postId);
-      setPosts(prevPosts => prevPosts.map(post =>
-        post.id === postId ? response.data : post
-      ));
+      setPosts(prevPosts =>
+        prevPosts.map(post => post.id === postId ? response.data : post)
+      );
     } catch (err) { console.error(err); }
   };
 
@@ -128,7 +140,7 @@ const MyCulturePageStaff = ({ user }) => {
 
           <div className="posts-container framed">
             {filteredPosts.length === 0 ? <p className="no-posts">No posts to display</p> : (
-              filteredPosts.map(post=>(
+              filteredPosts.map(post => (
                 <div key={post.id} className="post-card">
                   <div className="post-header" style={{color:getCultureColor(post.culture)}}>{post.culture}</div>
                   <div className="post-content">{post.text_message}</div>
@@ -136,15 +148,15 @@ const MyCulturePageStaff = ({ user }) => {
                     — <strong>{post.user?.name || post.user}</strong> · {new Date(post.date_created).toLocaleDateString()} · <span className={`status-${post.status.toLowerCase()}`}>{post.status}</span>
                   </div>
 
-                  {post.status==="pending" && (
+                  {post.status === "pending" && (
                     <div className="moderation-actions">
-                      <button className="approve-btn" onClick={()=>moderatePost(post.id,"approve")}>Approve</button>
-                      <button className="reject-btn" onClick={()=>moderatePost(post.id,"reject")}>Reject</button>
+                      <button className="approve-btn" onClick={() => moderatePost(post.id,"approve")}>Approve</button>
+                      <button className="reject-btn" onClick={() => moderatePost(post.id,"reject")}>Reject</button>
                     </div>
                   )}
 
                   <div className="post-actions">
-                    <button onClick={()=>toggleLike(post.id)}>💚 {post.likes}</button>
+                    <button onClick={() => toggleLike(post.id)}>💚 {post.likes}</button>
                   </div>
                 </div>
               ))
@@ -166,7 +178,7 @@ const MyCulturePageStaff = ({ user }) => {
               <label>Your Message</label>
               <textarea rows="5" value={newPost} onChange={(e)=>setNewPost(e.target.value)} placeholder="Share traditions, lifestyles, or cultural aspects..." />
             </div>
-            <button onClick={handlePostSubmit} className="submit-btn" disabled={posting}>{posting?"Submitting...":"Submit for Approval"}</button>
+            <button onClick={handlePostSubmit} className="submit-btn" disabled={posting}>{posting ? "Submitting..." : "Submit for Approval"}</button>
           </div>
         </div>
       </div>
