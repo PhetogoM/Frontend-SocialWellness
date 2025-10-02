@@ -31,4 +31,6 @@ export const cultureAPI = {
 
   // User-specific posts
   getUserPosts: (userId) => api.get(`users/${userId}/posts/`),
+
+  getUsers: () => api.get('users/'),
 };
