@@ -31,7 +31,7 @@ const LoginPage = ({ setUser }) => { // <-- pass setUser from App.js
       setLoading(true);
       setError("");
 
-      const res = await api.post("/token/", { email: email, password: password });
+      const res = await api.post("auth/login/", { email: email, password: password });
 
       // Save tokens + user info including role
       const user = res.data.user || { email, role: "user" }; 
@@ -67,7 +67,13 @@ const LoginPage = ({ setUser }) => { // <-- pass setUser from App.js
     <PageContainer>
       <LoginForm onSubmit={handleSubmit}>
         <Title>Login to Unipath</Title>
-        {error && <p style={{ color: "red" }}>{error}</p>}
+        {error && (
+  <div style={{ color: "red", marginBottom: "10px" }}>
+    {error.split('\n').map((line, idx) =>
+      line.trim() ? <div key={idx}>{line}</div> : null
+    )}
+  </div>
+)}
 
         <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
         <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
