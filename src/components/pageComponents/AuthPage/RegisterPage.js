@@ -40,7 +40,7 @@ const RegisterPage = ({ setUser }) => {
       setError("");
       await api.post("auth/register/", { name: firstName, surname: surname, email, password, confirm_password: confirmPassword });
 
-      const tokenRes = await api.post("auth/login/", { username: email, password });
+      const tokenRes = await api.post("auth/login/", { email, password });
       const user = tokenRes.data.user || { name: firstName, surname: surname, email, role: "user" };
       localStorage.setItem("access_token", tokenRes.data.access);
       localStorage.setItem("refresh_token", tokenRes.data.refresh);
@@ -69,7 +69,7 @@ const RegisterPage = ({ setUser }) => {
   };
 
   const handleSocialRegister = (provider) => {
-    const dummyUser = { first_name: "Social", last_name: "User", email: "socialuser@gmail.com", role: "user" };
+    const dummyUser = { name: "Social", surname: "User", email: "socialuser@gmail.com", role: "user", confirmPassword: "sociallogin" };
     localStorage.setItem("user", JSON.stringify(dummyUser));
     localStorage.setItem("access_token", "dummy_token");
     setUser(dummyUser);
