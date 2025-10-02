@@ -1,3 +1,4 @@
+// components/pageComponents/MyCulturePage/MyCulturePageUser.js
 import React, { useState, useEffect, useCallback } from "react";
 import { cultureAPI } from "../../apiComponents/cultureApi.js";
 import "./MyCulturePage.css";
@@ -20,6 +21,7 @@ const MyCulturePageUser = ({ user }) => {
   const [sortBy, setSortBy] = useState("most-liked");
   const [posts, setPosts] = useState([]);
   const [cultures, setCultures] = useState([]);
+  const [users, setUsers] = useState([]);
   const [newPost, setNewPost] = useState("");
   const [selectedCulture, setSelectedCulture] = useState("");
   const [loading, setLoading] = useState(true);
@@ -28,16 +30,19 @@ const MyCulturePageUser = ({ user }) => {
 
   const getCultureColor = (cultureName) => CULTURE_COLORS[cultureName] || CULTURE_COLORS.default;
 
+  // load Posts and Cultures
   const loadData = useCallback(async () => {
     try {
       setLoading(true);
       setError("");
-      const [postsResponse, culturesResponse] = await Promise.all([
+      const [postsResponse, culturesResponse, usersResponse] = await Promise.all([
         cultureAPI.getPosts({ status: "approved" }),
-        cultureAPI.getCultures()
+        cultureAPI.getCultures(),
+        cultureAPI.getUsers()
       ]);
-      setPosts(postsResponse.data.map(p => ({ ...p, likes: p.num_of_likes })));
+      setPosts(postsResponse.data);
       setCultures(culturesResponse.data);
+      setUsers(usersResponse.data);
     } catch (err) {
       setError(err.response?.data?.message || "Failed to load data.");
       console.error(err);
@@ -48,6 +53,7 @@ const MyCulturePageUser = ({ user }) => {
 
   useEffect(() => { loadData(); }, [loadData]);
 
+  // Submit post for approval
   const handlePostSubmit = async () => {
     if (!newPost || !selectedCulture) {
       setError("Please select a culture and write a message");
@@ -60,7 +66,7 @@ const MyCulturePageUser = ({ user }) => {
         culture: selectedCulture,
         text_message: newPost
       });
-      setPosts(prev => [{ ...response.data, likes: response.data.num_of_likes }, ...prev]);
+      setPosts([response.data, ...posts]);
       setNewPost("");
       setSelectedCulture("");
     } catch (err) {
@@ -70,33 +76,29 @@ const MyCulturePageUser = ({ user }) => {
     }
   };
 
+  // Like Handler
   const toggleLike = async (postId) => {
-    setPosts(prevPosts =>
-      prevPosts.map(post =>
-        post.id === postId ? { ...post, likes: (post.likes || 0) + 1 } : post
-      )
-    );
-
     try {
       const response = await cultureAPI.likePost(postId);
-      setPosts(prevPosts =>
-        prevPosts.map(post =>
-          post.id === postId ? { ...post, likes: response.data.num_of_likes } : post
-        )
-      );
-    } catch (err) {
-      console.error(err);
-      setPosts(prevPosts =>
-        prevPosts.map(post =>
-          post.id === postId ? { ...post, likes: (post.likes || 1) - 1 } : post
-        )
-      );
-    }
+      setPosts(posts.map(post => post.id === postId ? response.data : post));
+    } catch (err) { console.error(err); }
+  };
+
+  // Filter and Sort Posts
+  const getUserFullName = (userId) => {
+    const user = users.find(u => u.id === userId);
+    return user ? user.name : "Unknown User";
+  };
+  const getCultureName = (cultureId) => {
+    const culture = cultures.find(c => c.id === cultureId);
+    return culture ? culture.name : "Unknown Culture";
   };
 
   const filteredPosts = posts
-    .filter(post => selectedFilter === "all" || post.culture === selectedFilter)
+    .filter(post => selectedFilter === "all" || getCultureName(post.culture) === selectedFilter) //we can optimize this to correlate ids instead
     .sort((a, b) => sortBy === "most-liked" ? b.likes - a.likes : new Date(b.date_created) - new Date(a.date_created));
+
+  
 
   if (loading) return <div className="loading">Loading posts...</div>;
 
@@ -110,7 +112,7 @@ const MyCulturePageUser = ({ user }) => {
         {/* Posts Section */}
         <div className="posts-section">
           <div className="posts-header framed">
-            <h2>Cultural Posts</h2>
+            <h2>Culture Posts</h2>
             <div className="filter-controls">
               <div className="toggle-group">
                 <button className={sortBy==="most-liked"?"active":""} onClick={()=>setSortBy("most-liked")}>Most liked</button>
@@ -125,15 +127,16 @@ const MyCulturePageUser = ({ user }) => {
 
           <div className="posts-container framed">
             {filteredPosts.length === 0 ? <p className="no-posts">No posts to display</p> : (
-              filteredPosts.map(post => (
+              filteredPosts.map(post=>(
                 <div key={post.id} className="post-card">
-                  <div className="post-header" style={{color:getCultureColor(post.culture)}}>{post.culture}</div>
+                  <div className="post-header" style={{color:getCultureColor(post.culture)}}>{getCultureName(post.culture)}</div>
                   <div className="post-content">{post.text_message}</div>
                   <div className="post-meta">
-                    — <strong>{post.user?.name || post.user}</strong> · {new Date(post.date_created).toLocaleDateString()}
+                    <strong>{getUserFullName(post.user)}</strong> · {new Date(post.date_created).toLocaleDateString()}
                   </div>
+
                   <div className="post-actions">
-                    <button onClick={()=>toggleLike(post.id)}>💚 {post.likes}</button>
+                    <button onClick={()=>toggleLike(post.id)}>💚 {post.likes}</button>             
                   </div>
                 </div>
               ))
@@ -149,14 +152,16 @@ const MyCulturePageUser = ({ user }) => {
               <label>Select Culture</label>
               <select value={selectedCulture} onChange={(e)=>setSelectedCulture(e.target.value)}>
                 <option value="">Choose a culture...</option>
-                {cultures.map(c=> <option key={c.id} value={c.name}>{c.name}</option>)}
+                {cultures.map(c => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
               </select>
             </div>
             <div className="form-group">
               <label>Your Message</label>
               <textarea rows="5" value={newPost} onChange={(e)=>setNewPost(e.target.value)} placeholder="Share traditions, lifestyles, or cultural aspects..." />
             </div>
-            <button onClick={handlePostSubmit} className="submit-btn" disabled={posting}>{posting ? "Submitting..." : "Submit for Approval"}</button>
+            <button onClick={handlePostSubmit} className="submit-btn" disabled={posting}>{posting?"Submitting...":"Submit for Approval"}</button>
           </div>
         </div>
       </div>
