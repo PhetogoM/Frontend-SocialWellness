@@ -2,7 +2,7 @@ import axios from "axios";
 import { API_URL } from "./api-base-url"; // Import from your config file
 
 const api = axios.create({
-  baseURL: `${API_URL}/`, // Backend API base
+  baseURL: `${API_URL}/api/`, // Backend API base
   headers: {
     "Content-Type": "application/json",
   },
@@ -35,7 +35,7 @@ api.interceptors.response.use(
 /* Auth API */
 export const authAPI = {
   login: async (email, password) => {
-    const response = await api.post("auth/token/", { email, password });
+    const response = await api.post("auth/login/", { email, password });
     localStorage.setItem("access_token", response.data.access);
     localStorage.setItem("refresh_token", response.data.refresh);
     return response.data;
@@ -49,7 +49,7 @@ export const authAPI = {
   refreshToken: async () => {
     const refresh = localStorage.getItem("refresh_token");
     if (!refresh) throw new Error("No refresh token found");
-    const response = await api.post("auth/token/refresh/", { refresh });
+    const response = await api.post("auth/login/refresh/", { refresh });
     localStorage.setItem("access_token", response.data.access);
     return response.data.access;
   },
