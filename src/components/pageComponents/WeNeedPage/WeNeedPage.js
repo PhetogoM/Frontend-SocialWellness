@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Send } from 'lucide-react';
 
-export default function WeNeedPage() {
+const WeNeedPage = () => {
   const [request, setRequest] = useState('');
   const [category, setCategory] = useState('');
   const [name, setName] = useState('');
@@ -382,4 +382,6 @@ export default function WeNeedPage() {
       </div>
     </div>
   );
-}
+};
+export default WeNeedPage;
+
