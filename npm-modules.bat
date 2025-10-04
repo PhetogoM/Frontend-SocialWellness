@@ -2,6 +2,5 @@ npm install
 npm run build
 npm install serve --save
 npm install react-router-dom
-
-DON'T RUN THIS
-npm audit fix --force
+npm install @react-google-maps/api
+npm install lucide-react

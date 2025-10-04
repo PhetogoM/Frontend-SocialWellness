@@ -43,6 +43,6 @@ The browser should open automatically at http://localhost:3000
 
 3. To run the backend follow the link below:
 
-[Backend---SocialWellness](https://github.com/jpret/CMPG323-Group-Project/tree/main/c%3A/Users/jpret/Documents/NWU/2025/Sem%202/CMPG323%20IT%20Developments/Project%20Code/Social%20Wellness%20Backend)
+[Backend---SocialWellness](https://github.com/Doctor1ven/Backend---SocialWellness/blob/main/README.md)
 
 
