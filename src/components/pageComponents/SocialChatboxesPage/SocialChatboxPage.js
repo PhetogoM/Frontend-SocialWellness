@@ -1,6 +1,6 @@
 // src/components/social/SocialChatbox.js
 import React, { useState } from "react";
-import "./SocialChatbox.css";
+import "./SocialChatboxPage.css";
 
 const SocialChatbox = ({ roomName, isModerator = false }) => {
   const [messages, setMessages] = useState([]); // approved messages
