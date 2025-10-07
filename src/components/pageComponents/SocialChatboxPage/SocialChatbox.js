@@ -64,24 +64,31 @@ const SocialChatBox = ({ currentUser = "Guest", isAdmin = false }) => {
       <div className="chatbox-wrapper">
         <div className="chatbox-messages">
           {messages.length === 0 ? (
-            <p className="no-messages">
-              No messages yet. Start the conversation!
-            </p>
+            <p className="no-messages">No messages yet. Start the conversation!</p>
           ) : (
             messages.map((msg) => (
               <div
                 key={msg.id}
                 className={`message-bubble ${
-                  msg.user === currentUser ? "my-message" : "other-message"
+                  msg.user === currentUser
+                    ? "my-message"
+                    : msg.user.toLowerCase() === "admin"
+                    ? "admin-message"
+                    : "other-message"
                 }`}
               >
                 <div className="message-header">
                   <span className="user-name">
                     {msg.user === currentUser ? "You" : msg.user}
+                    {msg.user.toLowerCase() === "admin" && (
+                      <span className="admin-badge">Admin</span>
+                    )}
                   </span>
                   <span className="message-time">{msg.timestamp}</span>
                 </div>
+
                 <div className="message-text">{msg.text}</div>
+
                 <div className="message-actions">
                   {(msg.user === currentUser || isAdmin) && (
                     <button

@@ -6,7 +6,7 @@ import {
   InfoWindow,
   useJsApiLoader,
 } from "@react-google-maps/api";
-import { getLocations } from "../../apiComponents/api.js";
+import { mapsAPI } from "../../apiComponents/mapsApi.js";
 import "./CampusMapPage.css";
 
 const containerStyle = {
@@ -34,7 +34,7 @@ function CampusMapPage() {
   // Fetch locations from API + add static ones
   const loadLocations = async () => {
     try {
-      const data = await getLocations();
+      const data = await mapsAPI();
 
       // Add only Library + Main Office to dropdowns (not markers)
       const extraLocations = [

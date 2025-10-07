@@ -1,7 +1,7 @@
 // src/components/pageComponents/RegisterPage/RegisterPage.js
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import api from "../../apiComponents/api.js";
+import { authAPI } from "../../apiComponents/authApi.js";
 import {
   PageContainer,
   AuthForm as RegisterForm,
@@ -38,9 +38,9 @@ const RegisterPage = ({ setUser }) => {
     try {
       setLoading(true);
       setError("");
-      await api.post("auth/register/", { name: firstName, surname: surname, email, password, confirm_password: confirmPassword });
+      await authAPI.post("auth/register/", { name: firstName, surname: surname, email, password, confirm_password: confirmPassword });
 
-      const tokenRes = await api.post("auth/login/", { email, password });
+      const tokenRes = await authAPI.post("auth/login/", { email, password });
       const user = tokenRes.data.user || { name: firstName, surname: surname, email, role: "user" };
       localStorage.setItem("access_token", tokenRes.data.access);
       localStorage.setItem("refresh_token", tokenRes.data.refresh);
