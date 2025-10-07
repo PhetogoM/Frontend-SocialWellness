@@ -20,17 +20,18 @@ cd your-repository-name
 
 2. Run the server
 
-If you have not already installed dependecies, run
+If you have not already installed dependecies, run (for Windows)
 
 ```bash
-npm-modules.bat (Windows)
+npm-modules.bat 
 ```
 Do not run: npm audit fix --force, it just breaks the build.
 
 If it is your first time running the project, run
 
 ```bash
-npm build
+npm install
+npm run build
 ```
 
 Then run
