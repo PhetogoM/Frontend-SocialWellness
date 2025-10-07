@@ -1,9 +1,28 @@
-// src/components/pageComponents/SocialChatboxPage/SocialChatBox.js
 import React, { useState } from "react";
 import "./SocialChatBox.css";
 
 const SocialChatBox = ({ currentUser = "Guest", isAdmin = false }) => {
-  const [messages, setMessages] = useState([]);
+  const [messages, setMessages] = useState([
+    {
+      id: 1,
+      user: currentUser,
+      text: "Hey everyone! 👋",
+      timestamp: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    },
+    {
+      id: 2,
+      user: "Alex",
+      text: "Hi there! Nice to see you online 😄",
+      timestamp: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
+    },
+  ]);
+
   const [input, setInput] = useState("");
 
   const handleSend = () => {
@@ -12,7 +31,10 @@ const SocialChatBox = ({ currentUser = "Guest", isAdmin = false }) => {
       id: Date.now(),
       user: currentUser,
       text: input.trim(),
-      timestamp: new Date().toLocaleTimeString([], { hour: "2-digit", minute: "2-digit" }),
+      timestamp: new Date().toLocaleTimeString([], {
+        hour: "2-digit",
+        minute: "2-digit",
+      }),
     };
     setMessages([...messages, newMessage]);
     setInput("");
@@ -42,7 +64,9 @@ const SocialChatBox = ({ currentUser = "Guest", isAdmin = false }) => {
       <div className="chatbox-wrapper">
         <div className="chatbox-messages">
           {messages.length === 0 ? (
-            <p className="no-messages">No messages yet. Start the conversation!</p>
+            <p className="no-messages">
+              No messages yet. Start the conversation!
+            </p>
           ) : (
             messages.map((msg) => (
               <div

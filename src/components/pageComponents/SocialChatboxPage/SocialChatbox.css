@@ -1,4 +1,4 @@
-/* SocialChatBox.css - Inspired by MyCulturePage.css */
+/* SocialChatBox.css - MyCulturePage Style, WhatsApp-like alignment */
 .chatbox-container {
   max-width: 1000px;
   margin: 0 auto;
@@ -37,6 +37,9 @@
   max-height: 60vh;
   overflow-y: auto;
   border: 1px solid #ddd;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
 }
 
 .no-messages {
@@ -54,32 +57,42 @@
   box-shadow: 0 1px 4px rgba(0,0,0,0.1);
   position: relative;
   animation: fadeIn 0.2s ease-in;
+  max-width: 70%;
 }
 
+/* Align messages on opposite sides */
 .my-message {
   background-color: #e8f8f5;
   border-left: 4px solid #5fae8a;
+  align-self: flex-end;
+  text-align: right;
 }
 
 .other-message {
   background-color: #f4f6f7;
   border-left: 4px solid #e74c3c;
+  align-self: flex-start;
+  text-align: left;
 }
 
 .message-header {
   display: flex;
   justify-content: space-between;
   margin-bottom: 5px;
+  gap: 10px;
+  min-width: 150px;
   font-size: 0.85rem;
 }
 
 .user-name {
   font-weight: bold;
   color: #2c3e50;
+  margin-right: 10px;
 }
 
 .message-time {
   color: #7f8c8d;
+  flex-shrink: 0;
 }
 
 .message-text {
@@ -92,6 +105,11 @@
   display: flex;
   gap: 8px;
   margin-top: 5px;
+  justify-content: flex-end;
+}
+
+.other-message .message-actions {
+  justify-content: flex-start;
 }
 
 .message-actions button {
@@ -168,6 +186,10 @@
 @media (max-width: 768px) {
   .chatbox-container {
     padding: 15px;
+  }
+
+  .message-bubble {
+    max-width: 90%;
   }
 
   .chatbox-input {
