@@ -34,7 +34,7 @@ const SocialChatBox = ({ currentUser = "Guest", isAdmin = false }) => {
 
   return (
     <div className="chatbox-container">
-      <h1 className="chatbox-title">💬 Social Chatbox</h1>
+      <h1 className="chatbox-title"> Social Chatbox</h1>
       <p className="chatbox-subtitle">
         Connect and share your thoughts with others in real-time.
       </p>
