@@ -19,6 +19,7 @@ import WeNeedPage from './components/pageComponents/WeNeedPage/WeNeedPage.js';
 import CommunicationSkillsPage from './components/pageComponents/CommunicationSkillsPage/CommunicationSkillsPage.js';
 import SocialChatbox from './components/pageComponents/SocialChatboxesPage/SocialChatboxPage.js';
 import MyCulturePageUser from './components/pageComponents/MyCulturePage/MyCulturePage.js';
+import CampusMapPage from './components/pageComponents/CampusMapPage/CampusMapPage.js';
 import { AppWrapper } from "./components/pageComponents/AppWrapper.styled.js";
 
 function Layout({ children, user, onLogout }) {
@@ -73,6 +74,7 @@ function App() {
           <Route path="/communicationskills" element={<CommunicationSkillsPage />} />
           <Route path="/socialchatbox" element={<SocialChatbox setUser={setUser}/>} />
           <Route path="/myculture" element={<MyCulturePageUser setUser={setUser} />} />
+          <Route path="/campusmap" element={<CampusMapPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/weneed" element={<WeNeedPage />} />
         </Routes>
