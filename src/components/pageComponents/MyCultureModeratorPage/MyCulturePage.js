@@ -22,10 +22,8 @@ const MyCultureModeratorPage = ({ user }) => {
   const [posts, setPosts] = useState([]);
   const [cultures, setCultures] = useState([]);
   const [users, setUsers] = useState([]);
-  const [newPost, setNewPost] = useState("");
-  const [selectedCulture, setSelectedCulture] = useState("");
   const [loading, setLoading] = useState(true);
-  const [posting, setPosting] = useState(false);
+  
   const [error, setError] = useState("");
 
   const getCultureColor = (cultureName) => CULTURE_COLORS[cultureName] || CULTURE_COLORS.default;
@@ -53,28 +51,7 @@ const MyCultureModeratorPage = ({ user }) => {
 
   useEffect(() => { loadData(); }, [loadData]);
 
-  // Submit post for approval
-  const handlePostSubmit = async () => {
-    if (!newPost || !selectedCulture) {
-      setError("Please select a culture and write a message");
-      return;
-    }
-    try {
-      setPosting(true);
-      setError("");
-      const response = await cultureAPI.createPost({
-        culture: selectedCulture,
-        text_message: newPost
-      });
-      setPosts([response.data, ...posts]);
-      setNewPost("");
-      setSelectedCulture("");
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to create post.");
-    } finally {
-      setPosting(false);
-    }
-  };
+  
 
   // Like Handler
   const toggleLike = async (postId) => {
@@ -104,8 +81,8 @@ const MyCultureModeratorPage = ({ user }) => {
 
   return (
     <div className="my-culture-container user-version">
-      <h1 className="page-title">MyCulture</h1>
-      <p className="page-subtitle">Share and explore cultural posts</p>
+      <h1 className="page-title">MyCulture Moderator Page</h1>
+      <p className="page-subtitle">Approve or reject cultural posts</p>
       {error && <div className="error">{error}</div>}
 
       <div className="page-layout">
@@ -144,7 +121,8 @@ const MyCultureModeratorPage = ({ user }) => {
                   </div>
 
                   <div className="post-actions">
-                    <button onClick={()=>toggleLike(post.id)}>💚 {post.likes}</button>             
+                    <button onClick={()=>toggleLike(post.id)}>Accept {post.likes}</button>   
+                    <button onClick={()=>toggleLike(post.id)}>Reject {post.likes}</button>           
                   </div>
                 </div>
               ))
@@ -152,26 +130,8 @@ const MyCultureModeratorPage = ({ user }) => {
           </div>
         </div>
 
-        {/* Create Post Section */}
-        <div className="create-post-section">
-          <div className="create-post framed">
-            <h2>Share Your Culture</h2>
-            <div className="form-group">
-              <label>Select Culture</label>
-              <select value={selectedCulture} onChange={(e)=>setSelectedCulture(e.target.value)}>
-                <option value="">Choose a culture...</option>
-                {cultures.map(c => (
-                  <option key={c.id} value={c.id}>{c.name}</option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group">
-              <label>Your Message</label>
-              <textarea rows="5" value={newPost} onChange={(e)=>setNewPost(e.target.value)} placeholder="Share traditions, lifestyles, or cultural aspects..." />
-            </div>
-            <button onClick={handlePostSubmit} className="submit-btn" disabled={posting}>{posting?"Submitting...":"Submit for Approval"}</button>
-          </div>
-        </div>
+        
+        
       </div>
     </div>
   );
