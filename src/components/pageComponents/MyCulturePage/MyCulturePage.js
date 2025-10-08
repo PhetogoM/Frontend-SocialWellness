@@ -1,230 +1,180 @@
-import React, { useState, useEffect } from "react";
+// components/pageComponents/MyCulturePage/MyCulturePageUser.js
+import React, { useState, useEffect, useCallback } from "react";
+import { cultureAPI } from "../../apiComponents/cultureApi.js";
 import "./MyCulturePage.css";
 
-const SOUTH_AFRICAN_CULTURES = [
-  "Zulu","Xhosa","Sotho","Tswana","Venda","Tsonga","Swati","Ndebele","Afrikaans","English"
-];
+const CULTURE_COLORS = {
+  Zulu: "#e63946",
+  Xhosa: "#1d3557",
+  Afrikaans: "#457b9d",
+  Sotho: "#2a9d8f",
+  Tswana: "#f4a261",
+  Venda: "#8d99ae",
+  Ndebele: "#e76f51",
+  Swazi: "#6a4c93",
+  Tsonga: "#118ab2",
+  default: "#333333"
+};
 
-const initialFeed = [
-  { id: 1, culture:"Zulu", text:"We open celebrations with traditional songs.", likes:24, comments:[{user:"Lindiwe", text:"Lovely!"}], author:"Aisha", time:"2h ago", pending:true },
-  { id: 2, culture:"Afrikaans", text:"Sunday braai with family.", likes:12, comments:[], author:"Johan", time:"5h ago", pending:false },
-];
-
-const initialChat = [
-  { id:1, author:"Sipho", culture:"Sotho", text:"Teaching a song for Heritage Day 🎶", likes:10, time:"14:22" },
-  { id:2, author:"You", culture:"Tswana", text:"Bring drums to rehearsal tomorrow?", likes:3, time:"14:25" },
-];
-
-export default function MyCulturePage() {
-  const [feedPosts, setFeedPosts] = useState(initialFeed);
-  const [chatMessages, setChatMessages] = useState(initialChat);
-  const [showCommentBox, setShowCommentBox] = useState({});
+const MyCulturePageUser = ({ user }) => {
+  const [selectedFilter, setSelectedFilter] = useState("all");
   const [sortBy, setSortBy] = useState("most-liked");
-  const [filterCulture, setFilterCulture] = useState("");
-  const [isModerator, setIsModerator] = useState(false);
+  const [posts, setPosts] = useState([]);
+  const [cultures, setCultures] = useState([]);
+  const [users, setUsers] = useState([]);
+  const [newPost, setNewPost] = useState("");
+  const [selectedCulture, setSelectedCulture] = useState("");
+  const [loading, setLoading] = useState(true);
+  const [posting, setPosting] = useState(false);
+  const [error, setError] = useState("");
 
-  // ✅ Check role on mount
-  useEffect(() => {
-    const role = localStorage.getItem("userRole") || "user";
-    setIsModerator(role.toLowerCase() === "moderator");
+  const getCultureColor = (cultureName) => CULTURE_COLORS[cultureName] || CULTURE_COLORS.default;
+
+  // load Posts and Cultures
+  const loadData = useCallback(async () => {
+    try {
+      setLoading(true);
+      setError("");
+      const [postsResponse, culturesResponse, usersResponse] = await Promise.all([
+        cultureAPI.getPosts({ status: "approved" }),
+        cultureAPI.getCultures(),
+        cultureAPI.getUsers()
+      ]);
+      setPosts(postsResponse.data);
+      setCultures(culturesResponse.data);
+      setUsers(usersResponse.data);
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to load data.");
+      console.error(err);
+    } finally {
+      setLoading(false);
+    }
   }, []);
 
-  // --- Shared chat logic ---
-  const handleNewMessage = (text) => {
-    if (!text.trim()) return;
-    setChatMessages([
-      { id: Date.now(), author: "You", culture: "", text, likes: 0, time: "Now" },
-      ...chatMessages,
-    ]);
+  useEffect(() => { loadData(); }, [loadData]);
+
+  // Submit post for approval
+  const handlePostSubmit = async () => {
+    if (!newPost || !selectedCulture) {
+      setError("Please select a culture and write a message");
+      return;
+    }
+    try {
+      setPosting(true);
+      setError("");
+      const response = await cultureAPI.createPost({
+        culture: selectedCulture,
+        text_message: newPost
+      });
+      setPosts([response.data, ...posts]);
+      setNewPost("");
+      setSelectedCulture("");
+    } catch (err) {
+      setError(err.response?.data?.message || "Failed to create post.");
+    } finally {
+      setPosting(false);
+    }
   };
 
-  // --- Moderator functions ---
-  const toggleLike = id =>
-    setFeedPosts(feedPosts.map(p=>p.id===id ? {...p, likes:p.likes+1}:p));
-
-  const toggleCommentBox = id =>
-    setShowCommentBox(prev=>({...prev, [id]: !prev[id]}));
-
-  const addComment = (id, text) => {
-    if(!text.trim()) return;
-    setFeedPosts(feedPosts.map(p=>
-      p.id===id ? {...p, comments:[...p.comments, {user:"You", text}]} : p
-    ));
-    setShowCommentBox(prev=>({...prev, [id]: false}));
+  // Like Handler
+  const toggleLike = async (postId) => {
+    try {
+      const response = await cultureAPI.likePost(postId);
+      setPosts(posts.map(post => post.id === postId ? response.data : post));
+    } catch (err) { console.error(err); }
   };
 
-  const sortedFilteredPosts = [...feedPosts]
-    .filter(p => !filterCulture || p.culture===filterCulture)
-    .sort((a,b)=> sortBy==="most-liked" ? b.likes-a.likes : 0);
+  // Filter and Sort Posts
+  const getUserFullName = (userId) => {
+    const user = users.find(u => u.id === userId);
+    return user ? user.name : "Unknown User";
+  };
+  const getCultureName = (cultureId) => {
+    const culture = cultures.find(c => c.id === cultureId);
+    return culture ? culture.name : "Unknown Culture";
+  };
 
-  // -------------------------------
-  // Render
-  // -------------------------------
-  if (!isModerator) {
-    // 🔹 Non-moderator layout
-    return (
-      <div className="mc-root theme-light">
-        <main className="mc-main">
-          <section className="mc-left">
-            <div className="mc-right-chat">
-              <div className="mc-chat-header">
-                <div className="mc-chat-title">Campus Culture Chat</div>
-              </div>
+  const filteredPosts = posts
+    .filter(post => selectedFilter === "all" || getCultureName(post.culture) === selectedFilter) //we can optimize this to correlate ids instead
+    .sort((a, b) => sortBy === "most-liked" ? b.likes - a.likes : new Date(b.date_created) - new Date(a.date_created));
 
-              {/* Tweet-like feed (newest first) */}
-              <div className="mc-chat-body">
-                {chatMessages.map((msg) => (
-                  <div key={msg.id} className="mc-chat-msg">
-                    <div className="mc-chat-bubble">
-                      <div className="mc-chat-top">
-                        <span className="mc-author">{msg.author}</span>
-                        {msg.culture && <span className="mc-tag pill">{msg.culture}</span>}
-                      </div>
-                      <div className="mc-chat-text">{msg.text}</div>
-                      <div className="mc-chat-meta">💚 {msg.likes} • {msg.time}</div>
-                    </div>
-                  </div>
-                ))}
-              </div>
+  
 
-              {/* Input box pinned bottom-left */}
-              <div className="mc-chat-input">
-                <input
-                  type="text"
-                  placeholder="Type a message..."
-                  className="mc-input flex"
-                  onKeyDown={(e) => {
-                    if (e.key === "Enter") {
-                      handleNewMessage(e.target.value);
-                      e.target.value = "";
-                    }
-                  }}
-                />
-              </div>
-            </div>
-          </section>
-        </main>
-        <footer className="mc-footer-spacer"></footer>
-      </div>
-    );
-  }
+  if (loading) return <div className="loading">Loading posts...</div>;
 
-  // 🔹 Moderator layout
   return (
-    <div className="mc-root theme-light">
-      <main className="mc-main">
-        {/* Chat always visible */}
-        <section className="mc-left">
-          <div className="mc-right-chat">
-            <div className="mc-chat-header">
-              <div className="mc-chat-title">Campus Culture Chat</div>
-            </div>
-            <div className="mc-chat-body">
-              {chatMessages.map(msg => (
-                <div key={msg.id} className="mc-chat-msg">
-                  <div className="mc-chat-bubble">
-                    <div className="mc-chat-top">
-                      <span className="mc-author">{msg.author}</span>
-                      <span className="mc-tag pill">{msg.culture}</span>
-                    </div>
-                    <div className="mc-chat-text">{msg.text}</div>
-                    <div className="mc-chat-meta">💚 {msg.likes} • {msg.time}</div>
-                  </div>
-                </div>
-              ))}
-            </div>
-            <div className="mc-chat-input">
-              <input
-                type="text"
-                placeholder="Type a message..."
-                className="mc-input flex"
-                onKeyDown={e=>{
-                  if(e.key==="Enter" && e.target.value.trim()){
-                    handleNewMessage(e.target.value);
-                    e.target.value="";
-                  }
-                }}
-              />
-            </div>
-          </div>
-        </section>
+    <div className="my-culture-container user-version">
+      <h1 className="page-title">MyCulture</h1>
+      <p className="page-subtitle">Share and explore cultural posts</p>
+      {error && <div className="error">{error}</div>}
 
-        {/* Moderator-only compose & feed */}
-        <section className="mc-right">
-          <div className="mc-compose">
-            <h2 className="mc-h2">Share something about your culture</h2>
-            <div className="mc-row">
-              <label className="mc-label">Culture</label>
-              <select className="mc-select" defaultValue="">
-                <option value="">Select culture</option>
-                {SOUTH_AFRICAN_CULTURES.map(c=><option key={c} value={c}>{c}</option>)}
-                <option value="Other">Other</option>
+      <div className="page-layout">
+        {/* Posts Section */}
+        <div className="posts-section">
+          <div className="posts-header framed">
+            <h2>Culture Posts</h2>
+            <div className="filter-controls">
+              <div className="toggle-group">
+                <button
+                  className={`sort-btn ${sortBy === "most-liked" ? "active" : ""}`}
+                  onClick={() => setSortBy("most-liked")}>
+                  Most liked
+                </button>
+                <button
+                  className={`sort-btn ${sortBy === "newest" ? "active" : ""}`}
+                  onClick={() => setSortBy("newest")}>
+                  Newest
+                </button>
+                </div>
+              <select value={selectedFilter} onChange={(e)=>setSelectedFilter(e.target.value)} className="culture-filter">
+                <option value="all">All cultures</option>
+                {cultures.map(c=> <option key={c.id} value={c.name}>{c.name}</option>)}
               </select>
             </div>
-            <div className="mc-row">
-              <label className="mc-label">Message</label>
-              <textarea className="mc-textarea" placeholder="Traditions, lifestyle, customs..." rows={5}></textarea>
-            </div>
-            <div className="mc-actions">
-              <button className="mc-btn mc-btn-primary">Submit for Approval</button>
-            </div>
           </div>
-        </section>
 
-        {/* Moderation Feed */}
-        <section id="campus-feed" className="mc-post-section">
-          <div className="mc-post-filters">
-            <select value={sortBy} onChange={e=>setSortBy(e.target.value)} className="mc-select sm">
-              <option value="latest">Latest</option>
-              <option value="most-liked">Most liked</option>
-            </select>
-            <select value={filterCulture} onChange={e=>setFilterCulture(e.target.value)} className="mc-select sm">
-              <option value="">All cultures</option>
-              {SOUTH_AFRICAN_CULTURES.map(c=><option key={c} value={c}>{c}</option>)}
-              <option value="Other">Other</option>
-            </select>
-          </div>
-          <div className="mc-feed">
-            {sortedFilteredPosts.map(post=>(
-              <div key={post.id} className="mc-card large-post">
-                <div className="mc-card-top">
-                  <span className="mc-tag">{post.culture}</span>
-                  <span className="mc-like" onClick={()=>toggleLike(post.id)}>💚 {post.likes}</span>
-                  <span className="mc-comment-btn" onClick={()=>toggleCommentBox(post.id)}>💬 Comment</span>
+          <div className="posts-container framed">
+            {filteredPosts.length === 0 ? <p className="no-posts">No posts to display</p> : (
+              filteredPosts.map(post=>(
+                <div key={post.id} className="post-card">
+                  <div className="post-header" style={{color:getCultureColor(post.culture)}}>{getCultureName(post.culture)}</div>
+                  <div className="post-content">{post.text_message}</div>
+                  <div className="post-meta">
+                    <strong>{getUserFullName(post.user)}</strong> · {new Date(post.date_created).toLocaleDateString()}
+                  </div>
+
+                  <div className="post-actions">
+                    <button onClick={()=>toggleLike(post.id)}>💚 {post.likes}</button>             
+                  </div>
                 </div>
-                <div className="mc-text">{post.text}</div>
-                <div className="mc-meta">— {post.author} • {post.time} {post.pending && "• Pending moderation"}</div>
-
-                {post.pending && (
-                  <div className="mc-approval">
-                    <button className="mc-btn mc-btn-danger">Reject</button>
-                    <button className="mc-btn mc-btn-success">Approve</button>
-                  </div>
-                )}
-
-                {showCommentBox[post.id] && (
-                  <div className="mc-comments">
-                    <input
-                      type="text"
-                      className="mc-input flex"
-                      placeholder="Write a comment..."
-                      onKeyDown={e=>{
-                        if(e.key==="Enter") addComment(post.id, e.target.value);
-                      }}
-                    />
-                    {post.comments.map((c,i)=>
-                      <div key={i} className="mc-comment">
-                        <span className="mc-comment-user">{c.user}:</span> {c.text}
-                      </div>
-                    )}
-                  </div>
-                )}
-              </div>
-            ))}
+              ))
+            )}
           </div>
-        </section>
-      </main>
-      <footer className="mc-footer-spacer"></footer>
+        </div>
+
+        {/* Create Post Section */}
+        <div className="create-post-section">
+          <div className="create-post framed">
+            <h2>Share Your Culture</h2>
+            <div className="form-group">
+              <label>Select Culture</label>
+              <select value={selectedCulture} onChange={(e)=>setSelectedCulture(e.target.value)}>
+                <option value="">Choose a culture...</option>
+                {cultures.map(c => (
+                  <option key={c.id} value={c.id}>{c.name}</option>
+                ))}
+              </select>
+            </div>
+            <div className="form-group">
+              <label>Your Message</label>
+              <textarea rows="5" value={newPost} onChange={(e)=>setNewPost(e.target.value)} placeholder="Share traditions, lifestyles, or cultural aspects..." />
+            </div>
+            <button onClick={handlePostSubmit} className="submit-btn" disabled={posting}>{posting?"Submitting...":"Submit for Approval"}</button>
+          </div>
+        </div>
+      </div>
     </div>
   );
-}
+};
+
+export default MyCulturePageUser;

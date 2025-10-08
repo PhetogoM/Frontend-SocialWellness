@@ -1,49 +1,42 @@
-/* Reset margins/paddings and box-sizing */
-* {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
-}
-
-/* Set default font for the app */
-body, html, #root {
-  font-family: Arial, sans-serif;
-  height: 100%;
-}
-
-/* App container for full height */
-.App {
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-/* Main body grows to take space between header and footer */
-.AppBody {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-}
-
+/* Reset default styles */
 body, html, #root, .App {
   height: 100%;
   margin: 0;
   padding: 0;
   font-family: Arial, sans-serif;
-
-  background-image: url('/public/image/hero-bg.png');
-  background-size: cover; /* ensures the image covers the screen */
-  background-position: center; /* centers the image */
-  background-repeat: no-repeat; /* prevents tiling */
 }
 
-.App::before {
-  content: '';
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  background: rgba(255, 255, 255, 0.3); /* light overlay */
-  z-index: -1;
+/* Background only on Home, Login, Register pages */
+.with-background {
+  background-image: url('/public/image/hero-bg.png'); /* adjust path if needed */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative; /* container for overlay */
+}
+
+/* Remove the mist/overlay completely */
+.with-background::before {
+  content: none; /* removes the semi-transparent layer */
+}
+
+/* Pages without background (plain white) */
+.no-background {
+  background: #fff;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  position: relative;
+}
+
+/* Optional: AppBody container for page content */
+.AppBody {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
 }

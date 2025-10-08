@@ -6,7 +6,7 @@ import styled from "styled-components";
 const HeaderContainer = styled.header`
   background-color: #5fae8a; /* calm green */
   color: white;
-  padding: 10px 40px;
+  padding: 0px 40px;
   display: flex;
   justify-content: space-between;
   align-items: center;
@@ -16,30 +16,30 @@ const HeaderContainer = styled.header`
 const LogoTitle = styled.div`
   display: flex;
   align-items: center;
-  gap: 10px; /* space between logo and text */
+  gap: 10px;
 `;
 
 const Logo = styled.img`
-  width: 36px;
-  height: 36px;
+  width: 64px;
+  height: 64px;
   object-fit: contain;
 `;
 
 /* Nav links container */
 const NavLinks = styled.nav`
   display: flex;
-  gap: 0; /* tightly packed like Twitter */
+  gap: 0;
   flex: 1;
   margin-left: 40px;
 `;
 
-/* Link styled like Twitter header */
 const NavLink = styled(Link)`
   color: white;
   font-weight: bold;
   text-decoration: none;
   padding: 10px 15px;
-  border-bottom: ${props => (props.active ? "3px solid white" : "3px solid transparent")};
+  border-bottom: ${(props) =>
+    props.active ? "3px solid white" : "3px solid transparent"};
   transition: border 0.2s;
 
   &:hover {
@@ -47,44 +47,54 @@ const NavLink = styled(Link)`
   }
 `;
 
-/* Right buttons (profile, logout, etc.) */
+/* Right section: user info + logout */
 const HeaderButtons = styled.div`
   display: flex;
   gap: 10px;
   align-items: center;
 `;
 
-/* Profile icon */
-const ProfileButton = styled.button`
-  background: none;
-  border: none;
-  color: white;
-  font-size: 1.4rem;
-  cursor: pointer;
+const ProfileName = styled.span`
+  font-weight: bold;
 `;
 
-const SiteHeader = () => {
-  const location = useLocation(); // get current route
+const LogoutButton = styled.button`
+  background: none;
+  border: 1px solid white;
+  color: white;
+  padding: 5px 10px;
+  border-radius: 5px;
+  cursor: pointer;
+
+  &:hover {
+    background-color: rgba(255, 255, 255, 0.2);
+  }
+`;
+
+const SiteHeader = ({ user, onLogout }) => {
+  const location = useLocation();
 
   const PAGES = [
-    { path: "/myculture", label: "MyCulture" },
-    { path: "/whatsdifference", label: "WhatsTheDifference" },
+    { path: "/about", label: "About" },
+    { path: "/myculture", label: "My Culture" },
     { path: "/communicationskills", label: "Communication Skills" },
-    { path: "/eisenhower", label: "Two-Week Planner" },
-    { path: "/maps", label: "Google Maps" },
-    { path: "/socialchat", label: "Social Chatboxes" },
-    { path: "/weneed", label: "WeNeed" },
+    { path: "/campusmap", label: "Campus Map" },   
+    { path: "/socialchatbox", label: "Social Chatbox" }, 
+    { path: "/moderator", label: "Moderator Panel" }, 
+    { path: "/weneed", label: "We Need" },
   ];
 
   return (
     <HeaderContainer>
       <LogoTitle>
-        <Logo src="image/path-to-logo.png" alt="UniPath Logo" />
+        <Link to="/">
+          <Logo src="image/path-to-logo.png" alt="UniPath Logo" />
+        </Link>
         <h1 style={{ fontSize: "1.4rem", fontWeight: "bold" }}>UniPath</h1>
       </LogoTitle>
 
       <NavLinks>
-        {PAGES.map(p => (
+        {PAGES.map((p) => (
           <NavLink
             key={p.path}
             to={p.path}
@@ -96,8 +106,8 @@ const SiteHeader = () => {
       </NavLinks>
 
       <HeaderButtons>
-        <ProfileButton>👤</ProfileButton>
-        {/* You can expand profile dropdown or logout later */}
+        {user && <ProfileName>👤 {user.first_name || user.email}</ProfileName>}
+        {user && <LogoutButton onClick={onLogout}>Logout</LogoutButton>}
       </HeaderButtons>
     </HeaderContainer>
   );
