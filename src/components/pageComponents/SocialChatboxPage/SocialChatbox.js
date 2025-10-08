@@ -49,19 +49,6 @@ const SocialChatBox = ({ currentUser = "Guest", isAdmin = false }) => {
     }
   };
 
-  // Report message
-  const handleReport = async (id, user) => {
-    if (user !== currentUser) {
-      try {
-        await chatAPI.reportMessage(id, "Inappropriate content");
-        alert(`You reported ${user}'s message.`);
-      } catch (err) {
-        console.error("Error reporting message:", err);
-        alert("Failed to report message.");
-      }
-    }
-  };
-
   return (
     <div className="chatbox-container">
       <h1 className="chatbox-title">Social Chatbox</h1>
@@ -75,7 +62,7 @@ const SocialChatBox = ({ currentUser = "Guest", isAdmin = false }) => {
             <p className="no-messages">No messages yet. Start the conversation!</p>
           ) : (
             messages.map((msg) => {
-              if (!msg || typeof msg.text !== "string") return null;
+              if (!msg || typeof msg.message_text !== "string") return null;
 
               const userName =
                 typeof msg.user === "string" ? msg.user : String(msg.user ?? "Unknown");
@@ -98,10 +85,10 @@ const SocialChatBox = ({ currentUser = "Guest", isAdmin = false }) => {
                       {isCurrentUser ? "You" : userName}
                       {isAdminUser && <span className="admin-badge">Admin</span>}
                     </span>
-                    <span className="message-time">{msg.timestamp || "Just now"}</span>
+                    <span className="message-time">{msg.date_created || "Just now"}</span>
                   </div>
 
-                  <div className="message-text">{msg.text}</div>
+                  <div className="message-text">{msg.message_text}</div>
 
                   <div className="message-actions">
                     {(isCurrentUser || isAdmin) && (
@@ -110,14 +97,6 @@ const SocialChatBox = ({ currentUser = "Guest", isAdmin = false }) => {
                         onClick={() => handleDelete(msg.id, userName)}
                       >
                         ❌
-                      </button>
-                    )}
-                    {!isCurrentUser && (
-                      <button
-                        className="report-btn"
-                        onClick={() => handleReport(msg.id, userName)}
-                      >
-                        ⚠️
                       </button>
                     )}
                   </div>

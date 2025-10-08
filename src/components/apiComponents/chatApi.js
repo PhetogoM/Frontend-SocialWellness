@@ -1,5 +1,5 @@
 // src/apiComponents/chatApi.js
-import api from "./api";
+import api from "./api.js";
 
 export const chatAPI = {
   // Get all messages
@@ -11,22 +11,14 @@ export const chatAPI = {
   // Send a message
   sendMessage: async (messageText) => {
     const response = await api.post("chat/messages/", {
-      message_text: messageText, 
+      message_text: messageText, // match backend serializer
     });
     return response.data;
   },
 
-  // Delete message
+  // Delete a message
   deleteMessage: async (id) => {
     const response = await api.delete(`chat/messages/${id}/`);
-    return response.data;
-  },
-
-  // Report message
-  reportMessage: async (id, reason = "Inappropriate") => {
-    const response = await api.patch(`chat/messages/${id}/report/`, {
-      report: true,
-    });
     return response.data;
   },
 };
