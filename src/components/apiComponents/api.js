@@ -1,6 +1,5 @@
-// src/api/api.js
 import axios from "axios";
-import { API_URL } from "./api-base-url";
+import { API_URL } from "./api-base-url.js";
 
 const api = axios.create({
   baseURL: `${API_URL}/api/`,
@@ -9,7 +8,7 @@ const api = axios.create({
   },
 });
 
-// Automatically attach JWT token if available
+// 🧩 Add token if available
 api.interceptors.request.use((config) => {
   const token = localStorage.getItem("access_token");
   if (token) {
@@ -18,7 +17,7 @@ api.interceptors.request.use((config) => {
   return config;
 });
 
-// Response interceptor for 401 (unauthorized) handling
+// 🛑 Auto redirect on 401 Unauthorized
 api.interceptors.response.use(
   (response) => response,
   (error) => {

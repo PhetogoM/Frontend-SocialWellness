@@ -36,7 +36,7 @@ function CampusMapPage() {
     try {
       const data = await mapsAPI();
 
-      // Add only Library + Main Office to dropdowns (not markers)
+      // store for destination and starting point
       const extraLocations = [
         {
           id: "library",

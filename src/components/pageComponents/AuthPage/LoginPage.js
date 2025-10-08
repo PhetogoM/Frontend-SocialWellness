@@ -13,7 +13,7 @@ import {
 
 const GoogleLogo = "/image/google-logo.png";
 
-const LoginPage = ({ setUser }) => { // <-- pass setUser from App.js
+const LoginPage = ({ setUser }) => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [error, setError] = useState("");
@@ -31,17 +31,17 @@ const LoginPage = ({ setUser }) => { // <-- pass setUser from App.js
       setLoading(true);
       setError("");
 
-      const res = await authAPI.post("auth/login/", { email: email, password: password });
+      // ✅ use modular API method
+      const data = await authAPI.login(email, password);
 
-      // Save tokens + user info including role
-      const user = res.data.user || { email, role: "user" }; 
-      localStorage.setItem("access_token", res.data.access);
-      localStorage.setItem("refresh_token", res.data.refresh);
+      const user = data.user || { email, role: "user" };
+      localStorage.setItem("access_token", data.access);
+      localStorage.setItem("refresh_token", data.refresh);
       localStorage.setItem("user", JSON.stringify(user));
 
-      setUser(user); // update global app state
+      setUser(user);
 
-      // Navigate based on role
+      // ✅ navigate based on role
       if (user.role === "admin") {
         navigate("/admin-dashboard");
       } else {
@@ -55,8 +55,13 @@ const LoginPage = ({ setUser }) => { // <-- pass setUser from App.js
     }
   };
 
-  const handleSocialLogin = (provider) => {
-    const dummyUser = { first_name: "Social", last_name: "User", email: "socialuser@gmail.com", role: "user" };
+  const handleSocialLogin = () => {
+    const dummyUser = {
+      first_name: "Social",
+      last_name: "User",
+      email: "socialuser@gmail.com",
+      role: "user",
+    };
     localStorage.setItem("user", JSON.stringify(dummyUser));
     localStorage.setItem("access_token", "dummy_token");
     setUser(dummyUser);
@@ -67,23 +72,42 @@ const LoginPage = ({ setUser }) => { // <-- pass setUser from App.js
     <PageContainer>
       <LoginForm onSubmit={handleSubmit}>
         <Title>Login to Unipath</Title>
-        {error && (
-  <div style={{ color: "red", marginBottom: "10px" }}>
-    {error.split('\n').map((line, idx) =>
-      line.trim() ? <div key={idx}>{line}</div> : null
-    )}
-  </div>
-)}
 
-        <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
-        <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        {error && (
+          <div style={{ color: "red", marginBottom: "10px" }}>
+            {error.split("\n").map((line, idx) =>
+              line.trim() ? <div key={idx}>{line}</div> : null
+            )}
+          </div>
+        )}
+
+        <Input
+          type="email"
+          placeholder="Email"
+          value={email}
+          onChange={(e) => setEmail(e.target.value)}
+        />
+        <Input
+          type="password"
+          placeholder="Password"
+          value={password}
+          onChange={(e) => setPassword(e.target.value)}
+        />
 
         <Button type="submit" disabled={loading}>
           {loading ? "Logging in..." : "Login"}
         </Button>
 
-        <div style={{ textAlign: "center", color: "#6b7280", margin: "15px 0" }}>or</div>
-        <SocialButton bgColor="#ff2600ff" onClick={() => handleSocialLogin("Google")}>
+        <div
+          style={{ textAlign: "center", color: "#6b7280", margin: "15px 0" }}
+        >
+          or
+        </div>
+
+        <SocialButton
+          bgColor="#ff2600ff"
+          onClick={() => handleSocialLogin("Google")}
+        >
           <img src={GoogleLogo} alt="Google" /> Sign in with Google
         </SocialButton>
 
