@@ -15,7 +15,8 @@ import HomePage from "./components/pageComponents/HomePage/home-page.js";
 import LoginPage from "./components/pageComponents/AuthPage/LoginPage.js";
 import RegisterPage from "./components/pageComponents/AuthPage/RegisterPage.js";
 import AboutPage from "./components/pageComponents/AboutPage/AboutPage.js";
-import WeNeedPage from './pages/WeNeed-page';
+import WeNeedPage from "./components/pageComponents/WeNeedPage/WeNeedPage";
+import AdminWeNeedPage from "./components/pageComponents/AdminWeNeed/AdminWeNeedPage";
 import { AppWrapper } from "./components/pageComponents/AppWrapper.styled.js";
 
 function Layout({ children, user, onLogout }) {
