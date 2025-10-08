@@ -1,7 +1,7 @@
 import api from "./api.js";
 
 export const authAPI = {
-  // 🔐 LOGIN
+  // LOGIN
   login: async (email, password) => {
     const response = await api.post("auth/login/", { email, password });
     // Save tokens here for re-use across the app
@@ -10,13 +10,13 @@ export const authAPI = {
     return response.data; // return whole payload
   },
 
-  // 📝 REGISTER
+  // REGISTER
   register: async (userData) => {
     const response = await api.post("auth/register/", userData);
     return response.data;
   },
 
-  // ♻️ REFRESH TOKEN
+  // REFRESH TOKEN
   refreshToken: async () => {
     const refresh = localStorage.getItem("refresh_token");
     if (!refresh) throw new Error("No refresh token found");
@@ -25,7 +25,7 @@ export const authAPI = {
     return response.data.access;
   },
 
-  // 🚪 LOGOUT
+  //LOGOUT
   logout: () => {
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
@@ -33,7 +33,7 @@ export const authAPI = {
     window.location.href = "/login";
   },
 
-  // 👤 GET CURRENT USER
+  //GET CURRENT USER
   getUser: async () => {
     const response = await api.get("auth/user/");
     localStorage.setItem("user", JSON.stringify(response.data));

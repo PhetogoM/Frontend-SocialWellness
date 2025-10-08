@@ -11,7 +11,7 @@ export const chatAPI = {
   // Send a message
   sendMessage: async (messageText) => {
     const response = await api.post("chat/messages/", {
-      message_text: messageText, // ✅ matches Django field
+      message_text: messageText, 
     });
     return response.data;
   },
