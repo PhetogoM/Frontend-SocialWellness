@@ -144,8 +144,12 @@ const MyCulturePageUser = ({ user }) => {
                   </div>
 
                   <div className="post-actions">
-                    <button onClick={()=>toggleLike(post.id)}>💚 {post.likes}</button>             
-                  </div>
+                    <button
+  onClick={() => toggleLike(post.id)}
+  className={`like-btn${post.liked_by_user ? " liked" : ""}`}
+>
+  💚 {post.num_of_likes}
+</button></div>
                 </div>
               ))
             )}
