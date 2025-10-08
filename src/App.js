@@ -8,6 +8,8 @@ import Footer from "./components/sectionComponents/footer";
 import WeNeedPage from "./components/pageComponents/WeNeedPage/WeNeedPage";
 import AdminWeNeedPage from "./components/pageComponents/AdminWeNeed/AdminWeNeedPage";
 import AboutPage from "./components/pageComponents/AboutPage/AboutPage";
+import FAQsPage from "./components/pageComponents/FAQsPage/FAQsPage";
+
 
 function App() {
   const storedUser = localStorage.getItem("user");
@@ -48,6 +50,7 @@ function App() {
               path="/admin/weneed"
               element={isStaffUser ? <AdminWeNeedPage /> : <NotAuthorizedPlaceholder />}
             />
+            <Route path="/faqs" element={<FAQsPage />} />
           </Routes>
         </div>
 
