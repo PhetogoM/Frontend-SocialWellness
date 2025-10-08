@@ -15,8 +15,16 @@ import HomePage from "./components/pageComponents/HomePage/home-page.js";
 import LoginPage from "./components/pageComponents/AuthPage/LoginPage.js";
 import RegisterPage from "./components/pageComponents/AuthPage/RegisterPage.js";
 import AboutPage from "./components/pageComponents/AboutPage/AboutPage.js";
+<<<<<<< HEAD
 import WeNeedPage from "./components/pageComponents/WeNeedPage/WeNeedPage";
 import AdminWeNeedPage from "./components/pageComponents/AdminWeNeed/AdminWeNeedPage";
+=======
+import WeNeedPage from './components/pageComponents/WeNeedPage/WeNeedPage.js';
+import CommunicationSkillsPage from './components/pageComponents/CommunicationSkillsPage/CommunicationSkillsPage.js';
+import SocialChatbox from './components/pageComponents/SocialChatboxesPage/SocialChatboxPage.js';
+import MyCulturePageUser from './components/pageComponents/MyCulturePage/MyCulturePage.js';
+import CampusMapPage from './components/pageComponents/CampusMapPage/CampusMapPage.js';
+>>>>>>> 2da26db6ef079cb59b420cbc3214056800beddc4
 import { AppWrapper } from "./components/pageComponents/AppWrapper.styled.js";
 
 function Layout({ children, user, onLogout }) {
@@ -68,6 +76,10 @@ function App() {
           <Route path="/" element={<HomePage />} />
           <Route path="/login" element={<LoginPage setUser={setUser} />} />
           <Route path="/register" element={<RegisterPage setUser={setUser} />} />
+          <Route path="/communicationskills" element={<CommunicationSkillsPage />} />
+          <Route path="/socialchatbox" element={<SocialChatbox setUser={setUser}/>} />
+          <Route path="/myculture" element={<MyCulturePageUser setUser={setUser} />} />
+          <Route path="/campusmap" element={<CampusMapPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/weneed" element={<WeNeedPage />} />
         </Routes>
