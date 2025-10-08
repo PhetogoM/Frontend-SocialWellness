@@ -1,11 +1,8 @@
-import React, { useEffect, useMemo, useState } from "react";
+import React, { useEffect, useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { Send, ThumbsUp } from "lucide-react";
 import "./WeNeedPage.css";
-
-const API_BASE_URL =
-  process.env.REACT_APP_API_BASE_URL ||
-  (import.meta && import.meta.env && import.meta.env.VITE_API_BASE_URL) ||
-  "http://127.0.0.1:8000/api";
+import { WeNeedAPI } from "../../apiComponents/weNeedAPI";
 
 export default function WeNeedPage() {
   const token = localStorage.getItem("access_token") || "";
@@ -22,7 +19,6 @@ export default function WeNeedPage() {
     "Support Services",
     "Other",
   ]);
-
   const [submittedRequests, setSubmittedRequests] = useState([]);
   const [loading, setLoading] = useState(true);
   const [posting, setPosting] = useState(false);
@@ -30,28 +26,17 @@ export default function WeNeedPage() {
 
   const characterLimit = 250;
 
-  const authHeaders = useMemo(
-    () =>
-      isAuthed
-        ? { Authorization: `Bearer ${token}`, "Content-Type": "application/json" }
-        : { "Content-Type": "application/json" },
-    [isAuthed, token]
-  );
-
   useEffect(() => {
     let active = true;
     async function loadAll() {
       setError("");
       try {
-        const [reqRes, catRes] = await Promise.all([
-          fetch(`${API_BASE_URL}/requests/?status=approved`, { headers: authHeaders }),
-          fetch(`${API_BASE_URL}/requests/categories/`),
+        const [reqs, cats] = await Promise.all([
+          WeNeedAPI.getApprovedRequests(),
+          WeNeedAPI.getCategories().catch(() => null),
         ]);
 
-        if (!reqRes.ok) throw new Error(`Requests ${reqRes.status}`);
-        const reqs = await reqRes.json();
-
-        const normalized = (Array.isArray(reqs) ? reqs : reqs.results || []).map((r) => ({
+        const list = (Array.isArray(reqs) ? reqs : reqs.results || []).map((r) => ({
           id: r.id,
           name: r.student?.name || r.display_name || "Anonymous",
           category: r.category,
@@ -61,15 +46,12 @@ export default function WeNeedPage() {
           liked: !!r.likedByMe,
         }));
 
-        let cats = [];
-        if (catRes.ok) {
-          const json = await catRes.json();
-          cats = Array.isArray(json) ? json : json.categories || [];
-        }
-
         if (active) {
-          setSubmittedRequests(normalized);
-          if (cats.length) setCategories(cats);
+          setSubmittedRequests(list);
+          if (cats) {
+            const c = Array.isArray(cats) ? cats : cats.categories || [];
+            if (c.length) setCategories(c);
+          }
           setLoading(false);
         }
       } catch (e) {
@@ -84,7 +66,7 @@ export default function WeNeedPage() {
     return () => {
       active = false;
     };
-  }, [API_BASE_URL, authHeaders]);
+  }, []);
 
   async function handleSubmit(e) {
     e.preventDefault();
@@ -97,16 +79,10 @@ export default function WeNeedPage() {
     setPosting(true);
     setError("");
     try {
-      const res = await fetch(`${API_BASE_URL}/requests/`, {
-        method: "POST",
-        headers: authHeaders,
-        body: JSON.stringify({ category, text: requestText.trim() }),
+      const created = await WeNeedAPI.createRequest({
+        category,
+        text: requestText.trim(),
       });
-      if (!res.ok) {
-        const txt = await res.text();
-        throw new Error(txt || `Request failed: ${res.status}`);
-      }
-      const created = await res.json();
 
       if (created.status === "approved") {
         setSubmittedRequests((prev) => [
@@ -115,7 +91,9 @@ export default function WeNeedPage() {
             name: created.student?.name || created.display_name || "Anonymous",
             category: created.category,
             request: created.text,
-            date: created.created_at ? new Date(created.created_at).toLocaleString() : "Just now",
+            date: created.created_at
+              ? new Date(created.created_at).toLocaleString()
+              : "Just now",
             likes: created.likes_count ?? 0,
             liked: false,
           },
@@ -138,26 +116,35 @@ export default function WeNeedPage() {
       setError("Please sign in to like requests.");
       return;
     }
+
     setSubmittedRequests((prev) =>
       prev.map((r) =>
         r.id === id
-          ? { ...r, liked: !currentlyLiked, likes: Math.max(0, r.likes + (currentlyLiked ? -1 : 1)) }
+          ? {
+              ...r,
+              liked: !currentlyLiked,
+              likes: Math.max(0, r.likes + (currentlyLiked ? -1 : 1)),
+            }
           : r
       )
     );
+
     try {
-      const method = currentlyLiked ? "DELETE" : "POST";
-      const res = await fetch(`${API_BASE_URL}/requests/${id}/like/`, {
-        method,
-        headers: authHeaders,
-      });
-      if (!res.ok) throw new Error(`Like failed: ${res.status}`);
+      if (currentlyLiked) {
+        await WeNeedAPI.unlikeRequest(id);
+      } else {
+        await WeNeedAPI.likeRequest(id);
+      }
     } catch (e) {
       console.error(e);
       setSubmittedRequests((prev) =>
         prev.map((r) =>
           r.id === id
-            ? { ...r, liked: currentlyLiked, likes: Math.max(0, r.likes + (currentlyLiked ? 1 : -1)) }
+            ? {
+                ...r,
+                liked: currentlyLiked,
+                likes: Math.max(0, r.likes + (currentlyLiked ? 1 : -1)),
+              }
             : r
         )
       );
@@ -165,8 +152,33 @@ export default function WeNeedPage() {
     }
   }
 
+  const title = "#WeNeed — UniPath Social Wellness";
+  const description =
+    "Share and discover student requests for clubs, events, and support at NWU. Like ideas you support and help shape a healthier, more connected campus.";
+  const siteUrl = "https://your-domain.example/#/weneed"; 
+  const imageUrl = "https://your-domain.example/og/unipath-weneed.jpg";
+
   return (
     <div className="weneed-fullbleed">
+      <Helmet>
+        <title>{title}</title>
+        <meta name="description" content={description} />
+        <link rel="canonical" href={siteUrl} />
+
+        <meta property="og:type" content="website" />
+        <meta property="og:title" content={title} />
+        <meta property="og:description" content={description} />
+        <meta property="og:url" content={siteUrl} />
+        <meta property="og:image" content={imageUrl} />
+
+        <meta name="twitter:card" content="summary_large_image" />
+        <meta name="twitter:title" content={title} />
+        <meta name="twitter:description" content={description} />
+        <meta name="twitter:image" content={imageUrl} />
+
+        <meta name="robots" content="index,follow" />
+      </Helmet>
+
       <div className="weneed-content">
         <header className="weneed-header">
           <h1 className="weneed-title">#WeNeed</h1>
@@ -180,7 +192,11 @@ export default function WeNeedPage() {
         <section className="weneed-card">
           <h2 className="weneed-card-title">Submit Your Request</h2>
 
-          {!isAuthed && <div className="weneed-hint">Please sign in to submit requests and like others.</div>}
+          {!isAuthed && (
+            <div className="weneed-hint">
+              Please sign in to submit requests and like others.
+            </div>
+          )}
 
           <form onSubmit={handleSubmit} className="weneed-form">
             <div className="form-field">
@@ -206,13 +222,21 @@ export default function WeNeedPage() {
               <textarea
                 className="form-textarea"
                 value={requestText}
-                onChange={(e) => setRequestText(e.target.value.slice(0, characterLimit))}
-                placeholder={isAuthed ? "Tell us what you need..." : "Sign in to write your request"}
+                onChange={(e) =>
+                  setRequestText(e.target.value.slice(0, characterLimit))
+                }
+                placeholder={
+                  isAuthed ? "Tell us what you need..." : "Sign in to write your request"
+                }
                 required
                 disabled={!isAuthed || posting}
                 rows="4"
               />
-              <div className={`char-counter ${requestText.length >= characterLimit ? "char-limit" : ""}`}>
+              <div
+                className={`char-counter ${
+                  requestText.length >= characterLimit ? "char-limit" : ""
+                }`}
+              >
                 {requestText.length}/{characterLimit} characters
               </div>
             </div>
