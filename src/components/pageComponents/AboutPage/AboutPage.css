@@ -1,0 +1,132 @@
+/* full-bleed green background */
+.aboutpage-root {
+  width: 100vw;
+  margin-left: calc(50% - 50vw);
+  margin-right: calc(50% - 50vw);
+  min-height: 100vh;
+  background: linear-gradient(135deg, #d4f4d4 0%, #80EF80 100%);
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif;
+  color: #000;
+}
+
+/* centered column */
+.aboutpage-container {
+  max-width: 1100px;
+  margin: 0 auto;
+  padding: 40px 20px;
+}
+
+/* header */
+.aboutpage-header {
+  text-align: center;
+  margin-bottom: 32px;
+}
+.aboutpage-title {
+  font-size: 2.2rem;
+  font-weight: 700;
+  margin: 0 0 10px;
+}
+.aboutpage-description {
+  font-size: 1.05rem;
+  max-width: 700px;
+  margin: 0 auto;
+}
+
+/* main content */
+.aboutpage-content {
+  margin-top: 24px;
+}
+.aboutpage-divider {
+  height: 1px;
+  background: rgba(0,0,0,0.15);
+  margin: 12px 0 24px;
+}
+
+/* culture card */
+.aboutpage-culture-card {
+  background: #fff;
+  border-radius: 12px;
+  box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+  padding: 16px;
+  margin-bottom: 16px;
+}
+
+/* expand/collapse button */
+.aboutpage-culture-btn {
+  width: 100%;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  text-align: left;
+  gap: 12px;
+  padding: 12px 14px;
+  border: 1px solid #80EF80;
+  border-radius: 10px;
+  background: #f8fff8;
+  font-weight: 600;
+  cursor: pointer;
+  transition: background 0.2s ease, transform 0.05s ease;
+}
+.aboutpage-culture-btn:hover {
+  background: #f1fff1;
+}
+.aboutpage-culture-btn.expanded {
+  background: #e8fbe8;
+}
+
+/* video list */
+.aboutpage-videos {
+  display: grid;
+  grid-template-columns: repeat(auto-fill, minmax(260px, 1fr));
+  gap: 14px;
+  margin-top: 14px;
+}
+.aboutpage-video-card {
+  background: #fafafa;
+  border: 1px solid #ececec;
+  border-radius: 10px;
+  padding: 14px;
+}
+.aboutpage-video-title {
+  margin: 0 0 10px;
+  font-size: 1rem;
+  font-weight: 600;
+}
+.aboutpage-video-placeholder {
+  display: grid;
+  place-items: center;
+  height: 160px;
+  border: 1px dashed #c8eec8;
+  border-radius: 10px;
+  background: #ffffff;
+}
+.aboutpage-video-icon {
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2px solid #80EF80;
+  display: grid;
+  place-items: center;
+  margin-bottom: 8px;
+}
+.aboutpage-video-play {
+  width: 0;
+  height: 0;
+  border-left: 14px solid #80EF80;
+  border-top: 9px solid transparent;
+  border-bottom: 9px solid transparent;
+  margin-left: 4px;
+}
+.aboutpage-video-text {
+  font-size: 0.9rem;
+  color: #444;
+}
+
+/* footer */
+.aboutpage-footer {
+  text-align: center;
+  margin-top: 28px;
+  color: #000;
+  opacity: 0.9;
+  font-size: 0.95rem;
+}
