@@ -1,6 +1,6 @@
-// components/pageComponents/MyCulturePage/MyCulturePageUser.js
+// components/pageComponents/MyCulturePage/MyCultureModeratorPage.js
 import React, { useState, useEffect, useCallback } from "react";
-import { cultureAPI } from "../../apiComponents/cultureApi.js";
+import { cultureModeratorAPI } from "../../apiComponents/cultureModeratorApi.js";
 import "./MyCulturePage.css";
 
 const CULTURE_COLORS = {
@@ -13,30 +13,30 @@ const CULTURE_COLORS = {
   Ndebele: "#e76f51",
   Swazi: "#6a4c93",
   Tsonga: "#118ab2",
-  default: "#333333"
+  default: "#333333",
 };
 
 const MyCultureModeratorPage = ({ user }) => {
   const [selectedFilter, setSelectedFilter] = useState("all");
-  const [sortBy, setSortBy] = useState("most-liked");
+  const [sortBy, setSortBy] = useState("newest");
   const [posts, setPosts] = useState([]);
   const [cultures, setCultures] = useState([]);
   const [users, setUsers] = useState([]);
   const [loading, setLoading] = useState(true);
-  
   const [error, setError] = useState("");
 
-  const getCultureColor = (cultureName) => CULTURE_COLORS[cultureName] || CULTURE_COLORS.default;
+  const getCultureColor = (cultureName) =>
+    CULTURE_COLORS[cultureName] || CULTURE_COLORS.default;
 
-  // load Posts and Cultures
+  // Load all posts (pending), cultures, and users
   const loadData = useCallback(async () => {
     try {
       setLoading(true);
       setError("");
       const [postsResponse, culturesResponse, usersResponse] = await Promise.all([
-        cultureAPI.getPosts({ status: "approved" }),
-        cultureAPI.getCultures(),
-        cultureAPI.getUsers()
+        cultureModeratorAPI.getAllPosts("pending"),
+        cultureModeratorAPI.getCultures(),
+        cultureModeratorAPI.getUsers(),
       ]);
       setPosts(postsResponse.data);
       setCultures(culturesResponse.data);
@@ -49,89 +49,133 @@ const MyCultureModeratorPage = ({ user }) => {
     }
   }, []);
 
-  useEffect(() => { loadData(); }, [loadData]);
+  useEffect(() => {
+    loadData();
+  }, [loadData]);
 
-  
-
-  // Like Handler
-  const toggleLike = async (postId) => {
+  // Approve or Reject post
+  const handleApprove = async (postId) => {
     try {
-      const response = await cultureAPI.likePost(postId);
-      setPosts(posts.map(post => post.id === postId ? response.data : post));
-    } catch (err) { console.error(err); }
+      await cultureModeratorAPI.approvePost(postId);
+      setPosts(posts.filter((p) => p.id !== postId)); // remove post from list
+    } catch (err) {
+      console.error("Error approving post:", err);
+    }
   };
 
-  // Filter and Sort Posts
+  const handleReject = async (postId) => {
+    try {
+      await cultureModeratorAPI.rejectPost(postId);
+      setPosts(posts.filter((p) => p.id !== postId)); // remove post from list
+    } catch (err) {
+      console.error("Error rejecting post:", err);
+    }
+  };
+
+  // Helper: Get related user and culture info
   const getUserFullName = (userId) => {
-    const user = users.find(u => u.id === userId);
-    return user ? user.name : "Unknown User";
+    const foundUser = users.find((u) => u.id === userId);
+    return foundUser ? foundUser.name : "Unknown User";
   };
+
   const getCultureName = (cultureId) => {
-    const culture = cultures.find(c => c.id === cultureId);
-    return culture ? culture.name : "Unknown Culture";
+    const foundCulture = cultures.find((c) => c.id === cultureId);
+    return foundCulture ? foundCulture.name : "Unknown Culture";
   };
 
+  // Filter and sort posts
   const filteredPosts = posts
-    .filter(post => selectedFilter === "all" || getCultureName(post.culture) === selectedFilter) //we can optimize this to correlate ids instead
-    .sort((a, b) => sortBy === "most-liked" ? b.likes - a.likes : new Date(b.date_created) - new Date(a.date_created));
-
-  
+    .filter(
+      (post) =>
+        selectedFilter === "all" || getCultureName(post.culture) === selectedFilter
+    )
+    .sort((a, b) =>
+      sortBy === "most-liked"
+        ? b.likes - a.likes
+        : new Date(b.date_created) - new Date(a.date_created)
+    );
 
   if (loading) return <div className="loading">Loading posts...</div>;
 
   return (
-    <div className="my-culture-container user-version">
-      <h1 className="page-title">MyCulture Moderator Page</h1>
-      <p className="page-subtitle">Approve or reject cultural posts</p>
+    <div className="my-culture-container moderator-version">
+      <h1 className="page-title">MyCulture Moderator Panel</h1>
+      <p className="page-subtitle">Review and moderate cultural posts</p>
       {error && <div className="error">{error}</div>}
 
       <div className="page-layout">
         {/* Posts Section */}
         <div className="posts-section">
           <div className="posts-header framed">
-            <h2>Culture Posts</h2>
+            <h2>Pending Culture Posts</h2>
             <div className="filter-controls">
               <div className="toggle-group">
                 <button
                   className={`sort-btn ${sortBy === "most-liked" ? "active" : ""}`}
-                  onClick={() => setSortBy("most-liked")}>
-                  Most liked
+                  onClick={() => setSortBy("most-liked")}
+                >
+                  Most Liked
                 </button>
                 <button
                   className={`sort-btn ${sortBy === "newest" ? "active" : ""}`}
-                  onClick={() => setSortBy("newest")}>
+                  onClick={() => setSortBy("newest")}
+                >
                   Newest
                 </button>
-                </div>
-              <select value={selectedFilter} onChange={(e)=>setSelectedFilter(e.target.value)} className="culture-filter">
+              </div>
+
+              <select
+                value={selectedFilter}
+                onChange={(e) => setSelectedFilter(e.target.value)}
+                className="culture-filter"
+              >
                 <option value="all">All cultures</option>
-                {cultures.map(c=> <option key={c.id} value={c.name}>{c.name}</option>)}
+                {cultures.map((c) => (
+                  <option key={c.id} value={c.name}>
+                    {c.name}
+                  </option>
+                ))}
               </select>
             </div>
           </div>
 
           <div className="posts-container framed">
-            {filteredPosts.length === 0 ? <p className="no-posts">No posts to display</p> : (
-              filteredPosts.map(post=>(
+            {filteredPosts.length === 0 ? (
+              <p className="no-posts">No pending posts to review.</p>
+            ) : (
+              filteredPosts.map((post) => (
                 <div key={post.id} className="post-card">
-                  <div className="post-header" style={{color:getCultureColor(post.culture)}}>{getCultureName(post.culture)}</div>
+                  <div
+                    className="post-header"
+                    style={{ color: getCultureColor(getCultureName(post.culture)) }}
+                  >
+                    {getCultureName(post.culture)}
+                  </div>
                   <div className="post-content">{post.text_message}</div>
                   <div className="post-meta">
-                    <strong>{getUserFullName(post.user)}</strong> · {new Date(post.date_created).toLocaleDateString()}
+                    <strong>{getUserFullName(post.user)}</strong> ·{" "}
+                    {new Date(post.date_created).toLocaleDateString()}
                   </div>
 
                   <div className="post-actions">
-                    <button onClick={()=>toggleLike(post.id)}>Accept {post.likes}</button>   
-                    <button onClick={()=>toggleLike(post.id)}>Reject {post.likes}</button>           
+                    <button
+                      className="approve-btn"
+                      onClick={() => handleApprove(post.id)}
+                    >
+                      ✅ Approve
+                    </button>
+                    <button
+                      className="reject-btn"
+                      onClick={() => handleReject(post.id)}
+                    >
+                      ❌ Reject
+                    </button>
                   </div>
                 </div>
               ))
             )}
           </div>
         </div>
-
-        
-        
       </div>
     </div>
   );
