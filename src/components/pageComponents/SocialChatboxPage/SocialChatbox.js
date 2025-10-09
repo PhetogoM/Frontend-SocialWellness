@@ -1,6 +1,6 @@
 // src/components/pageComponents/SocialChatboxPage/SocialChatBox.js
 import React, { useState, useEffect } from "react";
-import "./SocialChatBox.css";
+import "./SocialChatbox.css";
 import { chatAPI } from "../../apiComponents/chatApi.js";
 
 const SocialChatBox = ({ currentUser = "Guest", isAdmin = false }) => {

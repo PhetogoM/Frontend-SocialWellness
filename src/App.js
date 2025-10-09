@@ -21,7 +21,7 @@ import RegisterPage from "./components/pageComponents/AuthPage/RegisterPage.js";
 import AboutPage from "./components/pageComponents/AboutPage/AboutPage.js";
 import MyCulturePage from "./components/pageComponents/MyCulturePage/MyCulturePage.js";
 import CampusMapPage from "./components/pageComponents/CampusMapPage/CampusMapPage.js"; 
-import SocialChatBox from "./components/pageComponents/SocialChatboxPage/SocialChatBox.js";
+import SocialChatBox from "./components/pageComponents/SocialChatboxPage/SocialChatbox.js";
 
 
 //import ProtectedRoute from "./components/ProtectedRoute.js";

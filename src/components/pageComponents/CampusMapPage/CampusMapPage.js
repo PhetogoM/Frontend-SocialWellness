@@ -34,7 +34,7 @@ function CampusMapPage() {
   // Fetch locations from API + add static ones
   const loadLocations = async () => {
     try {
-      const data = await mapsAPI();
+      const data = await mapsAPI.getLocations();
 
       // store for destination and starting point
       const extraLocations = [
@@ -219,8 +219,23 @@ function CampusMapPage() {
           Find My Location
         </button>
 
-        <button 
-          onClick={loadLocations} 
+        <button
+          onClick={() => {
+            // Reset everything to initial state
+            setCurrentPosition(null);
+            setStart("");
+            setDestination("");
+            setDirections(null);
+            setSelectedMarker(null);
+
+            // Reload locations
+            loadLocations();
+
+            if (mapRef.current) {
+              mapRef.current.panTo(CAMPUS_CENTER);
+              mapRef.current.setZoom(16);
+            }
+          }}
           className="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700"
         >
           Refresh Map
