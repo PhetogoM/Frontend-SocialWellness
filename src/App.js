@@ -22,7 +22,7 @@ import MyCulturePageUser from './components/pageComponents/MyCulturePage/MyCultu
 import MyCultureModeratorPage from "./components/pageComponents/MyCultureModeratorPage/MyCulturePage";
 import CampusMapPage from './components/pageComponents/CampusMapPage/CampusMapPage.js';
 import { AppWrapper } from "./components/pageComponents/AppWrapper.styled.js";
-import { HelmetProvider } from "react-helmet-async";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 function Layout({ children, user, onLogout }) {
   const location = useLocation();
