@@ -1,4 +1,3 @@
-/* SocialChatBox.css - MyCulturePage Style, WhatsApp-like alignment */
 .chatbox-container {
   max-width: 1000px;
   margin: 0 auto;
@@ -49,7 +48,6 @@
   font-style: italic;
 }
 
-/* Message bubbles */
 .message-bubble {
   margin-bottom: 15px;
   padding: 15px;
@@ -60,7 +58,6 @@
   max-width: 70%;
 }
 
-/* Align messages on opposite sides */
 .my-message {
   background-color: #e8f8f5;
   border-left: 4px solid #5fae8a;
@@ -71,6 +68,13 @@
 .other-message {
   background-color: #f4f6f7;
   border-left: 4px solid #e74c3c;
+  align-self: flex-start;
+  text-align: left;
+}
+
+.admin-message {
+  background-color: #ffeaa7;
+  border-left: 4px solid #fdcb6e;
   align-self: flex-start;
   text-align: left;
 }
@@ -88,6 +92,16 @@
   font-weight: bold;
   color: #2c3e50;
   margin-right: 10px;
+}
+
+.admin-badge {
+  background-color: #fdcb6e;
+  color: #2c3e50;
+  font-size: 0.7rem;
+  font-weight: 600;
+  padding: 1px 5px;
+  border-radius: 4px;
+  margin-left: 5px;
 }
 
 .message-time {
@@ -108,7 +122,8 @@
   justify-content: flex-end;
 }
 
-.other-message .message-actions {
+.other-message .message-actions,
+.admin-message .message-actions {
   justify-content: flex-start;
 }
 
@@ -125,7 +140,6 @@
   opacity: 1;
 }
 
-/* Input section */
 .chatbox-input {
   display: flex;
   gap: 10px;
@@ -157,7 +171,6 @@
   background-color: #27ae60;
 }
 
-/* Scrollbar */
 .chatbox-messages::-webkit-scrollbar {
   width: 8px;
 }
@@ -176,13 +189,11 @@
   background: #a8a8a8;
 }
 
-/* Animation */
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(5px); }
   to { opacity: 1; transform: translateY(0); }
 }
 
-/* Responsive */
 @media (max-width: 768px) {
   .chatbox-container {
     padding: 15px;

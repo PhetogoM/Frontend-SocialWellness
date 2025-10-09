@@ -3,7 +3,7 @@ import React, { useState, useEffect } from "react";
 import "./SocialChatbox.css";
 import { chatAPI } from "../../apiComponents/chatApi.js";
 
-const SocialChatBox = ({ currentUser = "Guest", isAdmin = false }) => {
+const SocialChatBox = ({ currentUser = { username: "Guest" }, isAdmin = false }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
 
@@ -12,7 +12,7 @@ const SocialChatBox = ({ currentUser = "Guest", isAdmin = false }) => {
     const fetchMessages = async () => {
       try {
         const data = await chatAPI.getMessages();
-        setMessages(Array.isArray(data) ? data : []); // safety check
+        setMessages(Array.isArray(data) ? data : []);
       } catch (err) {
         console.error("Failed to fetch messages:", err);
       }
@@ -36,7 +36,7 @@ const SocialChatBox = ({ currentUser = "Guest", isAdmin = false }) => {
 
   // Delete message (admin or owner)
   const handleDelete = async (id, user) => {
-    if (user === currentUser || isAdmin) {
+    if (user === currentUser.username || isAdmin) {
       try {
         await chatAPI.deleteMessage(id);
         setMessages((prev) => prev.filter((msg) => msg.id !== id));
@@ -64,16 +64,16 @@ const SocialChatBox = ({ currentUser = "Guest", isAdmin = false }) => {
             messages.map((msg) => {
               if (!msg || typeof msg.message_text !== "string") return null;
 
-              const userName =
-                typeof msg.user === "string" ? msg.user : String(msg.user ?? "Unknown");
-              const isCurrentUser = userName === currentUser;
-              const isAdminUser = userName.toLowerCase() === "admin";
+              // Safe username fallback
+              const msgUsername = msg.username || "";
+              const isMine = msgUsername === currentUser.username;
+              const isAdminUser = msgUsername.toLowerCase() === "admin";
 
               return (
                 <div
                   key={msg.id}
                   className={`message-bubble ${
-                    isCurrentUser
+                    isMine
                       ? "my-message"
                       : isAdminUser
                       ? "admin-message"
@@ -82,7 +82,7 @@ const SocialChatBox = ({ currentUser = "Guest", isAdmin = false }) => {
                 >
                   <div className="message-header">
                     <span className="user-name">
-                      {isCurrentUser ? "You" : userName}
+                      {isMine ? "You" : msg.user}
                       {isAdminUser && <span className="admin-badge">Admin</span>}
                     </span>
                     <span className="message-time">{msg.date_created || "Just now"}</span>
@@ -91,10 +91,10 @@ const SocialChatBox = ({ currentUser = "Guest", isAdmin = false }) => {
                   <div className="message-text">{msg.message_text}</div>
 
                   <div className="message-actions">
-                    {(isCurrentUser || isAdmin) && (
+                    {(isMine || isAdmin) && (
                       <button
                         className="delete-btn"
-                        onClick={() => handleDelete(msg.id, userName)}
+                        onClick={() => handleDelete(msg.id, msgUsername)}
                       >
                         ❌
                       </button>
