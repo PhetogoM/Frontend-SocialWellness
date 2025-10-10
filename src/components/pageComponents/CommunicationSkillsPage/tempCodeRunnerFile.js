@@ -1,9 +1,7 @@
-import React, { useState } from 'react';
+mport React, { useState } from 'react';
 import { ChevronDown, ChevronRight } from 'lucide-react';
 // 👈 STEP 1: ADD THE HOOK IMPORT BACK
 import { useNavigate } from 'react-router-dom';
-//Additons for for the SEO
-import { Helmet } from 'react-helmet-async';
 
 const CommunicationSkillsPage = () => {
   const [expandedCategory, setExpandedCategory] = useState(null);
@@ -55,27 +53,6 @@ const CommunicationSkillsPage = () => {
       fontFamily: '-apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif',
       padding: '40px 20px'
     }}>
-
-         {/* ⚡️ SEO META DATA */}
-         <Helmet>
-        <title>Communication Skills Training | Learn to Connect & Express Clearly</title>
-        <meta
-          name="description"
-          content="Improve your communication skills through engaging video lessons on active listening, empathy, and clarity in expression."
-        />
-        <meta
-          name="keywords"
-          content="communication skills, listening, empathy, speaking, clarity, presentation skills, body language"
-        />
-        <meta property="og:title" content="Communication Skills Training" />
-        <meta property="og:description" content="Boost your ability to connect and express effectively through expert communication tutorials." />
-        <meta property="og:type" content="website" />
-        <meta property="og:image" content="/images/communication-thumbnail.jpg" />
-        <link rel="canonical" href="https://yourwebsite.com/communication-skills" />
-      </Helmet>
-      {/* ⚡️ END SEO META */}
-
-      
       <div style={{
         maxWidth: '900px',
         margin: '0 auto'

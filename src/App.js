@@ -19,8 +19,10 @@ import WeNeedPage from './components/pageComponents/WeNeedPage/WeNeedPage.js';
 import CommunicationSkillsPage from './components/pageComponents/CommunicationSkillsPage/CommunicationSkillsPage.js';
 import SocialChatbox from './components/pageComponents/SocialChatboxesPage/SocialChatboxPage.js';
 import MyCulturePageUser from './components/pageComponents/MyCulturePage/MyCulturePage.js';
+import MyCultureModeratorPage from "./components/pageComponents/MyCultureModeratorPage/MyCulturePage";
 import CampusMapPage from './components/pageComponents/CampusMapPage/CampusMapPage.js';
 import { AppWrapper } from "./components/pageComponents/AppWrapper.styled.js";
+import { Helmet, HelmetProvider } from "react-helmet-async";
 
 function Layout({ children, user, onLogout }) {
   const location = useLocation();
@@ -64,6 +66,12 @@ function App() {
     navigate("/login");
   };
 
+  const App = () => (
+    <HelmetProvider>
+      {/* Your routes/components here */}
+    </HelmetProvider>
+  );
+
   return (
     <AppWrapper>
       <Layout user={user} onLogout={handleLogout}>
@@ -77,6 +85,7 @@ function App() {
           <Route path="/campusmap" element={<CampusMapPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/weneed" element={<WeNeedPage />} />
+          <Route path="/myculturemoderatorpage" element={<MyCultureModeratorPage setUser={setUser} />} />
         </Routes>
       </Layout>
     </AppWrapper>
