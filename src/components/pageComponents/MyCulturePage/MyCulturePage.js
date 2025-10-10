@@ -18,7 +18,7 @@ const CULTURE_COLORS = {
 
 const MyCulturePageUser = ({ user }) => {
   const [selectedFilter, setSelectedFilter] = useState("all");
-  const [sortBy, setSortBy] = useState("most-liked");
+  const [sortBy, setSortBy] = useState("newest");
   const [posts, setPosts] = useState([]);
   const [cultures, setCultures] = useState([]);
   const [users, setUsers] = useState([]);
@@ -36,7 +36,7 @@ const MyCulturePageUser = ({ user }) => {
       setLoading(true);
       setError("");
       const [postsResponse, culturesResponse, usersResponse] = await Promise.all([
-        cultureAPI.getPosts({ status: "approved" }),
+        cultureAPI.getPosts({ approved: true }),
         cultureAPI.getCultures(),
         cultureAPI.getUsers()
       ]);
@@ -77,12 +77,51 @@ const MyCulturePageUser = ({ user }) => {
   };
 
   // Like Handler
-  const toggleLike = async (postId) => {
-    try {
-      const response = await cultureAPI.likePost(postId);
-      setPosts(posts.map(post => post.id === postId ? response.data : post));
-    } catch (err) { console.error(err); }
-  };
+  const [loadingLikes, setLoadingLikes] = useState({}); // { [postId]: true/false }
+
+const toggleLike = async (postId) => {
+  // prevent spam clicks
+  if (loadingLikes[postId]) return;
+
+  setLoadingLikes(prev => ({ ...prev, [postId]: true }));
+
+  // Optimistic update
+  setPosts(prev =>
+    prev.map(post =>
+      post.id === postId
+        ? { ...post, liked_by_user: !post.liked_by_user }
+        : post
+    )
+  );
+
+  try {
+    const response = await cultureAPI.likePost(postId);
+    const data = response.data;
+
+    // Sync backend data
+    setPosts(prev =>
+      prev.map(post =>
+        post.id === postId
+          ? { ...post, num_of_likes: data.num_of_likes }
+          : post
+      )
+    );
+  } catch (err) {
+    console.error(err);
+
+    // Roll back optimistic update
+    setPosts(prev =>
+      prev.map(post =>
+        post.id === postId
+          ? { ...post, liked_by_user: !post.liked_by_user }
+          : post
+      )
+    );
+  } finally {
+    setLoadingLikes(prev => ({ ...prev, [postId]: false }));
+  }
+};
+
 
   // Filter and Sort Posts
   const getUserFullName = (userId) => {
@@ -95,10 +134,19 @@ const MyCulturePageUser = ({ user }) => {
   };
 
   const filteredPosts = posts
-    .filter(post => selectedFilter === "all" || getCultureName(post.culture) === selectedFilter) //we can optimize this to correlate ids instead
-    .sort((a, b) => sortBy === "most-liked" ? b.likes - a.likes : new Date(b.date_created) - new Date(a.date_created));
-
-  
+  .filter(
+    (post) =>
+      selectedFilter === "all" ||
+      getCultureName(post.culture) === selectedFilter
+  )
+  .sort((a, b) => {
+    if (sortBy === "most-liked") {
+      return b.num_of_likes - a.num_of_likes; // sort descending by likes
+    } else if (sortBy === "newest") {
+      return new Date(b.date_created) - new Date(a.date_created); // newest first
+    }
+    return 0;
+  });
 
   if (loading) return <div className="loading">Loading posts...</div>;
 
@@ -145,11 +193,11 @@ const MyCulturePageUser = ({ user }) => {
 
                   <div className="post-actions">
                     <button
-  onClick={() => toggleLike(post.id)}
-  className={`like-btn${post.liked_by_user ? " liked" : ""}`}
->
-  💚 {post.num_of_likes}
-</button></div>
+                      onClick={() => toggleLike(post.id)}
+                      className={`like-btn${post.liked_by_user ? " liked" : ""}`}
+                    >
+                      💚 {post.num_of_likes}
+                    </button></div>
                 </div>
               ))
             )}
