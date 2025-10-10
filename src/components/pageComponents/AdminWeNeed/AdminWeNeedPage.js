@@ -1,11 +1,7 @@
 import React, { useEffect, useMemo, useState } from "react";
 import { Helmet } from "react-helmet-async";
 import "./AdminWeNeedPage.css";
-
-const API_BASE_URL =
-  process.env.REACT_APP_API_BASE_URL ||
-  (import.meta && import.meta.env && import.meta.env.VITE_API_BASE_URL) ||
-  "http://127.0.0.1:8000/api";
+import api from "../../apiComponents/api.js";
 
 export default function AdminWeNeedPage() {
   const token = localStorage.getItem("access_token") || "";
@@ -36,8 +32,8 @@ export default function AdminWeNeedPage() {
         const qs = new URLSearchParams();
         if (statusFilter !== "all") qs.set("status", statusFilter);
         const [reqRes, catRes] = await Promise.all([
-          fetch(`${API_BASE_URL}/requests/?${qs.toString()}`, { headers: authHeaders }),
-          fetch(`${API_BASE_URL}/requests/categories/`)
+          fetch(`${api}/requests/?${qs.toString()}`, { headers: authHeaders }),
+          fetch(`${api}/requests/categories/`)
         ]);
         if (!reqRes.ok) throw new Error(`Requests ${reqRes.status}`);
         const reqs = await reqRes.json();
@@ -73,7 +69,7 @@ export default function AdminWeNeedPage() {
     }
     load();
     return () => { active = false; };
-  }, [API_BASE_URL, authHeaders, statusFilter]);
+  }, [api, authHeaders, statusFilter]);
 
   const filtered = items.filter((it) => {
     const matchCat = categoryFilter ? it.category === categoryFilter : true;
@@ -91,7 +87,7 @@ export default function AdminWeNeedPage() {
     const prev = items;
     setItems((cur) => cur.map((it) => (it.id === id ? { ...it, status: newStatus } : it)));
     try {
-      const res = await fetch(`${API_BASE_URL}/requests/${id}/`, {
+      const res = await fetch(`${api}/requests/${id}/`, {
         method: "PATCH",
         headers: authHeaders,
         body: JSON.stringify({ status: newStatus })
@@ -108,7 +104,7 @@ export default function AdminWeNeedPage() {
     const prev = items;
     setItems((cur) => cur.filter((it) => it.id !== id));
     try {
-      const res = await fetch(`${API_BASE_URL}/requests/${id}/`, {
+      const res = await fetch(`${api}/requests/${id}/`, {
         method: "DELETE",
         headers: authHeaders
       });
