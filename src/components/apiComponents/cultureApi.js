@@ -16,11 +16,7 @@ export const cultureAPI = {
   createPost: (postData) => api.post('culture-posts/', postData),
 
   // Likes
-  likePost: (postId) => api.post('culture-post-likes/', { post: postId }),
-
-  // Comments
-  addComment: (postId, comment) => 
-    api.post(`culture-posts/${postId}/comment/`, { content: comment }),
+  likePost: (postId) => api.post(`culture-posts/${postId}/like/`),
   
   // Approve/Reject (send post ID and action)
   approvePost: (postId) => api.patch('culture-post-rejects/', { post: postId, action: 'approve' }),
