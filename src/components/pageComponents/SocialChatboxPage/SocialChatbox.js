@@ -1,9 +1,8 @@
-// src/components/pageComponents/SocialChatboxPage/SocialChatBox.js
 import React, { useState, useEffect } from "react";
 import "./SocialChatbox.css";
 import { chatAPI } from "../../apiComponents/chatApi.js";
 
-const SocialChatBox = ({ currentUser = { username: "Guest" }, isAdmin = false }) => {
+const SocialChatBox = ({ isAdmin = false }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
 
@@ -35,17 +34,13 @@ const SocialChatBox = ({ currentUser = { username: "Guest" }, isAdmin = false })
   };
 
   // Delete message (admin or owner)
-  const handleDelete = async (id, user) => {
-    if (user === currentUser.username || isAdmin) {
-      try {
-        await chatAPI.deleteMessage(id);
-        setMessages((prev) => prev.filter((msg) => msg.id !== id));
-      } catch (err) {
-        console.error("Error deleting message:", err);
-        alert("Failed to delete message.");
-      }
-    } else {
-      alert("You can only delete your own messages.");
+  const handleDelete = async (id) => {
+    try {
+      await chatAPI.deleteMessage(id);
+      setMessages((prev) => prev.filter((msg) => msg.id !== id));
+    } catch (err) {
+      console.error("Error deleting message:", err);
+      alert("Failed to delete message.");
     }
   };
 
@@ -64,10 +59,8 @@ const SocialChatBox = ({ currentUser = { username: "Guest" }, isAdmin = false })
             messages.map((msg) => {
               if (!msg || typeof msg.message_text !== "string") return null;
 
-              // Safe username fallback
-              const msgUsername = msg.username || "";
-              const isMine = msgUsername === currentUser.username;
-              const isAdminUser = msgUsername.toLowerCase() === "admin";
+              const isMine = msg.is_current_user;
+              const isAdminUser = msg.username.toLowerCase() === "admin";
 
               return (
                 <div
@@ -82,19 +75,23 @@ const SocialChatBox = ({ currentUser = { username: "Guest" }, isAdmin = false })
                 >
                   <div className="message-header">
                     <span className="user-name">
-                      {isMine ? "You" : msg.user}
+                      {isMine ? "You" : msg.username}
                       {isAdminUser && <span className="admin-badge">Admin</span>}
                     </span>
-                    <span className="message-time">{msg.date_created || "Just now"}</span>
+                    <span className="message-time">
+                      {msg.date_created
+                        ? new Date(msg.date_created).toLocaleTimeString()
+                        : "Just now"}
+                    </span>
                   </div>
 
                   <div className="message-text">{msg.message_text}</div>
 
                   <div className="message-actions">
-                    {(isMine || isAdmin) && (
+                    {(isMine || isAdminUser) && (
                       <button
                         className="delete-btn"
-                        onClick={() => handleDelete(msg.id, msgUsername)}
+                        onClick={() => handleDelete(msg.id)}
                       >
                         ❌
                       </button>
