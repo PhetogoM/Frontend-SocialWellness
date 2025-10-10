@@ -2,24 +2,44 @@ import React, { useState, useEffect } from "react";
 import "./SocialChatbox.css";
 import { chatAPI } from "../../apiComponents/chatApi.js";
 
-const SocialChatBox = ({ isAdmin = false }) => {
+const SocialChatBox = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
+  const [isAdmin, setIsAdmin] = useState(false);
 
-  // Load messages from backend on mount
+  // Load current user + messages
   useEffect(() => {
-    const fetchMessages = async () => {
+    const fetchUserAndMessages = async () => {
+      let adminStatus = false;
+
+      // 1️⃣ Get current user
+      try {
+        const currentUser = await chatAPI.getCurrentUser();
+        console.log("Current user:", currentUser); // Check structure
+        adminStatus = currentUser?.is_staff || currentUser?.role === "admin";
+      } catch (err) {
+        console.warn("Could not get current user, assuming regular user.", err);
+      }
+      setIsAdmin(adminStatus);
+
+      // 2️⃣ Get messages
       try {
         const data = await chatAPI.getMessages();
-        setMessages(Array.isArray(data) ? data : []);
+        const sorted = Array.isArray(data)
+          ? data.sort(
+              (a, b) => new Date(a.date_created) - new Date(b.date_created)
+            )
+          : [];
+        setMessages(sorted);
       } catch (err) {
-        console.error("Failed to fetch messages:", err);
+        console.error("Failed to load messages:", err);
       }
     };
-    fetchMessages();
+
+    fetchUserAndMessages();
   }, []);
 
-  // Send message to backend
+  // Send message
   const handleSend = async () => {
     if (input.trim() === "") return;
 
@@ -34,10 +54,17 @@ const SocialChatBox = ({ isAdmin = false }) => {
   };
 
   // Delete message (admin or owner)
-  const handleDelete = async (id) => {
+  const handleDelete = async (msg) => {
+    const isMine = msg.is_current_user;
+
+    if (!isAdmin && !isMine) {
+      alert("You can only delete your own messages!");
+      return;
+    }
+
     try {
-      await chatAPI.deleteMessage(id);
-      setMessages((prev) => prev.filter((msg) => msg.id !== id));
+      await chatAPI.deleteMessage(msg.id);
+      setMessages((prev) => prev.filter((m) => m.id !== msg.id));
     } catch (err) {
       console.error("Error deleting message:", err);
       alert("Failed to delete message.");
@@ -60,7 +87,7 @@ const SocialChatBox = ({ isAdmin = false }) => {
               if (!msg || typeof msg.message_text !== "string") return null;
 
               const isMine = msg.is_current_user;
-              const isAdminUser = msg.username.toLowerCase() === "admin";
+              const isAdminUser = msg.username?.toLowerCase() === "admin";
 
               return (
                 <div
@@ -88,10 +115,10 @@ const SocialChatBox = ({ isAdmin = false }) => {
                   <div className="message-text">{msg.message_text}</div>
 
                   <div className="message-actions">
-                    {(isMine || isAdminUser) && (
+                    {(isMine || isAdmin) && (
                       <button
                         className="delete-btn"
-                        onClick={() => handleDelete(msg.id)}
+                        onClick={() => handleDelete(msg)}
                       >
                         ❌
                       </button>
