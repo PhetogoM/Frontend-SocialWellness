@@ -17,12 +17,12 @@ import RegisterPage from "./components/pageComponents/AuthPage/RegisterPage.js";
 import AboutPage from "./components/pageComponents/AboutPage/AboutPage.js";
 import WeNeedPage from './components/pageComponents/WeNeedPage/WeNeedPage.js';
 import CommunicationSkillsPage from './components/pageComponents/CommunicationSkillsPage/CommunicationSkillsPage.js';
-import SocialChatbox from './components/pageComponents/SocialChatboxesPage/SocialChatboxPage.js';
 import MyCulturePageUser from './components/pageComponents/MyCulturePage/MyCulturePage.js';
 import MyCultureModeratorPage from "./components/pageComponents/MyCultureModeratorPage/MyCulturePage";
 import CampusMapPage from './components/pageComponents/CampusMapPage/CampusMapPage.js';
+import SocialChatBox from "./components/pageComponents/SocialChatboxPage/SocialChatboxPage.js";
 import { AppWrapper } from "./components/pageComponents/AppWrapper.styled.js";
-import { Helmet, HelmetProvider } from "react-helmet-async";
+import { HelmetProvider } from "react-helmet-async";
 
 function Layout({ children, user, onLogout }) {
   const location = useLocation();
@@ -80,7 +80,7 @@ function App() {
           <Route path="/login" element={<LoginPage setUser={setUser} />} />
           <Route path="/register" element={<RegisterPage setUser={setUser} />} />
           <Route path="/communicationskills" element={<CommunicationSkillsPage />} />
-          <Route path="/socialchatbox" element={<SocialChatbox setUser={setUser}/>} />
+          <Route path="/socialchatbox" element={<SocialChatBox setUser={setUser}/>} />
           <Route path="/myculture" element={<MyCulturePageUser setUser={setUser} />} />
           <Route path="/campusmap" element={<CampusMapPage />} />
           <Route path="/about" element={<AboutPage />} />
