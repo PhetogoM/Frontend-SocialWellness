@@ -56,7 +56,6 @@ const SocialChatBox = () => {
 
   return (
     <div className="chatbox-container">
-      {/* ✅ SEO meta info */}
       <Helmet>
         <title>Unipath: Social Chatbox </title>
         <meta
