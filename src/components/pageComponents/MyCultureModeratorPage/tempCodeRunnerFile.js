@@ -16,16 +16,14 @@ const CULTURE_COLORS = {
   default: "#333333"
 };
 
-const MyCulturePageUser = ({ user }) => {
+const MyCultureModeratorPage = ({ user }) => {
   const [selectedFilter, setSelectedFilter] = useState("all");
-  const [sortBy, setSortBy] = useState("newest");
+  const [sortBy, setSortBy] = useState("most-liked");
   const [posts, setPosts] = useState([]);
   const [cultures, setCultures] = useState([]);
   const [users, setUsers] = useState([]);
-  const [newPost, setNewPost] = useState("");
-  const [selectedCulture, setSelectedCulture] = useState("");
   const [loading, setLoading] = useState(true);
-  const [posting, setPosting] = useState(false);
+  
   const [error, setError] = useState("");
 
   const getCultureColor = (cultureName) => CULTURE_COLORS[cultureName] || CULTURE_COLORS.default;
@@ -36,7 +34,7 @@ const MyCulturePageUser = ({ user }) => {
       setLoading(true);
       setError("");
       const [postsResponse, culturesResponse, usersResponse] = await Promise.all([
-        cultureAPI.getPosts({ approved: true }),
+        cultureAPI.getPosts({ status: "approved" }),
         cultureAPI.getCultures(),
         cultureAPI.getUsers()
       ]);
@@ -53,75 +51,15 @@ const MyCulturePageUser = ({ user }) => {
 
   useEffect(() => { loadData(); }, [loadData]);
 
-  // Submit post for approval
-  const handlePostSubmit = async () => {
-    if (!newPost || !selectedCulture) {
-      setError("Please select a culture and write a message");
-      return;
-    }
-    try {
-      setPosting(true);
-      setError("");
-      const response = await cultureAPI.createPost({
-        culture: selectedCulture,
-        text_message: newPost
-      });
-      setPosts([response.data, ...posts]);
-      setNewPost("");
-      setSelectedCulture("");
-    } catch (err) {
-      setError(err.response?.data?.message || "Failed to create post.");
-    } finally {
-      setPosting(false);
-    }
-  };
+  
 
   // Like Handler
-  const [loadingLikes, setLoadingLikes] = useState({}); // { [postId]: true/false }
-
-const toggleLike = async (postId) => {
-  // prevent spam clicks
-  if (loadingLikes[postId]) return;
-
-  setLoadingLikes(prev => ({ ...prev, [postId]: true }));
-
-  // Optimistic update
-  setPosts(prev =>
-    prev.map(post =>
-      post.id === postId
-        ? { ...post, liked_by_user: !post.liked_by_user }
-        : post
-    )
-  );
-
-  try {
-    const response = await cultureAPI.likePost(postId);
-    const data = response.data;
-
-    // Sync backend data
-    setPosts(prev =>
-      prev.map(post =>
-        post.id === postId
-          ? { ...post, num_of_likes: data.num_of_likes }
-          : post
-      )
-    );
-  } catch (err) {
-    console.error(err);
-
-    // Roll back optimistic update
-    setPosts(prev =>
-      prev.map(post =>
-        post.id === postId
-          ? { ...post, liked_by_user: !post.liked_by_user }
-          : post
-      )
-    );
-  } finally {
-    setLoadingLikes(prev => ({ ...prev, [postId]: false }));
-  }
-};
-
+  const toggleLike = async (postId) => {
+    try {
+      const response = await cultureAPI.likePost(postId);
+      setPosts(posts.map(post => post.id === postId ? response.data : post));
+    } catch (err) { console.error(err); }
+  };
 
   // Filter and Sort Posts
   const getUserFullName = (userId) => {
@@ -134,26 +72,17 @@ const toggleLike = async (postId) => {
   };
 
   const filteredPosts = posts
-  .filter(
-    (post) =>
-      selectedFilter === "all" ||
-      getCultureName(post.culture) === selectedFilter
-  )
-  .sort((a, b) => {
-    if (sortBy === "most-liked") {
-      return b.num_of_likes - a.num_of_likes; // sort descending by likes
-    } else if (sortBy === "newest") {
-      return new Date(b.date_created) - new Date(a.date_created); // newest first
-    }
-    return 0;
-  });
+    .filter(post => selectedFilter === "all" || getCultureName(post.culture) === selectedFilter) //we can optimize this to correlate ids instead
+    .sort((a, b) => sortBy === "most-liked" ? b.likes - a.likes : new Date(b.date_created) - new Date(a.date_created));
+
+  
 
   if (loading) return <div className="loading">Loading posts...</div>;
 
   return (
     <div className="my-culture-container user-version">
-      <h1 className="page-title">MyCulture</h1>
-      <p className="page-subtitle">Share and explore cultural posts</p>
+      <h1 className="page-title">MyCulture Moderator Page</h1>
+      <p className="page-subtitle">Approve or reject cultural posts</p>
       {error && <div className="error">{error}</div>}
 
       <div className="page-layout">
@@ -192,41 +121,20 @@ const toggleLike = async (postId) => {
                   </div>
 
                   <div className="post-actions">
-                    <button
-                      onClick={() => toggleLike(post.id)}
-                      className={`like-btn${post.liked_by_user ? " liked" : ""}`}
-                    >
-                      💚 {post.num_of_likes}
-                    </button></div>
+                    <button onClick={()=>toggleLike(post.id)}>Accept {post.likes}</button>   
+                    <button onClick={()=>toggleLike(post.id)}>Reject {post.likes}</button>           
+                  </div>
                 </div>
               ))
             )}
           </div>
         </div>
 
-        {/* Create Post Section */}
-        <div className="create-post-section">
-          <div className="create-post framed">
-            <h2>Share Your Culture</h2>
-            <div className="form-group">
-              <label>Select Culture</label>
-              <select value={selectedCulture} onChange={(e)=>setSelectedCulture(e.target.value)}>
-                <option value="">Choose a culture...</option>
-                {cultures.map(c => (
-                  <option key={c.id} value={c.id}>{c.name}</option>
-                ))}
-              </select>
-            </div>
-            <div className="form-group">
-              <label>Your Message</label>
-              <textarea rows="5" value={newPost} onChange={(e)=>setNewPost(e.target.value)} placeholder="Share traditions, lifestyles, or cultural aspects..." />
-            </div>
-            <button onClick={handlePostSubmit} className="submit-btn" disabled={posting}>{posting?"Submitting...":"Submit for Approval"}</button>
-          </div>
-        </div>
+        
+        
       </div>
     </div>
   );
 };
 
-export default MyCulturePageUser;
+export default MyCultureModeratorPage;

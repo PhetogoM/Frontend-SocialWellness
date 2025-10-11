@@ -3,7 +3,7 @@ import "./SocialChatbox.css";
 import { chatAPI } from "../../apiComponents/chatApi.js";
 import { Helmet } from "react-helmet-async"; // SEO integration
 
-const SocialChatBox = () => {
+const SocialChatBox = ({ user }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
 

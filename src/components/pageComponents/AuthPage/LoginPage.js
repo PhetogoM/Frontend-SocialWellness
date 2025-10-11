@@ -72,8 +72,8 @@ const LoginPage = ({ setUser }) => {
     <PageContainer>
       <LoginForm onSubmit={handleSubmit}>
         <Title>Login to Unipath</Title>
-
-        {error && (
+        {/* Display each error in a separate div */}
+       {error && (
           <div style={{ color: "red", marginBottom: "10px" }}>
             {error.split("\n").map((line, idx) =>
               line.trim() ? <div key={idx}>{line}</div> : null

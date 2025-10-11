@@ -20,17 +20,18 @@ cd your-repository-name
 
 2. Run the server
 
-If you have not already installed dependecies, run
+If you have not already installed dependecies, run (for Windows)
 
 ```bash
-npm-modules.bat (Windows)
+npm-modules.bat 
 ```
 Do not run: npm audit fix --force, it just breaks the build.
 
 If it is your first time running the project, run
 
 ```bash
-npm build
+npm install
+npm run build
 ```
 
 Then run
@@ -43,6 +44,6 @@ The browser should open automatically at http://localhost:3000
 
 3. To run the backend follow the link below:
 
-[Backend---SocialWellness](https://github.com/jpret/CMPG323-Group-Project/tree/main/c%3A/Users/jpret/Documents/NWU/2025/Sem%202/CMPG323%20IT%20Developments/Project%20Code/Social%20Wellness%20Backend)
+[Backend---SocialWellness](https://github.com/Doctor1ven/Backend---SocialWellness/blob/main/README.md)
 
 

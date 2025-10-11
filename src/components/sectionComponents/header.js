@@ -87,6 +87,8 @@ const Header = () => {
         <HeaderButton to="/register">Register</HeaderButton>
       </HeaderButtons>
     </HeaderContainer>
+
+    
   );
 };
 
