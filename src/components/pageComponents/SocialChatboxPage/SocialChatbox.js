@@ -1,16 +1,16 @@
 import React, { useState, useEffect } from "react";
 import "./SocialChatbox.css";
 import { chatAPI } from "../../apiComponents/chatApi.js";
+import { Helmet } from "react-helmet-async"; // SEO integration
 
 const SocialChatBox = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
 
-  // Load current user + messages
+  // Load messages
   useEffect(() => {
-    const fetchUserAndMessages = async () => {
+    const fetchMessages = async () => {
       try {
-        // 1️⃣ Get messages
         const data = await chatAPI.getMessages();
         const sorted = Array.isArray(data)
           ? data.sort((a, b) => new Date(a.date_created) - new Date(b.date_created))
@@ -21,7 +21,7 @@ const SocialChatBox = () => {
       }
     };
 
-    fetchUserAndMessages();
+    fetchMessages();
   }, []);
 
   // Send message
@@ -56,6 +56,26 @@ const SocialChatBox = () => {
 
   return (
     <div className="chatbox-container">
+      {/* ✅ SEO meta info */}
+      <Helmet>
+        <title>Unipath: Social Chatbox </title>
+        <meta
+          name="description"
+          content="Join the NWU Social Chatbox — a real-time messaging hub where students connect, share updates, and chat instantly with others on campus."
+        />
+        <meta
+          name="keywords"
+          content="NWU Chatbox, NWU Social, Student Chat, Campus Messaging, NWU Realtime Chat, Chatroom, Online Discussion"
+        />
+        <meta property="og:title" content="NWU Social Chatbox" />
+        <meta
+          property="og:description"
+          content="Connect with fellow students in real time through the NWU Social Chatbox — a live messaging platform for campus communication."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://yourdomain.com/socialchatbox" />
+      </Helmet>
+
       <h1 className="chatbox-title">Social Chatbox</h1>
       <p className="chatbox-subtitle">
         Connect and share your thoughts with others in real time.
@@ -76,7 +96,11 @@ const SocialChatBox = () => {
                 <div
                   key={msg.id}
                   className={`message-bubble ${
-                    isMine ? "my-message" : isAdminUser ? "admin-message" : "other-message"
+                    isMine
+                      ? "my-message"
+                      : isAdminUser
+                      ? "admin-message"
+                      : "other-message"
                   }`}
                 >
                   <div className="message-header">
@@ -119,6 +143,20 @@ const SocialChatBox = () => {
           <button onClick={handleSend}>Send ➤</button>
         </div>
       </div>
+
+      <section style={{ display: "none" }}>
+        <h2>About the NWU Social Chatbox</h2>
+        <p>
+          The NWU Social Chatbox allows students to communicate, share ideas, and
+          collaborate in real-time. It’s a safe, moderated chat environment that
+          enhances campus connection and social engagement.
+        </p>
+        <ul>
+          <li>Real-time student messaging</li>
+          <li>Share campus updates</li>
+          <li>Interactive communication platform</li>
+        </ul>
+      </section>
     </div>
   );
 };
