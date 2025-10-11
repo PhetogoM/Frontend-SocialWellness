@@ -5,30 +5,15 @@ import { chatAPI } from "../../apiComponents/chatApi.js";
 const SocialChatBox = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
-  const [isAdmin, setIsAdmin] = useState(false);
 
   // Load current user + messages
   useEffect(() => {
     const fetchUserAndMessages = async () => {
-      let adminStatus = false;
-
-      // 1️⃣ Get current user
       try {
-        const currentUser = await chatAPI.getCurrentUser();
-        console.log("Current user:", currentUser); // Check structure
-        adminStatus = currentUser?.is_staff || currentUser?.role === "admin";
-      } catch (err) {
-        console.warn("Could not get current user, assuming regular user.", err);
-      }
-      setIsAdmin(adminStatus);
-
-      // 2️⃣ Get messages
-      try {
+        // 1️⃣ Get messages
         const data = await chatAPI.getMessages();
         const sorted = Array.isArray(data)
-          ? data.sort(
-              (a, b) => new Date(a.date_created) - new Date(b.date_created)
-            )
+          ? data.sort((a, b) => new Date(a.date_created) - new Date(b.date_created))
           : [];
         setMessages(sorted);
       } catch (err) {
@@ -53,11 +38,9 @@ const SocialChatBox = () => {
     }
   };
 
-  // Delete message (admin or owner)
+  // Delete message
   const handleDelete = async (msg) => {
-    const isMine = msg.is_current_user;
-
-    if (!isAdmin && !isMine) {
+    if (!msg.is_current_user && !msg.is_admin_user) {
       alert("You can only delete your own messages!");
       return;
     }
@@ -87,23 +70,18 @@ const SocialChatBox = () => {
               if (!msg || typeof msg.message_text !== "string") return null;
 
               const isMine = msg.is_current_user;
-              const isAdminUser = msg.username?.toLowerCase() === "admin";
+              const isAdminUser = msg.is_admin_user;
 
               return (
                 <div
                   key={msg.id}
                   className={`message-bubble ${
-                    isMine
-                      ? "my-message"
-                      : isAdminUser
-                      ? "admin-message"
-                      : "other-message"
+                    isMine ? "my-message" : isAdminUser ? "admin-message" : "other-message"
                   }`}
                 >
                   <div className="message-header">
                     <span className="user-name">
                       {isMine ? "You" : msg.username}
-                      {isAdminUser && <span className="admin-badge">Admin</span>}
                     </span>
                     <span className="message-time">
                       {msg.date_created
@@ -115,7 +93,7 @@ const SocialChatBox = () => {
                   <div className="message-text">{msg.message_text}</div>
 
                   <div className="message-actions">
-                    {(isMine || isAdmin) && (
+                    {(isMine || isAdminUser) && (
                       <button
                         className="delete-btn"
                         onClick={() => handleDelete(msg)}
