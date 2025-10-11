@@ -36,21 +36,23 @@ function CampusMapPage() {
   const loadLocations = async () => {
     try {
       const data = await mapsAPI.getLocations();
+
       const extraLocations = [
-        { id: "library", name: "Library", lat: -26.6889757, lng: 27.0917899 },
-        { id: "main_office", name: "Main Office", lat: -26.6885171, lng: 27.0932626 },
-        { id: "FEC", name: "Faculty of Educational Sciences", lat: -26.6918294, lng: 27.0904169 },
-        { id: "FOH", name: "Faculty of Humanities", lat: -26.6881634, lng: 27.0917708 },
-        { id: "CENTRE", name: "Campus Student Centre", lat: -26.6867447, lng: 27.0928651 },
-        { id: "ProServ", name: "Protection Services", lat: -26.6873198, lng: 27.0941740 },
-        { id: "HealthCen", name: "Healthcare Centre", lat: -26.6891795, lng: 27.0946032 },
-        { id: "main_gate", name: "Main Gate", lat: -26.6900805, lng: 27.0933372 },
-        { id: "FNAS", name: "Faculty of Natural Sciences", lat: -26.6857769, lng: 27.0932189 },
-        { id: "FE", name: "Faculty of Engineering", lat: -26.6792620, lng: 27.0951470 },
-        { id: "ParK", name: "Cachet Park Shopping", lat: -26.6919886, lng: 27.0943913 },
-        { id: "Sports", name: "Sports Village", lat: -26.6939973, lng: 27.0998594 },
+        { id: "library", name: "Library", lat: -26.6889757, lng: 27.0917899, showOnMap: false },
+        { id: "main_office", name: "Main Office", lat: -26.6885171, lng: 27.0932626, showOnMap: false },
+        { id: "FEC", name: "Faculty of Educational Sciences", lat: -26.6918294, lng: 27.0904169, showOnMap: true },
+        { id: "FOH", name: "Faculty of Humanities", lat: -26.6881634, lng: 27.0917708, showOnMap: true },
+        { id: "CENTRE", name: "Campus Student Centre", lat: -26.6867447, lng: 27.0928651, showOnMap: true },
+        { id: "ProServ", name: "Protection Services", lat: -26.6873198, lng: 27.0941740, showOnMap: true },
+        { id: "HealthCen", name: "Healthcare Centre", lat: -26.6891795, lng: 27.0946032, showOnMap: true },
+        { id: "main_gate", name: "Main Gate", lat: -26.6900805, lng: 27.0933372, showOnMap: true },
+        { id: "FNAS", name: "Faculty of Natural Sciences", lat: -26.6857769, lng: 27.0932189, showOnMap: true },
+        { id: "FE", name: "Faculty of Engineering", lat: -26.6792620, lng: 27.0951470, showOnMap: true },
+        { id: "ParK", name: "Cachet Park Shopping", lat: -26.6919886, lng: 27.0943913, showOnMap: true },
+        { id: "Sports", name: "Sports Village", lat: -26.6939973, lng: 27.0998594, showOnMap: true },
       ];
-      setLocations([...data, ...extraLocations]);
+
+      setLocations([...data.map(loc => ({ ...loc, showOnMap: true })), ...extraLocations]);
     } catch (err) {
       console.error("Failed to fetch locations:", err);
     }
@@ -67,12 +69,14 @@ function CampusMapPage() {
           const userLoc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
           setCurrentPosition(userLoc);
           if (mapRef.current) mapRef.current.panTo(userLoc);
-          const myLoc = { id: "my_location", name: "My Location", lat: userLoc.lat, lng: userLoc.lng };
-          setLocations((prev) => {
-            const exists = prev.find((loc) => loc.id === "my_location");
-            if (exists) return prev.map((loc) => (loc.id === "my_location" ? myLoc : loc));
+
+          const myLoc = { id: "my_location", name: "My Location", lat: userLoc.lat, lng: userLoc.lng, showOnMap: true };
+          setLocations(prev => {
+            const exists = prev.find(loc => loc.id === "my_location");
+            if (exists) return prev.map(loc => (loc.id === "my_location" ? myLoc : loc));
             return [...prev, myLoc];
           });
+
           setStart("my_location");
         },
         () => alert("Unable to retrieve your location")
@@ -82,8 +86,8 @@ function CampusMapPage() {
 
   const handleFindRoute = () => {
     if (!start || !destination) return alert("Please select both starting point and destination.");
-    const startLoc = locations.find((loc) => loc.id === start);
-    const destLoc = locations.find((loc) => loc.id === destination);
+    const startLoc = locations.find(loc => loc.id === start);
+    const destLoc = locations.find(loc => loc.id === destination);
     if (!startLoc || !destLoc) return;
 
     const directionsService = new window.google.maps.DirectionsService();
@@ -94,6 +98,19 @@ function CampusMapPage() {
         else alert("Could not calculate route. Try again.");
       }
     );
+  };
+
+  const handleRefreshMap = () => {
+    setCurrentPosition(null);
+    setStart("");
+    setDestination("");
+    setDirections(null);
+    setSelectedMarker(null);
+    loadLocations();
+    if (mapRef.current) {
+      mapRef.current.panTo(CAMPUS_CENTER);
+      mapRef.current.setZoom(16);
+    }
   };
 
   return (
@@ -133,21 +150,45 @@ function CampusMapPage() {
         <button onClick={handleFindMe} className="px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700">
           Find My Location
         </button>
+        <button onClick={handleRefreshMap} className="px-4 py-2 bg-yellow-600 text-white rounded hover:bg-yellow-700">
+          Refresh Map
+        </button>
       </div>
 
       <div className="map-frame">
         {isLoaded ? (
-          <GoogleMap mapContainerStyle={containerStyle} center={CAMPUS_CENTER} zoom={16} onLoad={(map) => (mapRef.current = map)}>
-            {locations.map((loc) => (
-              <Marker
-                key={loc.id}
-                position={{ lat: loc.lat, lng: loc.lng }}
-                label={loc.name !== "My Location" ? loc.name : ""}
-                onClick={() => setSelectedMarker(loc)}
-              />
+          <GoogleMap
+            mapContainerStyle={containerStyle}
+            center={CAMPUS_CENTER}
+            zoom={16}
+            onLoad={(map) => (mapRef.current = map)}
+            options={{
+              zoomControl: true,
+              streetViewControl: false,
+              mapTypeControl: false,
+              fullscreenControl: true,
+              scrollwheel: true,
+              gestureHandling: "cooperative", // prevents accidental clicks while dragging
+            }}
+          >
+            {locations
+              .filter(loc => loc.showOnMap)
+              .map((loc) => (
+                <Marker
+                  key={loc.id}
+                  position={{ lat: loc.lat, lng: loc.lng }}
+                  label={loc.name !== "My Location" ? loc.name : ""}
+                  onClick={() => setSelectedMarker(loc)}
+                />
             ))}
 
-            {currentPosition && <Marker position={currentPosition} label="You" icon={{ url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png" }} />}
+            {currentPosition && (
+              <Marker
+                position={currentPosition}
+                label="You"
+                icon={{ url: "http://maps.google.com/mapfiles/ms/icons/blue-dot.png" }}
+              />
+            )}
 
             {selectedMarker && (
               <InfoWindow position={{ lat: selectedMarker.lat, lng: selectedMarker.lng }} onCloseClick={() => setSelectedMarker(null)}>
@@ -165,8 +206,8 @@ function CampusMapPage() {
         )}
       </div>
 
-      <section className="locations-list">
-        <h2>Campus Buildings & Facilities</h2>
+      {/* Hidden locations for SEO */}
+      <section style={{ display: "none" }}>
         <ul>
           {locations.map((loc) => (
             <li key={loc.id}>{loc.name}</li>
@@ -174,7 +215,12 @@ function CampusMapPage() {
         </ul>
       </section>
 
-      <a href="/files/nwu-campus-map.pdf" target="_blank" rel="noopener noreferrer">
+      <a
+        href="/files/nwu-campus-map.pdf"
+        target="_blank"
+        rel="noopener noreferrer"
+        className="pdf-link"
+      >
         Download the full NWU Potchefstroom Campus Map (PDF)
       </a>
     </div>
