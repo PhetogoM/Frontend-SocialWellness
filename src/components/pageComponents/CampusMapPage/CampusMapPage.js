@@ -116,7 +116,7 @@ function CampusMapPage() {
   return (
     <div className="campus-map-container">
       <Helmet>
-        <title>NWU Potchefstroom Campus Map | Find Locations & Directions</title>
+        <title>Unipath: NWU Potchefstroom Campus Map</title>
         <meta
           name="description"
           content="Explore the NWU Potchefstroom campus map. Find faculty buildings, student centres, libraries, and get walking directions."
