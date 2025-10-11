@@ -18,7 +18,7 @@ import AboutPage from "./components/pageComponents/AboutPage/AboutPage.js";
 import WeNeedPage from './components/pageComponents/WeNeedPage/WeNeedPage.js';
 import CommunicationSkillsPage from './components/pageComponents/CommunicationSkillsPage/CommunicationSkillsPage.js';
 import MyCulturePageUser from './components/pageComponents/MyCulturePage/MyCulturePage.js';
-import MyCultureModeratorPage from "./components/pageComponents/MyCultureModeratorPage/MyCulturePage";
+import MyCultureModeratorPage from "./components/pageComponents/MyCultureModeratorPage/MyCultureModeratorPage.js";
 import CampusMapPage from './components/pageComponents/CampusMapPage/CampusMapPage.js';
 import SocialChatBox from "./components/pageComponents/SocialChatboxPage/SocialChatboxPage.js";
 import { AppWrapper } from "./components/pageComponents/AppWrapper.styled.js";

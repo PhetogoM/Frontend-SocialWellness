@@ -1,7 +1,8 @@
 // components/pageComponents/MyCulturePage/MyCultureModeratorPage.js
 import React, { useState, useEffect, useCallback } from "react";
 import { cultureModeratorAPI } from "../../apiComponents/cultureModeratorApi.js";
-import "./MyCulturePage.css";
+import { cultureAPI } from "../../apiComponents/cultureApi.js";
+import "./MyCultureModeratorPage.css";
 
 const CULTURE_COLORS = {
   Zulu: "#e63946",
@@ -34,9 +35,9 @@ const MyCultureModeratorPage = ({ user }) => {
       setLoading(true);
       setError("");
       const [postsResponse, culturesResponse, usersResponse] = await Promise.all([
-        cultureModeratorAPI.getAllPosts("pending"),
-        cultureModeratorAPI.getCultures(),
-        cultureModeratorAPI.getUsers(),
+        cultureAPI.getPosts({ reviewed: false }),
+        cultureAPI.getCultures(),
+        cultureAPI.getUsers(),
       ]);
       setPosts(postsResponse.data);
       setCultures(culturesResponse.data);

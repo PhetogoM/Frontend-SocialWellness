@@ -66,7 +66,6 @@ const MyCulturePageUser = ({ user }) => {
         culture: selectedCulture,
         text_message: newPost
       });
-      setPosts([response.data, ...posts]);
       setNewPost("");
       setSelectedCulture("");
     } catch (err) {
