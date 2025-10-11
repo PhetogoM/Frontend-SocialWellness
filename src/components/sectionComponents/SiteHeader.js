@@ -80,7 +80,7 @@ const SiteHeader = ({ user, onLogout }) => {
     { path: "/communicationskills", label: "Communication Skills" },
     { path: "/campusmap", label: "Campus Map" },   
     { path: "/socialchatbox", label: "Social Chatbox" }, 
-    { path: "/moderator", label: "Moderator Panel" }, 
+    { path: "/myculturemoderatorpage", label: "Moderator Panel" }, 
     { path: "/weneed", label: "We Need" },
   ];
 
