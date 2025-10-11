@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import "./SocialChatbox.css";
 import { chatAPI } from "../../apiComponents/chatApi.js";
 
-const SocialChatBox = () => {
+const SocialChatBox = ({ user }) => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
 
