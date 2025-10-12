@@ -16,13 +16,16 @@ import RegisterPage from "./components/pageComponents/AuthPage/RegisterPage.js";
 
 //Page components
 import AboutPage from "./components/pageComponents/AboutPage/AboutPage.js";
-import WeNeedPage from './components/pageComponents/WeNeedPage/WeNeedPage.js';
+import WeNeedPage from "./components/pageComponents/WeNeedPage/WeNeedPage.js";
+import AdminWeNeedPage from "./components/pageComponents/AdminWeNeed/AdminWeNeedPage.js";
 import CommunicationSkillsPage from './components/pageComponents/CommunicationSkillsPage/CommunicationSkillsPage.js';
 import MyCulturePageUser from './components/pageComponents/MyCulturePage/MyCulturePage.js';
 import MyCultureModeratorPage from "./components/pageComponents/MyCultureModeratorPage/MyCultureModeratorPage.js";
 import CampusMapPage from './components/pageComponents/CampusMapPage/CampusMapPage.js';
 import SocialChatBox from "./components/pageComponents/SocialChatboxPage/SocialChatboxPage.js";
+
 import { AppWrapper } from "./components/pageComponents/AppWrapper.styled.js";
+import { HelmetProvider } from "react-helmet-async";
 
 //Homepage directing
 function Layout({ children, user, onLogout }) {
@@ -86,6 +89,7 @@ function App() {
           <Route path="/campusmap" element={<CampusMapPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/weneed" element={<WeNeedPage />} />
+          <Route path="/adminweneed" element={<AdminWeNeedPage />} />
         </Routes>
       </Layout>
     </AppWrapper>
