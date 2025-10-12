@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from "react";
-import { Helmet } from "react-helmet-async";
+import { Helmet } from "react-helmet";
 import { Send, ThumbsUp } from "lucide-react";
 import "./WeNeedPage.css";
 import { WeNeedAPI } from "../../apiComponents/weNeedAPI";
