@@ -209,11 +209,15 @@ export default function WeNeedPage() {
                 disabled={!isAuthed || posting}
               >
                 <option value="">Select a category...</option>
-                {categories.map((cat) => (
-                  <option key={cat} value={cat}>
-                    {cat}
-                  </option>
-                ))}
+                {categories.map((cat) => {
+                  const value = typeof cat === "string" ? cat : cat.value;
+                  const label = typeof cat === "string" ? cat : cat.label;
+                  return (
+                    <option key={value} value={value}>
+                      {label}
+                    </option>
+                  );
+                })}
               </select>
             </div>
 
