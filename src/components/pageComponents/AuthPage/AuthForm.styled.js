@@ -24,7 +24,7 @@ export const Title = styled.h2`
 `;
 
 export const Input = styled.input`
-  width: 100%;
+  width: 94%;
   padding: 0.75rem;
   margin-bottom: 1rem;
   border: 1px solid #d1d5db;

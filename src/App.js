@@ -1,19 +1,20 @@
 // src/App.js
 import React, { useState, useEffect } from "react";
-import {
-  HashRouter as Router,
-  Routes,
-  Route,
-  useLocation,
-  useNavigate,
-} from "react-router-dom";
+import { HashRouter as Router, Routes, Route, useNavigate, useLocation } from "react-router-dom";
 import "./App.css";
+import { HelmetProvider } from "react-helmet-async";
+
+//section Components
 import Header from "./components/sectionComponents/header.js";
 import SiteHeader from "./components/sectionComponents/SiteHeader.js";
 import Footer from "./components/sectionComponents/footer.js";
+
+//Authentication pages
 import HomePage from "./components/pageComponents/HomePage/home-page.js";
 import LoginPage from "./components/pageComponents/AuthPage/LoginPage.js";
 import RegisterPage from "./components/pageComponents/AuthPage/RegisterPage.js";
+
+//Page components
 import AboutPage from "./components/pageComponents/AboutPage/AboutPage.js";
 import WeNeedPage from './components/pageComponents/WeNeedPage/WeNeedPage.js';
 import CommunicationSkillsPage from './components/pageComponents/CommunicationSkillsPage/CommunicationSkillsPage.js';
@@ -22,29 +23,33 @@ import MyCultureModeratorPage from "./components/pageComponents/MyCultureModerat
 import CampusMapPage from './components/pageComponents/CampusMapPage/CampusMapPage.js';
 import SocialChatBox from "./components/pageComponents/SocialChatboxPage/SocialChatboxPage.js";
 import { AppWrapper } from "./components/pageComponents/AppWrapper.styled.js";
-import { HelmetProvider } from "react-helmet-async";
 
+//Homepage directing
 function Layout({ children, user, onLogout }) {
   const location = useLocation();
-  const simpleHeaderPaths = ["/", "/login", "/register"];
-  const useSimpleHeader = simpleHeaderPaths.includes(location.pathname);
-  const backgroundClass = simpleHeaderPaths.includes(location.pathname)
-    ? "with-background"
-    : "no-background";
+
+  const isLoggedIn = Boolean(user);
+  const showSimpleHeader =
+    !isLoggedIn || location.pathname === "/login" || location.pathname === "/register";
+
+  // <-- This is where you control the background
+  const backgroundClass =
+    location.pathname === "/" || !user ? "with-background" : "no-background";
 
   return (
     <>
-      {useSimpleHeader ? (
+      {showSimpleHeader ? (
         <Header />
       ) : (
         <SiteHeader user={user} onLogout={onLogout} />
       )}
-      <main className={`AppBody ${backgroundClass}`}>{children}</main>
+      <main className={`AppBody ${backgroundClass}`}>
+        {children}
+      </main>
       <Footer />
     </>
   );
 }
-
 function App() {
   const [user, setUser] = useState(null);
 
@@ -66,11 +71,6 @@ function App() {
     navigate("/login");
   };
 
-  const App = () => (
-    <HelmetProvider>
-      {/* Your routes/components here */}
-    </HelmetProvider>
-  );
 
   return (
     <AppWrapper>
@@ -80,12 +80,12 @@ function App() {
           <Route path="/login" element={<LoginPage setUser={setUser} />} />
           <Route path="/register" element={<RegisterPage setUser={setUser} />} />
           <Route path="/communicationskills" element={<CommunicationSkillsPage />} />
-          <Route path="/socialchatbox" element={<SocialChatBox setUser={setUser}/>} />
+          <Route path="/socialchatbox" element={<SocialChatBox setUser={setUser} />} />
           <Route path="/myculture" element={<MyCulturePageUser setUser={setUser} />} />
+          <Route path="/myculturemoderatorpage" element={<MyCultureModeratorPage setUser={setUser} />} />
           <Route path="/campusmap" element={<CampusMapPage />} />
           <Route path="/about" element={<AboutPage />} />
           <Route path="/weneed" element={<WeNeedPage />} />
-          <Route path="/myculturemoderatorpage" element={<MyCultureModeratorPage setUser={setUser} />} />
         </Routes>
       </Layout>
     </AppWrapper>
@@ -95,7 +95,9 @@ function App() {
 export default function AppWithRouter() {
   return (
     <Router>
-      <App />
+      <HelmetProvider>
+        <App />
+      </HelmetProvider>
     </Router>
   );
 }
