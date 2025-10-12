@@ -211,3 +211,29 @@
     width: 100%;
   }
 }
+
+.chat-date-divider {
+  text-align: center;
+  color: #555;
+  font-size: 0.85rem;
+  margin: 15px 0;
+  position: relative;
+}
+
+.chat-date-divider::before,
+.chat-date-divider::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  width: 40%;
+  height: 1px;
+  background: #ccc;
+}
+
+.chat-date-divider::before {
+  left: 0;
+}
+
+.chat-date-divider::after {
+  right: 0;
+}

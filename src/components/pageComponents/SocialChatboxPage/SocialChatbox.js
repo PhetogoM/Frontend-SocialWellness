@@ -54,6 +54,7 @@ const SocialChatBox = () => {
     }
   };
 
+
   return (
     <div className="chatbox-container">
       <h1 className="chatbox-title">Social Chatbox</h1>
@@ -66,45 +67,58 @@ const SocialChatBox = () => {
           {messages.length === 0 ? (
             <p className="no-messages">No messages yet. Start the conversation!</p>
           ) : (
-            messages.map((msg) => {
-              if (!msg || typeof msg.message_text !== "string") return null;
+            (() => {
+              let lastDate = null;
+              return messages.map((msg) => {
+                if (!msg || typeof msg.message_text !== "string") return null;
 
-              const isMine = msg.is_current_user;
-              const isAdminUser = msg.is_admin_user;
+                const msgDate = new Date(msg.date_created).toDateString();
+                const isMine = msg.is_current_user;
+                const isAdminUser = msg.is_admin_user;
 
-              return (
-                <div
-                  key={msg.id}
-                  className={`message-bubble ${
-                    isMine ? "my-message" : isAdminUser ? "admin-message" : "other-message"
-                  }`}
-                >
-                  <div className="message-header">
-                    <span className="user-name">
-                      {isMine ? "You" : msg.username}
-                    </span>
-                    <span className="message-time">
-                      {msg.date_created
-                        ? new Date(msg.date_created).toLocaleTimeString()
-                        : "Just now"}
-                    </span>
-                  </div>
+                const showDivider = lastDate !== msgDate;
+                lastDate = msgDate;
 
-                  <div className="message-text">{msg.message_text}</div>
-
-                  <div className="message-actions">
-                    {(isMine || isAdminUser) && (
-                      <button
-                        className="delete-btn"
-                        onClick={() => handleDelete(msg)}
-                      >
-                        ❌
-                      </button>
+                return (
+                  <React.Fragment key={msg.id}>
+                    {showDivider && (
+                      <div className="chat-date-divider">
+                        {msgDate === new Date().toDateString()
+                          ? "Today"
+                          : msgDate === new Date(Date.now() - 86400000).toDateString()
+                          ? "Yesterday"
+                          : msgDate}
+                      </div>
                     )}
-                  </div>
-                </div>
-              );
-            })
+
+                    <div
+                      className={`message-bubble ${
+                        isMine ? "my-message" : isAdminUser ? "admin-message" : "other-message"
+                      }`}
+                    >
+                      <div className="message-header">
+                        <span className="user-name">{isMine ? "You" : msg.username}</span>
+                        <span className="message-time">
+                          {msg.date_created
+                            ? new Date(msg.date_created).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false })
+                            : "Just now"}
+                        </span>
+                      </div>
+
+                      <div className="message-text">{msg.message_text}</div>
+
+                      <div className="message-actions">
+                        {(isMine || isAdminUser) && (
+                          <button className="delete-btn" onClick={() => handleDelete(msg)}>
+                            ❌
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  </React.Fragment>
+                );
+              });
+            })()
           )}
         </div>
 
