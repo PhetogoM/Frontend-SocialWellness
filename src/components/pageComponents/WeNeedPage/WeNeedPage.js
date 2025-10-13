@@ -32,11 +32,13 @@ export default function WeNeedPage() {
       setError("");
       try {
         const [reqs, cats] = await Promise.all([
-          WeNeedAPI.getApprovedRequests(),
+          WeNeedAPI.getRequests(),
           WeNeedAPI.getCategories().catch(() => null),
         ]);
 
-        const list = (Array.isArray(reqs) ? reqs : reqs.results || []).map((r) => ({
+        const rawList = Array.isArray(reqs) ? reqs : reqs?.results || [];
+
+        const list = rawList.map((r) => ({
           id: r.id,
           name: r.student?.name || r.display_name || "Anonymous",
           category: r.category,
@@ -84,22 +86,20 @@ export default function WeNeedPage() {
         text: requestText.trim(),
       });
 
-      if (created.status === "approved") {
-        setSubmittedRequests((prev) => [
-          {
-            id: created.id,
-            name: created.student?.name || created.display_name || "Anonymous",
-            category: created.category,
-            request: created.text,
-            date: created.created_at
-              ? new Date(created.created_at).toLocaleString()
-              : "Just now",
-            likes: created.likes_count ?? 0,
-            liked: false,
-          },
-          ...prev,
-        ]);
-      }
+      setSubmittedRequests((prev) => [
+        {
+          id: created.id,
+          name: created.student?.name || created.display_name || "Anonymous",
+          category: created.category,
+          request: created.text,
+          date: created.created_at
+            ? new Date(created.created_at).toLocaleString()
+            : "Just now",
+          likes: created.likes_count ?? 0,
+          liked: false,
+        },
+        ...prev,
+      ]);
 
       setRequestText("");
       setCategory("");
@@ -155,7 +155,7 @@ export default function WeNeedPage() {
   const title = "#WeNeed — UniPath Social Wellness";
   const description =
     "Share and discover student requests for clubs, events, and support at NWU. Like ideas you support and help shape a healthier, more connected campus.";
-  const siteUrl = "https://your-domain.example/#/weneed"; 
+  const siteUrl = "https://your-domain.example/#/weneed";
   const imageUrl = "https://your-domain.example/og/unipath-weneed.jpg";
 
   return (
@@ -164,18 +164,15 @@ export default function WeNeedPage() {
         <title>{title}</title>
         <meta name="description" content={description} />
         <link rel="canonical" href={siteUrl} />
-
         <meta property="og:type" content="website" />
         <meta property="og:title" content={title} />
         <meta property="og:description" content={description} />
         <meta property="og:url" content={siteUrl} />
         <meta property="og:image" content={imageUrl} />
-
         <meta name="twitter:card" content="summary_large_image" />
         <meta name="twitter:title" content={title} />
         <meta name="twitter:description" content={description} />
         <meta name="twitter:image" content={imageUrl} />
-
         <meta name="robots" content="index,follow" />
       </Helmet>
 
@@ -245,12 +242,6 @@ export default function WeNeedPage() {
               type="submit"
               className={`btn ${isAuthed ? "btn-primary" : "btn-disabled"}`}
               disabled={!isAuthed || posting}
-              onMouseOver={(e) => {
-                if (isAuthed) e.currentTarget.classList.add("hover");
-              }}
-              onMouseOut={(e) => {
-                if (isAuthed) e.currentTarget.classList.remove("hover");
-              }}
             >
               <Send size={18} />
               {posting ? "Submitting…" : "Submit Request"}
@@ -264,7 +255,7 @@ export default function WeNeedPage() {
           {loading ? (
             <div>Loading…</div>
           ) : submittedRequests.length === 0 ? (
-            <div className="weneed-empty">No approved requests yet.</div>
+            <div className="weneed-empty">No requests yet.</div>
           ) : (
             submittedRequests.map((req) => (
               <div key={req.id} className="request-item">

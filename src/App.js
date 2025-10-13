@@ -15,17 +15,13 @@ import HomePage from "./components/pageComponents/HomePage/home-page.js";
 import LoginPage from "./components/pageComponents/AuthPage/LoginPage.js";
 import RegisterPage from "./components/pageComponents/AuthPage/RegisterPage.js";
 import AboutPage from "./components/pageComponents/AboutPage/AboutPage.js";
-<<<<<<< HEAD
-import WeNeedPage from "./components/pageComponents/WeNeedPage/WeNeedPage";
-import AdminWeNeedPage from "./components/pageComponents/AdminWeNeed/AdminWeNeedPage";
-=======
 import WeNeedPage from './components/pageComponents/WeNeedPage/WeNeedPage.js';
-import CommunicationSkillsPage from './components/pageComponents/CommunicationSkillsPage/CommunicationSkillsPage.js';
-import SocialChatbox from './components/pageComponents/SocialChatboxesPage/SocialChatboxPage.js';
-import MyCulturePageUser from './components/pageComponents/MyCulturePage/MyCulturePage.js';
-import CampusMapPage from './components/pageComponents/CampusMapPage/CampusMapPage.js';
->>>>>>> 2da26db6ef079cb59b420cbc3214056800beddc4
 import { AppWrapper } from "./components/pageComponents/AppWrapper.styled.js";
+import CommunicationSkillsPage from "./components/pageComponents/CommunicationSkillsPage/CommunicationSkillsPage.js";
+import SocialChatbox from "./components/pageComponents/SocialChatbox/SocialChatbox.js";
+import MyCulturePageUser from "./components/pageComponents/MyCulturePageUser/MyCulturePageUser.js";
+import CampusMapPage from "./components/pageComponents/CampusMapPage/CampusMapPage.js";
+
 
 function Layout({ children, user, onLogout }) {
   const location = useLocation();
