@@ -82,7 +82,6 @@ const SiteHeader = ({ user, onLogout }) => {
     { path: "/socialchatbox", label: "Social Chatbox" }, 
     { path: "/myculturemoderatorpage", label: "Moderator Panel" }, 
     { path: "/weneed", label: "We Need" },
-    { path: "/moderator", label: "Moderator Panel" }, 
     { path: "/adminweneed", label: "We Need Submissions" },
   ];
 
