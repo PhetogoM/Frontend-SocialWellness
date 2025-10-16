@@ -4,11 +4,12 @@
   padding: 20px;
   width: 100%;
   box-sizing: border-box;
+  background: linear-gradient(135deg, #f9f9f9 0%, #e9e9e9 100%);
 }
 
 .page-title {
   text-align: center;
-  color: #5fae8a;
+  color: #2c3e50;
   margin-bottom: 5px;
   font-size: 2rem;
   border-bottom: 2px solid #e74c3c;

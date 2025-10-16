@@ -36,7 +36,7 @@ function Layout({ children, user, onLogout }) {
 
   // <-- This is where you control the background
   const backgroundClass =
-    location.pathname === "/" || !user ? "with-background" : "no-background";
+    location.pathname === "/" || !user ? "with-background" : "light-scale-gray-background";
 
   return (
     <>

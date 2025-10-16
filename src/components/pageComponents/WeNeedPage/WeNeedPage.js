@@ -99,14 +99,14 @@ export default function WeNeedPage() {
     }
   }
 
-  const title = "#WeNeed — UniPath Social Wellness";
+  const title = "WeNeed — UniPath Social Wellness";
   const description =
     "Share and discover student requests for clubs, events, and support at NWU. Like ideas you support and help shape a healthier, more connected campus.";
   const siteUrl = "https://your-domain.example/login#/weneed"; 
   const imageUrl = "https://your-domain.example/image/path-to-logo.png";
 
   return (
-    <div className="weneed-fullbleed">
+    <div className="weneed-container">
       <Helmet>
         <title>{title}</title>
         <meta name="description" content={description} />
@@ -126,7 +126,7 @@ export default function WeNeedPage() {
         <meta name="robots" content="index,follow" />
       </Helmet>
 
-      <h1 className="page-title weneed-title">#WeNeed</h1>
+      <h1 className="page-title weneed-title">We Need</h1>
       <p className="page-subtitle weneed-subtitle">
         Share what social activities, clubs, or support you need on campus
       </p>
