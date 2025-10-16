@@ -1,5 +1,6 @@
 // components/pageComponents/MyCulturePage/MyCulturePageUser.js
 import React, { useState, useEffect, useCallback } from "react";
+import { Send } from "lucide-react";
 import { cultureAPI } from "../../apiComponents/cultureApi.js";
 import "./MyCulturePage.css";
 
@@ -220,7 +221,9 @@ const toggleLike = async (postId) => {
               <label>Your Message</label>
               <textarea rows="5" value={newPost} onChange={(e)=>setNewPost(e.target.value)} placeholder="Share traditions, lifestyles, or cultural aspects..." />
             </div>
-            <button onClick={handlePostSubmit} className="submit-btn" disabled={posting}>{posting?"Submitting...":"Submit for Approval"}</button>
+            <button onClick={handlePostSubmit} className="submit-btn" disabled={posting}>
+              <Send size={18} />
+              {posting?"Submitting...":"Submit for Approval"}</button>
           </div>
         </div>
       </div>
