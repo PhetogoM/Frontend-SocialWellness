@@ -7,7 +7,7 @@ import { API_BASE_URL } from "../../apiComponents/weNeedAPI.js";
 export default function AdminWeNeedPage() {
   const [items, setItems] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [statusFilter, setStatusFilter] = useState("pending");
+  const [statusFilter, setStatusFilter] = useState("all");
   const [categoryFilter, setCategoryFilter] = useState("");
   const [search, setSearch] = useState("");
   const [loading, setLoading] = useState(true);
@@ -48,50 +48,40 @@ export default function AdminWeNeedPage() {
       text: r.text,
       category: r.category,
       status: r.status,
-      likes: r.likes_count ?? 0,
       created_at: r.created_at,
       student: {
         name: r.student?.name || r.display_name || "Anonymous",
-        number: r.student?.student_number || r.student_number || "",
       },
     }));
   }
 
-  async function updateStatus(id, newStatus) {
-    const prev = [...items];
-    setItems((cur) => cur.map((it) => (it.id === id ? { ...it, status: newStatus } : it)));
+async function updateStatus(id, newStatus) {
+  const prev = [...items];
+  setItems((cur) => cur.map((it) => (it.id === id ? { ...it, status: newStatus } : it)));
 
-    try {
-      const res = await fetch(`${API_BASE_URL}/requests/${id}/`, {
-        method: "PATCH",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ status: newStatus }),
-      });
-      if (!res.ok) throw new Error(`Update failed: ${res.status}`);
-    } catch (err) {
-      console.error(err);
-      setError("Failed to update status.");
-      setItems(prev);
-    }
+  try {
+    await WeNeedAPI.updateRequestStatus(id, newStatus);
+  } catch (err) {
+    console.error(err);
+    setError("Failed to update status.");
+    setItems(prev);
   }
+}
 
-  async function removeRequest(id) {
-    const prev = [...items];
-    setItems((cur) => cur.filter((it) => it.id !== id));
-    try {
-      const res = await fetch(`${API_BASE_URL}/requests/${id}/`, {
-        method: "DELETE",
-        headers: { "Content-Type": "application/json" },
-      });
-      if (!res.ok && res.status !== 204) throw new Error(`Delete failed: ${res.status}`);
-    } catch (err) {
-      console.error(err);
-      setError("Failed to delete request.");
-      setItems(prev);
-    }
+async function removeRequest(id) {
+  const prev = [...items];
+  setItems((cur) => cur.filter((it) => it.id !== id));
+  try {
+    await WeNeedAPI.deleteRequest(id);
+  } catch (err) {
+    console.error(err);
+    setError("Failed to delete request.");
+    setItems(prev);
   }
+}
 
-  const filtered = items.filter((it) => {
+
+  const requests = items.filter((it) => {
     const matchesCategory = categoryFilter ? it.category === categoryFilter : true;
     const q = search.trim().toLowerCase();
     const matchesSearch =
@@ -103,83 +93,113 @@ export default function AdminWeNeedPage() {
   });
 
   return (
-    <div className="awn-fullbleed">
-      <Helmet>
-        <title>WeNeed Admin — UniPath</title>
-        <meta name="robots" content="noindex,nofollow" />
-      </Helmet>
+  <div className="awn-fullbleed">
+    <Helmet>
+      <title>WeNeed Admin — UniPath</title>
+      <meta name="robots" content="noindex,nofollow" />
+    </Helmet>
 
-      <div className="awn-content">
-        <header className="awn-header">
-          <h1 className="awn-title">WeNeed — Admin Submissions</h1>
-          <p className="awn-subtitle">Review, approve, reject, or remove submissions.</p>
-        </header>
+    <div className="awn-content">
+      {/* Header */}
+      <header className="awn-header">
+        <h1 className="awn-title">WeNeed — Admin Submissions</h1>
+        <p className="awn-subtitle">Review, approve, reject, or remove submissions.</p>
+      </header>
 
-        {error && <div className="awn-error">{error}</div>}
+      {/* Error message */}
+      {error && <div className="awn-error">{error}</div>}
 
-        <section className="awn-card">
-          <div className="awn-toolbar">
-            <select
-              className="awn-select"
-              value={categoryFilter}
-              onChange={(e) => setCategoryFilter(e.target.value)}
-            >
-              <option value="">All categories</option>
-              {categories.map((cat) => {
-                  const value = typeof cat === "string" ? cat : cat.value;
-                  const label = typeof cat === "string" ? cat : cat.label;
-                  return (
-                    <option key={value} value={value}>
-                      {label}
-                    </option>
-                  );
-                })}
-            </select>
+      {/* Card with toolbar + table */}
+      <section className="awn-card">
+        {/* Toolbar */}
+        <div className="awn-toolbar">
+          <select
+            className="awn-select"
+            value={categoryFilter}
+            onChange={(e) => setCategoryFilter(e.target.value)}
+          >
+            <option value="">All categories</option>
+            {categories.map((cat) => {
+              const value = typeof cat === "string" ? cat : cat.value;
+              const label = typeof cat === "string" ? cat : cat.label;
+              return (
+                <option key={value} value={value}>
+                  {label}
+                </option>
+              );
+            })}
+          </select>
 
-            <input
-              className="awn-input"
-              value={search}
-              onChange={(e) => setSearch(e.target.value)}
-              placeholder="Search text, name, category"
-            />
-          </div>
+          <input
+            className="awn-input"
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+            placeholder="Search text, name, category"
+          />
+        </div>
 
-          {loading ? (
-            <div>Loading…</div>
-          ) : filtered.length === 0 ? (
-            <div className="awn-empty">No submissions.</div>
-          ) : (
-            <div className="awn-table" role="table" aria-label="WeNeed submissions">
-              <div className="awn-thead" role="rowgroup">
-                <div className="awn-tr" role="row">
-                  <div className="awn-th">Date</div>
-                  <div className="awn-th">Student</div>
-                  <div className="awn-th">Category</div>
-                  <div className="awn-th">Request</div>
-                  <div className="awn-th">Likes</div>
-                </div>
-              </div>
-
-              <div className="awn-tbody" role="rowgroup">
-                {filtered.map((it) => (
-                  <div className="awn-tr" role="row" key={it.id}>
-                    <div className="awn-td">
-                      {it.created_at ? new Date(it.created_at).toLocaleString() : ""}
-                    </div>
-                    <div className="awn-td">{it.student.name}</div>
-
-                    <div className="awn-td">
-                      <span className="chip">{it.category}</span>
-                    </div>
-                    <div className="awn-td awn-text">{it.text}</div>
-                    <div className="awn-td awn-text">{it.likes}</div>                   
-                  </div>
-                ))}
+        {/* Loading / empty states */}
+        {loading ? (
+          <div>Loading…</div>
+        ) : requests.length === 0 ? (
+          <div className="awn-empty">No submissions.</div>
+        ) : (
+          <div className="awn-table" role="table" aria-label="WeNeed submissions">
+            {/* Table header */}
+            <div className="awn-thead" role="rowgroup">
+              <div className="awn-tr" role="row">
+                <div className="awn-th">Date</div>
+                <div className="awn-th">Student</div>
+                <div className="awn-th">Category</div>
+                <div className="awn-th">Request</div>
+                <div className="awn-th awn-actions-col">Actions</div>
               </div>
             </div>
-          )}
-        </section>
-      </div>
+
+            {/* Table body */}
+            <div className="awn-tbody" role="rowgroup">
+              {requests.map((req) => (
+                <div className="awn-tr" role="row" key={req.id}>
+                  <div className="awn-td">
+                    {req.created_at ? new Date(req.created_at).toLocaleString() : ""}
+                  </div>
+                  <div className="awn-td">{req.student.name}</div>
+                  <div className="awn-td">
+                    <span className="chip">{req.category}</span>
+                  </div>
+                  <div className="awn-td awn-text">{req.text}</div>
+                  <div className="awn-td awn-actions">
+                    <button
+                      className="btn small approve"
+                      disabled={req.status === "approved"}
+                      onClick={() => updateStatus(req.id, "approved")}
+                    >
+                      Approve
+                    </button>
+                    <button
+                      className="btn small reject"
+                      disabled={req.status === "rejected"}
+                      onClick={() => updateStatus(req.id, "rejected")}
+                    >
+                      Reject
+                    </button>
+                    <button
+                      className="btn small danger"
+                      onClick={() => removeRequest(req.id)}
+                      title="Delete request"
+                    >
+                      Delete
+                    </button>
+                    <span className={`badge ${req.status}`}>{req.status}</span>
+                  </div>
+                </div>
+              ))}
+            </div>
+          </div>
+        )}
+      </section>
     </div>
-  );
+  </div>
+);
+
 }

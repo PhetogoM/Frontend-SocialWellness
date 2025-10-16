@@ -44,21 +44,30 @@ export const WeNeedAPI = {
     return res.json();
   },
 
-  async likeRequest(id) {
-    const res = await fetch(`${API_BASE_URL}/requests/${id}/like/`, {
-      method: "POST",
+  //update request status (approve/reject)
+  async updateRequestStatus(id, status) {
+    const res = await fetch(`${API_BASE_URL}/requests/${id}/`, {
+      method: "PATCH",
       headers: jsonHeaders(),
+      body: JSON.stringify({ status }),
     });
-    if (!res.ok) throw new Error(`likeRequest: ${res.status}`);
-    return res.text();
+    if (!res.ok) {
+      const msg = await res.text();
+      throw new Error(msg || `updateRequestStatus: ${res.status}`);
+    }
+    return res.json();
   },
 
-  async unlikeRequest(id) {
-    const res = await fetch(`${API_BASE_URL}/requests/${id}/like/`, {
+  //delete request
+  async deleteRequest(id) {
+    const res = await fetch(`${API_BASE_URL}/requests/${id}/`, {
       method: "DELETE",
       headers: jsonHeaders(),
     });
-    if (!res.ok) throw new Error(`unlikeRequest: ${res.status}`);
-    return res.text();
+    if (!res.ok && res.status !== 204) {
+      const msg = await res.text();
+      throw new Error(msg || `deleteRequest: ${res.status}`);
+    }
+    return true;
   },
 };
