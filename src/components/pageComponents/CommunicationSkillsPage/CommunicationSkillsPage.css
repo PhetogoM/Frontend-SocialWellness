@@ -63,7 +63,7 @@
 
 /* See More Button — restored red style */
 .see-more-button {
-  background: #e74c3c;
+  background: #5fae8a;
   color: white;
   border: none;
   border-radius: 6px;
@@ -79,7 +79,7 @@
 }
 
 .see-more-button:hover {
-  background: #c0392b;
+  background: #5fae8a;
 }
 
 /* Hidden videos container */
@@ -98,13 +98,16 @@
   margin-bottom: 10px;
 }
 
+/* This changes the video frame sizes*/
 .video-iframe {
   position: relative;
-  padding-bottom: 56.25%; /* 16:9 */
+  padding-bottom: 35%; 
   height: 0;
   overflow: hidden;
   border-radius: 6px;
   background: #000;
+  max-width: 700px; 
+  margin: 0 auto; 
 }
 
 .video-iframe iframe {

@@ -9,21 +9,22 @@ const CommunicationSkillsPage = () => {
     'Learning to understand others': [
       { id: 1, title: 'Active Listening Techniques', videoId: 'Yq5pJ0q3xuc' },
       { id: 2, title: 'Reading Body Language', videoId: '4jwUXV4QaTw' },
-      { id: 3, title: 'Empathy in Communication', videoId: 'pi86Nr9Mdms&t=470s' },
+      { id: 3, title: 'Empathy in Communication', videoId: 'pi86Nr9Mdms', start: 470 },
       { id: 4, title: 'Understanding Different Perspectives', videoId: 'iueVZJVEmEs' }
     ],
+
     'Express yourself with clarity': [
       { id: 5, title: 'Speaking with Confidence', videoId: 'eVFzbxmKNUw' },
       { id: 6, title: 'Structuring Your Thoughts', videoId: 'Z_z-QOagXZU' },
       { id: 7, title: 'Effective Presentation Skills', videoId: 'yoD8RMq2OkU' },
-      { id: 8, title: 'Writing Clear Messages', videoId: 'prUqCd2R3Zw&t=20s' }
+      { id: 8, title: 'Writing Clear Messages', videoId: 'prUqCd2R3Zw', start: 20 }
     ]
   };
 
   const toggleSeeMore = (category) => {
-    setSeeMoreCategories(prev => ({
+    setSeeMoreCategories((prev) => ({
       ...prev,
-      [category]: !prev[category]
+      [category]: !prev[category],
     }));
   };
 
@@ -40,16 +41,12 @@ const CommunicationSkillsPage = () => {
           const firstVideo = videos[0];
           const restVideos = videos.slice(1);
           const seeMore = seeMoreCategories[category];
-
-          // Determine color class: first category red, second green
           const colorClass = index % 2 === 0 ? 'red' : 'green';
 
           return (
             <div key={category} className={`category-card ${colorClass}`}>
-              {/* Category Heading */}
               <h2 className="category-title">{category}</h2>
 
-              {/* First video always visible */}
               <div className="video-subheading">
                 <h3>{firstVideo.title}</h3>
                 <div className="video-iframe">
@@ -62,31 +59,39 @@ const CommunicationSkillsPage = () => {
                 </div>
               </div>
 
-              {/* See More button for remaining videos */}
-              {restVideos.length > 0 && (
+              {restVideos.length > 0 && !seeMore && (
                 <button
                   className={`see-more-button ${seeMore ? 'expanded' : ''}`}
                   onClick={() => toggleSeeMore(category)}
                 >
-                  {seeMore ? 'See Less' : 'See More'}
-                  {seeMore ? <ChevronDown size={20} /> : <ChevronRight size={20} />}
+                  See More <ChevronRight size={20} />
                 </button>
               )}
 
-              {/* Remaining videos */}
-              {seeMore && restVideos.map(video => (
-                <div key={video.id} className="video-card">
-                  <h3>{video.title}</h3>
-                  <div className="video-iframe">
-                    <iframe
-                      src={`https://www.youtube.com/embed/${video.videoId}`}
-                      title={video.title}
-                      allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
-                      allowFullScreen
-                    ></iframe>
-                  </div>
-                </div>
-              ))}
+              {seeMore && (
+                <>
+                  {restVideos.map((video) => (
+                    <div key={video.id} className="video-card">
+                      <h3>{video.title}</h3>
+                      <div className="video-iframe">
+                        <iframe
+                          src={`https://www.youtube.com/embed/${video.videoId}${video.start ? `?start=${video.start}` : ''}`}
+                          title={video.title}
+                          allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture; web-share"
+                          allowFullScreen
+                        ></iframe>
+                      </div>
+                    </div>
+                  ))}
+
+                  <button
+                    className="see-more-button"
+                    onClick={() => toggleSeeMore(category)}
+                  >
+                    See Less <ChevronDown size={20} />
+                  </button>
+                </>
+              )}
             </div>
           );
         })}
