@@ -41,10 +41,9 @@ const CommunicationSkillsPage = () => {
           const firstVideo = videos[0];
           const restVideos = videos.slice(1);
           const seeMore = seeMoreCategories[category];
-          const colorClass = index % 2 === 0 ? 'red' : 'green';
 
           return (
-            <div key={category} className={`category-card ${colorClass}`}>
+            <div key={category} className={`category-card`}>
               <h2 className="category-title">{category}</h2>
 
               <div className="video-subheading">

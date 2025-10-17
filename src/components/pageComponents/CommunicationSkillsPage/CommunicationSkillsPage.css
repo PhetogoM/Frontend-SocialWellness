@@ -38,12 +38,7 @@
   box-shadow: 0 2px 8px rgba(0,0,0,0.1);
 }
 
-/* Color variations for headings */
-.category-card.red .category-title {
-  color: #e74c3c;
-}
-
-.category-card.green .category-title {
+.category-title {
   color: #5fae8a;
 }
 
