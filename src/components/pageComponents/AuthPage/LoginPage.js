@@ -33,20 +33,38 @@ const LoginPage = ({ setUser }) => {
 
       // ✅ use modular API method
       const data = await authAPI.login(email, password);
+      console.log("🔍 LOGIN RESPONSE DATA:", data); // Debug log
 
-      const user = data.user || { email, role: "user" };
+      // 🔥 FIXED: Get the actual user data from backend
+      let user;
+      if (data.user) {
+        // If backend returns user data in login response
+        user = data.user;
+      } else {
+        // If not, fetch the complete user profile from /api/me/
+        try {
+          user = await authAPI.getUser(); // This should call your MeView
+        } catch (fetchError) {
+          console.error("Failed to fetch user profile:", fetchError);
+          // Fallback - but don't hardcode role
+          user = { 
+            email: email,
+            // Role will be undefined, which is better than wrong
+          };
+        }
+      }
+
+      console.log("🔍 USER DATA TO STORE:", user); // Debug log
+
+      // Store tokens and user data
       localStorage.setItem("access_token", data.access);
       localStorage.setItem("refresh_token", data.refresh);
       localStorage.setItem("user", JSON.stringify(user));
 
       setUser(user);
 
-      // ✅ navigate based on role
-      if (user.role === "admin") {
-        navigate("/admin-dashboard");
-      } else {
-        navigate("/myculture");
-      }
+      // ✅ CHANGED: Navigate both admin and user to homepage
+      navigate("/");
     } catch (err) {
       console.error(err);
       setError("Invalid credentials. Please try again.");
@@ -65,7 +83,7 @@ const LoginPage = ({ setUser }) => {
     localStorage.setItem("user", JSON.stringify(dummyUser));
     localStorage.setItem("access_token", "dummy_token");
     setUser(dummyUser);
-    navigate("/myculture");
+    navigate("/");
   };
 
   return (

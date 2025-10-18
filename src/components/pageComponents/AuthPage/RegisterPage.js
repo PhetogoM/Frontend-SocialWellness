@@ -50,15 +50,38 @@ const RegisterPage = ({ setUser }) => {
 
       // ✅ Log in immediately after successful registration
       const data = await authAPI.login(email, password);
-      const user =
-        data.user || { name: firstName, surname, email, role: "user" };
+      
+      // 🔥 FIXED: Get the actual user data from backend instead of hardcoding
+      let user;
+      if (data.user) {
+        // If backend returns user data in login response
+        user = data.user;
+      } else {
+        // If not, fetch the complete user profile from /api/me/
+        try {
+          user = await authAPI.getUser(); // This should call your MeView
+        } catch (fetchError) {
+          console.error("Failed to fetch user profile:", fetchError);
+          // Fallback - but don't hardcode role
+          user = { 
+            name: firstName,
+            surname: surname,
+            email: email,
+            // Role will be undefined, which is better than wrong
+          };
+        }
+      }
+
+      console.log("🔍 USER DATA TO STORE:", user); // Debug log
 
       localStorage.setItem("access_token", data.access);
       localStorage.setItem("refresh_token", data.refresh);
       localStorage.setItem("user", JSON.stringify(user));
 
       setUser(user);
-      navigate("/myculture");
+      
+      // ✅ CHANGED: Navigate to homepage instead of /myculture
+      navigate("/");
     } catch (err) {
       console.error(err);
 
@@ -90,7 +113,9 @@ const RegisterPage = ({ setUser }) => {
     localStorage.setItem("user", JSON.stringify(dummyUser));
     localStorage.setItem("access_token", "dummy_token");
     setUser(dummyUser);
-    navigate("/myculture");
+    
+    // ✅ CHANGED: Navigate to homepage instead of /myculture
+    navigate("/");
   };
 
   return (

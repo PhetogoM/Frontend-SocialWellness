@@ -4,7 +4,7 @@ import styled from "styled-components";
 
 /* Header container */
 const HeaderContainer = styled.header`
-  background-color: #5fae8a; /* calm green */
+  background-color: #5fae8a;
   color: white;
   padding: 0px 40px;
   display: flex;
@@ -58,6 +58,13 @@ const ProfileName = styled.span`
   font-weight: bold;
 `;
 
+const UserRoleBadge = styled.span`
+  background: rgba(255, 255, 255, 0.2);
+  padding: 2px 8px;
+  border-radius: 12px;
+  font-size: 0.8rem;
+`;
+
 const LogoutButton = styled.button`
   background: none;
   border: 1px solid white;
@@ -74,16 +81,34 @@ const LogoutButton = styled.button`
 const SiteHeader = ({ user, onLogout }) => {
   const location = useLocation();
 
-  const PAGES = [
-    { path: "/about", label: "About" },
+  // Define all possible pages - ADMIN role can see moderator/admin pages
+  const ALL_PAGES = [
+    //{ path: "/about", label: "About" },
     { path: "/myculture", label: "My Culture" },
     { path: "/communicationskills", label: "Communication Skills" },
     { path: "/campusmap", label: "Campus Map" },   
     { path: "/socialchatbox", label: "Social Chatbox" }, 
-    { path: "/myculturemoderatorpage", label: "Moderator Panel" }, 
+    { path: "/myculturemoderatorpage", label: "Moderator Panel", roles: ["admin"] }, // Only admin can see
     { path: "/weneed", label: "We Need" },
-    { path: "/adminweneed", label: "We Need Submissions" },
+    { path: "/adminweneed", label: "We Need Submissions", roles: ["admin"] }, // Only admin can see
   ];
+
+  // Filter pages based on user role
+  const getVisiblePages = () => {
+    if (!user) return ALL_PAGES.filter(page => !page.roles);
+    
+    const userRole = user.role || 'first_year';
+    
+    return ALL_PAGES.filter(page => {
+      // If page has no roles restriction, show to everyone
+      if (!page.roles) return true;
+      
+      // If page has roles, check if user has one of those roles
+      return page.roles.includes(userRole);
+    });
+  };
+
+  const visiblePages = getVisiblePages();
 
   return (
     <HeaderContainer>
@@ -95,7 +120,7 @@ const SiteHeader = ({ user, onLogout }) => {
       </LogoTitle>
 
       <NavLinks>
-        {PAGES.map((p) => (
+        {visiblePages.map((p) => (
           <NavLink
             key={p.path}
             to={p.path}
@@ -107,8 +132,13 @@ const SiteHeader = ({ user, onLogout }) => {
       </NavLinks>
 
       <HeaderButtons>
-        {user && <ProfileName>👤 {user.first_name || user.email}</ProfileName>}
-        {user && <LogoutButton onClick={onLogout}>Logout</LogoutButton>}
+        {user && (
+          <>
+            <ProfileName>👤 {user.name || user.email}</ProfileName>
+            <UserRoleBadge>{user.role}</UserRoleBadge>
+            <LogoutButton onClick={onLogout}>Logout</LogoutButton>
+          </>
+        )}
       </HeaderButtons>
     </HeaderContainer>
   );
