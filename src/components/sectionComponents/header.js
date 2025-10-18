@@ -72,7 +72,7 @@ const Header = () => {
     <HeaderContainer>
       <LogoTitle>
         <NavLink to="/">
-        <Logo src="image/path-to-logo.png" alt="UniPath Logo" />
+          <Logo src="image/path-to-logo.png" alt="UniPath Logo" />
         </NavLink>
         <h1 style={{ fontSize: "1.5rem", fontWeight: "bold" }}>UniPath: Social Wellness</h1>
       </LogoTitle>
@@ -87,8 +87,6 @@ const Header = () => {
         <HeaderButton to="/register">Register</HeaderButton>
       </HeaderButtons>
     </HeaderContainer>
-
-    
   );
 };
 
