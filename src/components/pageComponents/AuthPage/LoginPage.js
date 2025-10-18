@@ -1,4 +1,5 @@
 import React, { useState } from "react";
+import { Helmet } from "react-helmet-async";
 import { Link, useNavigate } from "react-router-dom";
 import { authAPI } from "../../apiComponents/authApi.js";
 import {
@@ -31,7 +32,6 @@ const LoginPage = ({ setUser }) => {
       setLoading(true);
       setError("");
 
-      // ✅ use modular API method
       const data = await authAPI.login(email, password);
 
       const user = data.user || { email, role: "user" };
@@ -41,7 +41,6 @@ const LoginPage = ({ setUser }) => {
 
       setUser(user);
 
-      // ✅ navigate based on role
       if (user.role === "admin") {
         navigate("/admin-dashboard");
       } else {
@@ -69,53 +68,77 @@ const LoginPage = ({ setUser }) => {
   };
 
   return (
-    <PageContainer>
-      <LoginForm onSubmit={handleSubmit}>
-        <Title>Login to Unipath</Title>
-        {/* Display each error in a separate div */}
-       {error && (
-          <div style={{ color: "red", marginBottom: "10px" }}>
-            {error.split("\n").map((line, idx) =>
-              line.trim() ? <div key={idx}>{line}</div> : null
-            )}
+    <>
+      {/* ✅ SEO Optimization with React Helmet */}
+      <Helmet>
+        <title>Login | UniPath Student Portal</title>
+        <meta
+          name="description"
+          content="Login to UniPath to access your personalized academic dashboard, track your progress, and manage your learning journey."
+        />
+        <meta
+          name="keywords"
+          content="unipath login, student portal, education, academic management, learning platform"
+        />
+        <meta property="og:title" content="Login | UniPath Student Portal" />
+        <meta
+          property="og:description"
+          content="Access your UniPath student dashboard and manage your academic progress with ease."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://yourdomain.com/login" />
+        <meta property="og:image" content="https://yourdomain.com/assets/preview.png" />
+      </Helmet>
+
+      {/* ✅ Page UI */}
+      <PageContainer>
+        <LoginForm onSubmit={handleSubmit}>
+          <Title>Login to UniPath</Title>
+
+          {error && (
+            <div style={{ color: "red", marginBottom: "10px" }}>
+              {error.split("\n").map((line, idx) =>
+                line.trim() ? <div key={idx}>{line}</div> : null
+              )}
+            </div>
+          )}
+
+          <Input
+            type="email"
+            placeholder="Email"
+            value={email}
+            onChange={(e) => setEmail(e.target.value)}
+          />
+          <Input
+            type="password"
+            placeholder="Password"
+            value={password}
+            onChange={(e) => setPassword(e.target.value)}
+          />
+
+          <Button type="submit" disabled={loading}>
+            {loading ? "Logging in..." : "Login"}
+          </Button>
+
+          <div
+            style={{ textAlign: "center", color: "#6b7280", margin: "15px 0" }}
+          >
+            or
           </div>
-        )}
 
-        <Input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <Input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
+          <SocialButton
+            bgColor="#ff2600ff"
+            onClick={() => handleSocialLogin("Google")}
+          >
+            <img src={GoogleLogo} alt="Google" /> Sign in with Google
+          </SocialButton>
 
-        <Button type="submit" disabled={loading}>
-          {loading ? "Logging in..." : "Login"}
-        </Button>
-
-        <div
-          style={{ textAlign: "center", color: "#6b7280", margin: "15px 0" }}
-        >
-          or
-        </div>
-
-        <SocialButton
-          bgColor="#ff2600ff"
-          onClick={() => handleSocialLogin("Google")}
-        >
-          <img src={GoogleLogo} alt="Google" /> Sign in with Google
-        </SocialButton>
-
-        <RegisterLink>
-          Don't have an account? <Link to="/register">Register</Link>
-        </RegisterLink>
-      </LoginForm>
-    </PageContainer>
+          <RegisterLink>
+            Don't have an account? <Link to="/register">Register</Link>
+          </RegisterLink>
+        </LoginForm>
+      </PageContainer>
+    </>
   );
 };
 

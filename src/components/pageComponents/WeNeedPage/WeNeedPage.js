@@ -99,6 +99,7 @@ export default function WeNeedPage() {
     }
   }
 
+  // 🌐 SEO metadata
   const title = "WeNeed — UniPath Social Wellness";
   const description =
     "Share and discover student requests for clubs, events, and support at NWU. Like ideas you support and help shape a healthier, more connected campus.";

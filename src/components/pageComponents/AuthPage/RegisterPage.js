@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { Helmet } from "react-helmet"; // ✅ Import Helmet
 import { authAPI } from "../../apiComponents/authApi.js";
 import {
   PageContainer,
@@ -39,7 +40,6 @@ const RegisterPage = ({ setUser }) => {
       setLoading(true);
       setError("");
 
-      // ✅ Use modularized API method
       await authAPI.register({
         name: firstName,
         surname,
@@ -48,10 +48,8 @@ const RegisterPage = ({ setUser }) => {
         confirm_password: confirmPassword,
       });
 
-      // ✅ Log in immediately after successful registration
       const data = await authAPI.login(email, password);
-      const user =
-        data.user || { name: firstName, surname, email, role: "user" };
+      const user = data.user || { name: firstName, surname, email, role: "user" };
 
       localStorage.setItem("access_token", data.access);
       localStorage.setItem("refresh_token", data.refresh);
@@ -61,7 +59,6 @@ const RegisterPage = ({ setUser }) => {
       navigate("/myculture");
     } catch (err) {
       console.error(err);
-
       let message = "";
       if (err.response && err.response.data) {
         for (const key in err.response.data) {
@@ -95,8 +92,30 @@ const RegisterPage = ({ setUser }) => {
 
   return (
     <PageContainer>
+      {/* ✅ SEO Optimization using Helmet */}
+      <Helmet>
+        <title>Register | UniPath</title>
+        <meta
+          name="description"
+          content="Create your UniPath account to access personalized learning resources and track your academic progress. Sign up easily using your email or Google account."
+        />
+        <meta
+          name="keywords"
+          content="UniPath register, student registration, university login, education signup, learning platform"
+        />
+        <meta name="author" content="UniPath Team" />
+        <meta property="og:title" content="Register on UniPath" />
+        <meta
+          property="og:description"
+          content="Sign up for UniPath to start your academic journey today."
+        />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://yourdomain.com/register" />
+        <meta property="og:image" content="/image/unipath-preview.png" />
+      </Helmet>
+
       <RegisterForm onSubmit={handleSubmit}>
-        <Title>Register to Unipath</Title>
+        <Title>Register to UniPath</Title>
 
         {error && (
           <div style={{ color: "red", marginBottom: "10px" }}>

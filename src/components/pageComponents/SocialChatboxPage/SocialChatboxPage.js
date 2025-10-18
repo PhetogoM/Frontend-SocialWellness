@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from "react";
+import { Helmet } from "react-helmet-async";
 import "./SocialChatbox.css";
 import { chatAPI } from "../../apiComponents/chatApi.js";
 
@@ -6,11 +7,10 @@ const SocialChatBox = () => {
   const [messages, setMessages] = useState([]);
   const [input, setInput] = useState("");
 
-  // Load current user + messages
+  // Load messages
   useEffect(() => {
     const fetchUserAndMessages = async () => {
       try {
-        // 1️⃣ Get messages
         const data = await chatAPI.getMessages();
         const sorted = Array.isArray(data)
           ? data.sort((a, b) => new Date(a.date_created) - new Date(b.date_created))
@@ -20,7 +20,6 @@ const SocialChatBox = () => {
         console.error("Failed to load messages:", err);
       }
     };
-
     fetchUserAndMessages();
   }, []);
 
@@ -54,9 +53,30 @@ const SocialChatBox = () => {
     }
   };
 
+  // 🌐 SEO Metadata
+  const seoTitle = "Social Chatbox | Connect and Share Ideas in Real-Time";
+  const seoDescription =
+    "Join the Social Chatbox to connect with other users, share thoughts, and engage in real-time conversations. Stay informed and build your community.";
+  const seoKeywords =
+    "social chat, chatbox, real-time messaging, community, messaging app, online chat, user interaction, Unipath";
 
   return (
     <div className="chatbox-container">
+      {/* 🧠 SEO Metadata */}
+      <Helmet>
+        <title>{seoTitle}</title>
+        <meta name="description" content={seoDescription} />
+        <meta name="keywords" content={seoKeywords} />
+        <meta property="og:title" content={seoTitle} />
+        <meta property="og:description" content={seoDescription} />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://yourdomain.com/social-chatbox" />
+        <meta
+          property="og:image"
+          content="https://yourdomain.com/assets/chatbox-banner.jpg"
+        />
+      </Helmet>
+
       <h1 className="chatbox-title">Social Chatbox</h1>
       <p className="chatbox-subtitle">
         Connect and share your thoughts with others in real time.
@@ -100,7 +120,11 @@ const SocialChatBox = () => {
                         <span className="user-name">{isMine ? "You" : msg.username}</span>
                         <span className="message-time">
                           {msg.date_created
-                            ? new Date(msg.date_created).toLocaleTimeString([], { hour: "2-digit", minute: "2-digit", hour12: false })
+                            ? new Date(msg.date_created).toLocaleTimeString([], {
+                                hour: "2-digit",
+                                minute: "2-digit",
+                                hour12: false,
+                              })
                             : "Just now"}
                         </span>
                       </div>
