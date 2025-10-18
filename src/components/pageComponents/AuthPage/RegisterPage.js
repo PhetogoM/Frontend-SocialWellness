@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import { Helmet } from "react-helmet"; // ✅ Import Helmet
+import { Helmet } from "react-helmet-async";
 import { authAPI } from "../../apiComponents/authApi.js";
 import {
   PageContainer,
@@ -26,7 +26,6 @@ const RegisterPage = ({ setUser }) => {
 
   const handleSubmit = async (e) => {
     e.preventDefault();
-
     if (!firstName || !surname || !email || !password || !confirmPassword) {
       setError("Please fill in all fields.");
       return;
@@ -40,25 +39,31 @@ const RegisterPage = ({ setUser }) => {
       setLoading(true);
       setError("");
 
-      await authAPI.register({
-        name: firstName,
-        surname,
-        email,
-        password,
-        confirm_password: confirmPassword,
-      });
+      await authAPI.register({ name: firstName, surname, email, password, confirm_password: confirmPassword });
 
       const data = await authAPI.login(email, password);
-      const user = data.user || { name: firstName, surname, email, role: "user" };
+
+      let user;
+      if (data.user) {
+        user = data.user;
+      } else {
+        try {
+          user = await authAPI.getUser();
+        } catch (fetchError) {
+          console.error("Failed to fetch user profile:", fetchError);
+          user = { name: firstName, surname, email };
+        }
+      }
 
       localStorage.setItem("access_token", data.access);
       localStorage.setItem("refresh_token", data.refresh);
       localStorage.setItem("user", JSON.stringify(user));
 
       setUser(user);
-      navigate("/myculture");
+      navigate("/");
     } catch (err) {
       console.error(err);
+
       let message = "";
       if (err.response && err.response.data) {
         for (const key in err.response.data) {
@@ -78,40 +83,24 @@ const RegisterPage = ({ setUser }) => {
   };
 
   const handleSocialRegister = () => {
-    const dummyUser = {
-      name: "Social",
-      surname: "User",
-      email: "socialuser@gmail.com",
-      role: "user",
-    };
+    const dummyUser = { name: "Social", surname: "User", email: "socialuser@gmail.com", role: "user" };
     localStorage.setItem("user", JSON.stringify(dummyUser));
     localStorage.setItem("access_token", "dummy_token");
     setUser(dummyUser);
-    navigate("/myculture");
+    navigate("/");
   };
 
   return (
     <PageContainer>
-      {/* ✅ SEO Optimization using Helmet */}
+      {/* 🌐 SEO Metadata */}
       <Helmet>
         <title>Register | UniPath</title>
-        <meta
-          name="description"
-          content="Create your UniPath account to access personalized learning resources and track your academic progress. Sign up easily using your email or Google account."
-        />
-        <meta
-          name="keywords"
-          content="UniPath register, student registration, university login, education signup, learning platform"
-        />
-        <meta name="author" content="UniPath Team" />
-        <meta property="og:title" content="Register on UniPath" />
-        <meta
-          property="og:description"
-          content="Sign up for UniPath to start your academic journey today."
-        />
+        <meta name="description" content="Create a new account on UniPath to join the student community, share cultural posts, and explore traditions." />
+        <meta name="keywords" content="UniPath register, create account, student portal, cultural posts, signup" />
+        <meta property="og:title" content="Register | UniPath" />
+        <meta property="og:description" content="Create a new account on UniPath to join the student community, share cultural posts, and explore traditions." />
         <meta property="og:type" content="website" />
         <meta property="og:url" content="https://yourdomain.com/register" />
-        <meta property="og:image" content="/image/unipath-preview.png" />
       </Helmet>
 
       <RegisterForm onSubmit={handleSubmit}>
@@ -119,57 +108,23 @@ const RegisterPage = ({ setUser }) => {
 
         {error && (
           <div style={{ color: "red", marginBottom: "10px" }}>
-            {error.split("\n").map(
-              (line, idx) => line.trim() && <div key={idx}>{line}</div>
-            )}
+            {error.split("\n").map((line, idx) => line.trim() && <div key={idx}>{line}</div>)}
           </div>
         )}
 
-        <Input
-          type="text"
-          placeholder="First Name"
-          value={firstName}
-          onChange={(e) => setFirstName(e.target.value)}
-        />
-        <Input
-          type="text"
-          placeholder="Surname"
-          value={surname}
-          onChange={(e) => setSurname(e.target.value)}
-        />
-        <Input
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={(e) => setEmail(e.target.value)}
-        />
-        <Input
-          type="password"
-          placeholder="Password"
-          value={password}
-          onChange={(e) => setPassword(e.target.value)}
-        />
-        <Input
-          type="password"
-          placeholder="Confirm Password"
-          value={confirmPassword}
-          onChange={(e) => setConfirmPassword(e.target.value)}
-        />
+        <Input type="text" placeholder="First Name" value={firstName} onChange={(e) => setFirstName(e.target.value)} />
+        <Input type="text" placeholder="Surname" value={surname} onChange={(e) => setSurname(e.target.value)} />
+        <Input type="email" placeholder="Email" value={email} onChange={(e) => setEmail(e.target.value)} />
+        <Input type="password" placeholder="Password" value={password} onChange={(e) => setPassword(e.target.value)} />
+        <Input type="password" placeholder="Confirm Password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} />
 
         <Button type="submit" disabled={loading}>
           {loading ? "Registering..." : "Register"}
         </Button>
 
-        <div
-          style={{ textAlign: "center", color: "#6b7280", margin: "15px 0" }}
-        >
-          or
-        </div>
+        <div style={{ textAlign: "center", color: "#6b7280", margin: "15px 0" }}>or</div>
 
-        <SocialButton
-          bgColor="#ff2600ff"
-          onClick={() => handleSocialRegister("Google")}
-        >
+        <SocialButton bgColor="#ff2600ff" onClick={handleSocialRegister}>
           <img src={GoogleLogo} alt="Google" /> Sign up with Google
         </SocialButton>
 
