@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { Send } from "lucide-react";
 import "./WeNeedPage.css";
-import { WeNeedAPI } from "../../apiComponents/weNeedAPI";
+import { WeNeedAPI } from "../../apiComponents/weNeedAPI.js";
 
 export default function WeNeedPage() {
   const token = localStorage.getItem("access_token") || "";

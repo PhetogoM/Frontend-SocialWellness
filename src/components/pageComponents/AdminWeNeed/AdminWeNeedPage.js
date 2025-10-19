@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Helmet } from "react-helmet-async";
 import "./AdminWeNeedPage.css";
 import { WeNeedAPI } from "../../apiComponents/weNeedAPI.js";
 import { API_BASE_URL } from "../../apiComponents/weNeedAPI.js";
@@ -94,11 +93,6 @@ async function removeRequest(id) {
 
   return (
   <div className="awn-fullbleed">
-    <Helmet>
-      <title>WeNeed Admin — UniPath</title>
-      <meta name="robots" content="noindex,nofollow" />
-    </Helmet>
-
     <div className="awn-content">
       {/* Header */}
       <header className="awn-header">
@@ -201,5 +195,4 @@ async function removeRequest(id) {
     </div>
   </div>
 );
-
 }
