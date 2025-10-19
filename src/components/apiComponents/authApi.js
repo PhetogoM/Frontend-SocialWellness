@@ -51,8 +51,14 @@ export const authAPI = {
 
   // GET CURRENT USER
   getUser: async () => {
+  try
+  {
     const response = await api.get("auth/me/");
     localStorage.setItem("user", JSON.stringify(response.data));
     return response.data;
-  },
+  }
+  catch (error) 
+  { 
+    console.error("Error fetching user data:", error); throw error; } 
+  }, 
 };
