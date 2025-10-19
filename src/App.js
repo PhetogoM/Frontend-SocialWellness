@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback } from "react";
 import { HashRouter as Router, Routes, Route, useNavigate, useLocation, Navigate } from "react-router-dom";
 import "./App.css";
+import PageViewTracker from "./analytics/PageViewTracker";
 
 // Section Components
 import Header from "./components/sectionComponents/header.js";
@@ -77,7 +78,10 @@ function Layout({ children, user, onLogout }) {
         {children}
       </main>
       <Footer />
-    </>
+      
+
+      </>
+    
   );
 }
 
@@ -246,6 +250,7 @@ function App() {
 export default function AppWithRouter() {
   return (
     <Router>
+      <PageViewTracker />
       <HelmetProvider>
         <App />
       </HelmetProvider>
