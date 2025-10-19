@@ -8,7 +8,7 @@ body, html, #root, .App {
 
 /* Background only on Home, Login, Register pages */
 .with-background {
-  background-image: url('/public/image/hero-bg.png'); /* adjust path if needed */
+  background-image: url('/public/image/leaves-3289964_1280.webp'); /* adjust path if needed */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
