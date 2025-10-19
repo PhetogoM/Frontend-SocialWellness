@@ -80,17 +80,32 @@
 }
 
 /* Table layout */
+/* Table wrapper for horizontal scroll on small screens */
+.awn-table-wrapper {
+  width: 100%;
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
+@media (max-width: 768px) {
+  .awn-table {
+    min-width: 700px; /* ensures scroll only when necessary */
+  }
+}
+
+
 .awn-table {
   width: 100%;
   border-collapse: collapse;
 }
 .awn-tr {
   display: grid;
-  grid-template-columns: 160px 180px 120px 1fr 100px 200px;
+  grid-template-columns: 160px 180px 120px minmax(180px, 1fr) 220px;
   gap: 12px;
-  align-items: center;
+  align-items: start;
   padding: 10px 0;
 }
+
 .awn-thead .awn-tr {
   border-bottom: 2px solid #e6e6e6;
   font-weight: 700;
@@ -102,7 +117,12 @@
 .awn-td { color: #2c3e50; }
 
 /* Text wrapping */
-.awn-text { white-space: pre-wrap; }
+.awn-text {
+  white-space: normal;
+  word-wrap: break-word;
+  overflow-wrap: anywhere;
+}
+
 
 /* Status badges */
 .badge {

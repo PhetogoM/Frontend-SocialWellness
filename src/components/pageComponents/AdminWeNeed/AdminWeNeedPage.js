@@ -138,8 +138,10 @@ async function removeRequest(id) {
         ) : requests.length === 0 ? (
           <div className="awn-empty">No submissions.</div>
         ) : (
-          <div className="awn-table" role="table" aria-label="WeNeed submissions">
-            {/* Table header */}
+          <div className="awn-table-wrapper">
+            <div className="awn-table" role="table" aria-label="WeNeed submissions">
+              {/* Table header */}
+            </div>
             <div className="awn-thead" role="rowgroup">
               <div className="awn-tr" role="row">
                 <div className="awn-th">Date</div>
@@ -161,7 +163,9 @@ async function removeRequest(id) {
                   <div className="awn-td">
                     <span className="chip">{req.category}</span>
                   </div>
-                  <div className="awn-td awn-text">{req.text}</div>
+                  <div className="awn-td awn-text">
+                    {req.text.length > 200 ? req.text.slice(0, 200) + "…" : req.text}
+                  </div>
                   <div className="awn-td awn-actions">
                     <button
                       className="btn small approve"
