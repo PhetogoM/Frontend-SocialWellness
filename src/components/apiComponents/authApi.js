@@ -4,10 +4,9 @@ export const authAPI = {
   // LOGIN
   login: async (email, password) => {
     const response = await api.post("auth/login/", { email, password });
-    // Save tokens here for re-use across the app
     localStorage.setItem("access_token", response.data.access);
     localStorage.setItem("refresh_token", response.data.refresh);
-    return response.data; // return whole payload
+    return response.data;
   },
 
   // REGISTER
@@ -16,13 +15,30 @@ export const authAPI = {
     return response.data;
   },
 
-  // REFRESH TOKEN
+  // REFRESH TOKEN - IMPROVED
   refreshToken: async () => {
     const refresh = localStorage.getItem("refresh_token");
-    if (!refresh) throw new Error("No refresh token found");
-    const response = await api.post("auth/login/refresh/", { refresh });
-    localStorage.setItem("access_token", response.data.access);
-    return response.data.access;
+    if (!refresh) {
+      throw new Error("No refresh token found");
+    }
+    
+    try {
+      const response = await api.post("auth/login/refresh/", { refresh });
+      localStorage.setItem("access_token", response.data.access);
+      
+      // If backend returns new refresh token, store it
+      if (response.data.refresh) {
+        localStorage.setItem("refresh_token", response.data.refresh);
+      }
+      
+      return response.data.access;
+    } catch (error) {
+      // Clear tokens on refresh failure
+      localStorage.removeItem("access_token");
+      localStorage.removeItem("refresh_token");
+      localStorage.removeItem("user");
+      throw error;
+    }
   },
 
   // LOGOUT
@@ -33,15 +49,10 @@ export const authAPI = {
     window.location.href = "/login";
   },
 
-  // GET CURRENT USER - FIXED: Make sure this calls your MeView endpoint
+  // GET CURRENT USER
   getUser: async () => {
-    try {
-      const response = await api.get("auth/me/"); // This should match your MeView URL
-      localStorage.setItem("user", JSON.stringify(response.data));
-      return response.data;
-    } catch (error) {
-      console.error("Error fetching user data:", error);
-      throw error;
-    }
+    const response = await api.get("auth/me/");
+    localStorage.setItem("user", JSON.stringify(response.data));
+    return response.data;
   },
 };
