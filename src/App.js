@@ -60,8 +60,8 @@ function Layout({ children, user, onLogout }) {
   // FIXED: Only show SiteHeader when user is logged in AND not on login/register pages
   const showSimpleHeader = !isLoggedIn || location.pathname === "/login" || location.pathname === "/register";
 
-  // FIXED: White background when logged in, gradient when logged out
-  const backgroundClass = isLoggedIn ? "white-background" : "with-background";
+  const backgroundClass =
+    location.pathname === "/" || !user ? "with-background" : "light-scale-gray-background";
 
   return (
     <>
@@ -80,7 +80,7 @@ function Layout({ children, user, onLogout }) {
 
 function App() {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(true); // Add loading state
   const navigate = useNavigate();
 
   // Handle logout
@@ -152,7 +152,7 @@ function App() {
           />
           
           {/* PUBLIC routes - accessible to everyone (logged in or out) */}
-          <Route path="/about" element={<AboutPage />} />
+          <Route path="/about" element={<AboutPage />} /> {/* ← CHANGED: Removed ProtectedRoute */}
           
           {/* Protected authenticated routes - only logged in users can access */}
           <Route 

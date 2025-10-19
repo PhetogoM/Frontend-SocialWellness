@@ -6,7 +6,7 @@ body, html, #root, .App {
   font-family: Arial, sans-serif;
 }
 
-/* Background image when logged out */
+/* Background only on Home, Login, Register pages */
 .with-background {
   background-image: url('/public/image/hero-bg.png'); /* adjust path if needed */
   background-size: cover;
@@ -15,8 +15,7 @@ body, html, #root, .App {
   flex: 1;
   display: flex;
   flex-direction: column;
-  position: relative;
-  min-height: 100vh;
+  position: relative; /* container for overlay */
 }
 
 /* Remove the mist/overlay completely */
@@ -24,23 +23,13 @@ body, html, #root, .App {
   content: none; /* removes the semi-transparent layer */
 }
 
-/* White background when logged in */
-.white-background {
-  background: white !important;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  min-height: 100vh;
-}
-
-/* basic background - fallback */
+/* basic background */
 .light-scale-gray-background {
   background: linear-gradient(135deg, #f9f9f9 0%, #e9e9e9 100%);
   flex: 1;
   display: flex;
   flex-direction: column;
   position: relative;
-  min-height: 100vh;
 }
 
 /* Optional: AppBody container for page content */
@@ -48,5 +37,6 @@ body, html, #root, .App {
   flex: 1;
   display: flex;
   flex-direction: column;
-  width: 100%;
+  align-items: center;
+  justify-content: center;
 }
