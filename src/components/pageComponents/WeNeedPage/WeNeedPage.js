@@ -1,5 +1,4 @@
 import React, { useEffect, useState } from "react";
-import { Helmet } from "react-helmet";
 import { Send } from "lucide-react";
 import "./WeNeedPage.css";
 import { WeNeedAPI } from "../../apiComponents/weNeedAPI";
@@ -99,33 +98,8 @@ export default function WeNeedPage() {
     }
   }
 
-  const title = "WeNeed — UniPath Social Wellness";
-  const description =
-    "Share and discover student requests for clubs, events, and support at NWU. Like ideas you support and help shape a healthier, more connected campus.";
-  const siteUrl = "https://your-domain.example/login#/weneed"; 
-  const imageUrl = "https://your-domain.example/image/path-to-logo.png";
-
   return (
     <div className="weneed-container">
-      <Helmet>
-        <title>{title}</title>
-        <meta name="description" content={description} />
-        <link rel="canonical" href={siteUrl} />
-
-        <meta property="og:type" content="website" />
-        <meta property="og:title" content={title} />
-        <meta property="og:description" content={description} />
-        <meta property="og:url" content={siteUrl} />
-        <meta property="og:image" content={imageUrl} />
-
-        <meta name="twitter:card" content="summary_large_image" />
-        <meta name="twitter:title" content={title} />
-        <meta name="twitter:description" content={description} />
-        <meta name="twitter:image" content={imageUrl} />
-
-        <meta name="robots" content="index,follow" />
-      </Helmet>
-
       <h1 className="page-title weneed-title">We Need</h1>
       <p className="page-subtitle weneed-subtitle">
         Share what social activities, clubs, or support you need on campus
