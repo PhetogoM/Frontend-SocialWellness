@@ -7,11 +7,11 @@ import {
   Input,
   Button,
   Title,
-  SocialButton,
+  //SocialButton,
   RegisterLink,
 } from "./AuthForm.styled.js";
 
-const GoogleLogo = "/image/google-logo.png";
+//const GoogleLogo = "/image/google-logo.png";
 
 const RegisterPage = ({ setUser }) => {
   const [firstName, setFirstName] = useState("");
@@ -103,7 +103,7 @@ const RegisterPage = ({ setUser }) => {
     }
   };
 
-  const handleSocialRegister = () => {
+  /*const handleSocialRegister = () => {
     const dummyUser = {
       name: "Social",
       surname: "User",
@@ -116,7 +116,7 @@ const RegisterPage = ({ setUser }) => {
     
     // ✅ CHANGED: Navigate to homepage instead of /myculture
     navigate("/");
-  };
+  };*/
 
   return (
     <PageContainer>
@@ -172,12 +172,12 @@ const RegisterPage = ({ setUser }) => {
           or
         </div>
 
-        <SocialButton
+        {/*<SocialButton
           bgColor="#ff2600ff"
           onClick={() => handleSocialRegister("Google")}
         >
           <img src={GoogleLogo} alt="Google" /> Sign up with Google
-        </SocialButton>
+        </SocialButton>*/}
 
         <RegisterLink>
           Already have an account? <Link to="/login">Login</Link>

@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { HashRouter as Router, Routes, Route, useNavigate, useLocation, Navigate } from "react-router-dom";
 import "./App.css";
 
@@ -24,6 +24,9 @@ import SocialChatBox from "./components/pageComponents/SocialChatboxPage/SocialC
 
 import { AppWrapper } from "./components/pageComponents/AppWrapper.styled.js";
 import { HelmetProvider } from "react-helmet-async";
+
+// Import authAPI
+import { authAPI } from "./components/apiComponents/authApi.js";
 
 // Protected Route Component
 const ProtectedRoute = ({ children, requiredRoles = [] }) => {
@@ -80,41 +83,62 @@ function Layout({ children, user, onLogout }) {
 
 function App() {
   const [user, setUser] = useState(null);
-  const [loading, setLoading] = useState(true); // Add loading state
+  const [loading, setLoading] = useState(true);
   const navigate = useNavigate();
 
   // Handle logout
-  const handleLogout = () => {
+  const handleLogout = useCallback(() => {
     localStorage.removeItem("user");
     localStorage.removeItem("access_token");
     localStorage.removeItem("refresh_token");
     setUser(null);
     navigate("/login");
-  };
+  }, [navigate]);
+
+  // Enhanced auth check with token refresh - wrapped in useCallback
+  const checkAuth = useCallback(async () => {
+    try {
+      const storedUser = localStorage.getItem("user");
+      const accessToken = localStorage.getItem("access_token");
+      const refreshToken = localStorage.getItem("refresh_token");
+      
+      if (!storedUser || !accessToken) {
+        setLoading(false);
+        return;
+      }
+
+      // Verify the token is still valid by making a simple API call
+      try {
+        const userData = await authAPI.getUser();
+        setUser(userData);
+      } catch (error) {
+        if (error.response?.status === 401 && refreshToken) {
+          // Token expired, try to refresh
+          try {
+            await authAPI.refreshToken();
+            // If refresh successful, get user data again
+            const userData = await authAPI.getUser();
+            setUser(userData);
+          } catch (refreshError) {
+            console.error("Token refresh failed:", refreshError);
+            handleLogout();
+          }
+        } else {
+          // Other error or no refresh token available
+          handleLogout();
+        }
+      }
+    } catch (error) {
+      console.error("Error checking auth:", error);
+      handleLogout();
+    } finally {
+      setLoading(false);
+    }
+  }, [handleLogout]);
 
   useEffect(() => {
-    const checkAuth = async () => {
-      try {
-        const storedUser = localStorage.getItem("user");
-        const accessToken = localStorage.getItem("access_token");
-        
-        if (storedUser && accessToken) {
-          const userData = JSON.parse(storedUser);
-          setUser(userData);
-        }
-      } catch (error) {
-        console.error("Error checking auth:", error);
-        // Clear invalid tokens
-        localStorage.removeItem("user");
-        localStorage.removeItem("access_token");
-        localStorage.removeItem("refresh_token");
-      } finally {
-        setLoading(false);
-      }
-    };
-
     checkAuth();
-  }, []);
+  }, [checkAuth]);
 
   // Show loading spinner while checking authentication
   if (loading) {
@@ -152,7 +176,7 @@ function App() {
           />
           
           {/* PUBLIC routes - accessible to everyone (logged in or out) */}
-          <Route path="/about" element={<AboutPage />} /> {/* ← CHANGED: Removed ProtectedRoute */}
+          <Route path="/about" element={<AboutPage />} />
           
           {/* Protected authenticated routes - only logged in users can access */}
           <Route 
