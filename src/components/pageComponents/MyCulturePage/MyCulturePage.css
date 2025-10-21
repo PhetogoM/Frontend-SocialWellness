@@ -1,10 +1,10 @@
-/* MyCulturePage.css - Balanced Layout */
 .my-culture-container {
-  max-width: 1200px; /* Reduced from 2200px */
+  max-width: 1200px; 
   margin: 0 auto;
   padding: 20px;
   width: 100%;
   box-sizing: border-box;
+  background: linear-gradient(135deg, #f9f9f9 0%, #e9e9e9 100%);
 }
 
 .page-title {
